@@ -1,0 +1,62 @@
+---
+# ==========================================================================
+# POST TEMPLATE — for Phase 4 writers. This file never builds: the
+# collection pattern '**/[^_]*.{md,mdx}' in src/content.config.ts excludes
+# "_"-prefixed files (see the comment there for the doc citation).
+#
+# How to use:
+#   1. Copy this file within src/content/posts/ and rename it to a
+#      kebab-case name WITHOUT the leading underscore, e.g.
+#      deploying-ai-in-a-change-resistant-vertical.mdx. The file name
+#      becomes the entry's `id` (there is no "slug") and its URL:
+#      /writing/<id>/
+#   2. Fill in every frontmatter field below.
+#   3. Write the post (structure guidance is in the body).
+#   4. Set `draft: false` to publish. Drafts get no routes and never render.
+#
+# Length target: 800–1,500 words, first person (PLAN Phase 4).
+# Honesty rules: no fabricated experience; numbers stay directional ("~");
+# no client-identifying details.
+# ==========================================================================
+
+# Post title (also the page <title> and og:title).
+title: "TEMPLATE: Post title"
+
+# One to two sentences. Renders in the writing list and as the meta
+# description, so write it for both contexts.
+description: "TEMPLATE: what the post argues and who it is for."
+
+# Publication date, YYYY-MM-DD. NEVER displayed in the UI
+# (SHOW_DATES = false in src/site.config.ts); used only to order the
+# writing list (newest first) and for the sitemap.
+pubDate: 2026-01-01
+
+# Optional. Uncomment only when meaningfully revising a published post.
+# updatedDate: 2026-01-01
+
+# Drafts get no routes and never render anywhere. Set false to publish.
+draft: true
+---
+
+{/* Structure guidance — posts have no fixed headings, but this shape works:
+    1. Open with a concrete field observation, not a thesis statement
+       (1–2 paragraphs).
+    2. Develop the argument in 2–4 sections with ## headings.
+    3. Close with takeaways the reader can act on.
+    Voice: first person, practitioner tone. No comments, reactions, or
+    visible dates render on posts — just prose. 800–1,500 words. */}
+
+TEMPLATE: Opening paragraph. A specific moment or observation from the
+field that the rest of the post unpacks.
+
+## TEMPLATE: First section heading
+
+TEMPLATE: Section prose.
+
+## TEMPLATE: Second section heading
+
+TEMPLATE: Section prose.
+
+## Takeaways
+
+TEMPLATE: Three to five short, concrete takeaways. Bullets are fine.

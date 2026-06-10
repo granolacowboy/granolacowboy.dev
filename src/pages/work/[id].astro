@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import NdaNote from '../../components/NdaNote.astro';
 
 export async function getStaticPaths() {
   // Draft case studies get no routes (PLAN Phase 2). Slug semantics: entry.id.
@@ -17,13 +18,30 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.summary}>
+<BaseLayout title={entry.data.title} description={entry.data.summary} ogType="article">
   <article class="prose">
     <header class="page-header">
       <p class="eyebrow">{entry.data.client}</p>
       <h1>{entry.data.title}</h1>
       <p class="lede">{entry.data.summary}</p>
+      <NdaNote />
     </header>
+    {/* The MDX body carries the four CSO headings:
+        Context → Complication → What I built → Outcome. */}
     <Content />
+    {
+      entry.data.outcomes.length > 0 && (
+        <section class="outcomes" aria-labelledby="outcomes-heading">
+          <h2 id="outcomes-heading">Outcomes</h2>
+          {/* Metric-led bullets from frontmatter; every figure is
+              user-attested and framed as directional ("~"). */}
+          <ul>
+            {entry.data.outcomes.map((outcome) => (
+              <li>{outcome}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
   </article>
 </BaseLayout>

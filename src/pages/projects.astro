@@ -1,6 +1,19 @@
 ---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { ARTIFACT_NAME, ARTIFACT_REPO_URL } from '../site.config';
+import { ARTIFACT_NAME, ARTIFACT_REPO_URL, ARTIFACT_WRITEUP_PATH } from '../site.config';
+
+// Screenshot slot (PLAN Phase 3 task 4). Drop a screenshot at
+// src/assets/projects/<ARTIFACT_NAME>.png and it renders; while absent, the
+// slot renders nothing — no broken <img>. Guarded dynamic import per
+// docs.astro.build/en/recipes/dynamically-importing-images/ (import.meta.glob
+// returns an object keyed by path; <Image src={images[path]()} />).
+const screenshots = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/projects/*.{jpeg,jpg,png,gif}'
+);
+const screenshotPath = `/src/assets/projects/${ARTIFACT_NAME}.png`;
+const screenshot = screenshots[screenshotPath];
 ---
 
 <BaseLayout title="Projects" description="[PLACEHOLDER — Phase 4] Open-source work by [NAME].">
@@ -8,13 +21,25 @@ import { ARTIFACT_NAME, ARTIFACT_REPO_URL } from '../site.config';
   <section class="home-section" aria-labelledby="artifact-heading">
     <div class="card">
       <h2 id="artifact-heading">{ARTIFACT_NAME}</h2>
+      <p>[PLACEHOLDER — Phase 4: one paragraph on why this project exists.]</p>
+      {
+        screenshot && (
+          <Image
+            class="project-shot"
+            src={screenshot()}
+            alt={`[PLACEHOLDER — Phase 4: describe what the ${ARTIFACT_NAME} screenshot shows]`}
+          />
+        )
+      }
       <p>
-        [PLACEHOLDER — Phase 4: one paragraph on why this project exists. Screenshot slot and
-        write-up link are wired in Phase 3.]
-      </p>
-      <p>
-        <a href={ARTIFACT_REPO_URL}>Repository</a> ·
-        <a href="/writing/">Write-up [PLACEHOLDER — Phase 4: link to companion post]</a>
+        <a href={ARTIFACT_REPO_URL}>Repository</a> ·{' '}
+        {
+          ARTIFACT_WRITEUP_PATH ? (
+            <a href={ARTIFACT_WRITEUP_PATH}>Write-up</a>
+          ) : (
+            <span>Write-up: [PLACEHOLDER — Phase 4: set ARTIFACT_WRITEUP_PATH in site.config.ts]</span>
+          )
+        }
       </p>
     </div>
   </section>

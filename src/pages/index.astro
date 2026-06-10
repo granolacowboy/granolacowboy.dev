@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import NdaNote from '../components/NdaNote.astro';
 import { ARTIFACT_NAME, ARTIFACT_REPO_URL } from '../site.config';
 
 // Drafts never render: excluded here and in every getStaticPaths (PLAN Phase 2).
@@ -37,6 +38,7 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
             </li>
           ))}
         </ul>
+        <NdaNote />
       </section>
     )
   }
