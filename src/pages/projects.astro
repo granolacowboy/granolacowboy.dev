@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ARTIFACT_NAME, ARTIFACT_REPO_URL } from '../site.config';
+---
+
+<BaseLayout title="Projects" description="[PLACEHOLDER — Phase 4] Open-source work by [NAME].">
+  <h1>Projects</h1>
+  <section class="home-section" aria-labelledby="artifact-heading">
+    <div class="card">
+      <h2 id="artifact-heading">{ARTIFACT_NAME}</h2>
+      <p>
+        [PLACEHOLDER — Phase 4: one paragraph on why this project exists. Screenshot slot and
+        write-up link are wired in Phase 3.]
+      </p>
+      <p>
+        <a href={ARTIFACT_REPO_URL}>Repository</a> ·
+        <a href="/writing/">Write-up [PLACEHOLDER — Phase 4: link to companion post]</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

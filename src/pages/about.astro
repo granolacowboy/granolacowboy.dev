@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { GITHUB_URL } from '../site.config';
+---
+
+<BaseLayout title="About" description="[PLACEHOLDER — Phase 4] About [NAME].">
+  <article class="prose">
+    <h1>About</h1>
+    <p>[PLACEHOLDER — Phase 4: 3–4 sentence bio for [NAME] per report §B.]</p>
+    <p>[PLACEHOLDER — Phase 4: NDA discretion line.]</p>
+
+    <h2 id="contact">Contact</h2>
+    <ul class="contact-list">
+      <li>Email: [PLACEHOLDER — Phase 4]</li>
+      <li><a href={GITHUB_URL}>GitHub</a></li>
+      <li>LinkedIn: [PLACEHOLDER — Phase 4]</li>
+      <li>Resume: [PLACEHOLDER — Phase 4: PDF link]</li>
+    </ul>
+  </article>
+</BaseLayout>
