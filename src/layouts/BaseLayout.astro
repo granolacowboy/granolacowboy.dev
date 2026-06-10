@@ -7,10 +7,22 @@ interface Props {
   title?: string;
   /** Meta description; falls back to the site default. */
   description?: string;
+  /** OpenGraph object type; post/case-study detail pages pass 'article'. */
+  ogType?: 'website' | 'article';
 }
 
-const { title, description = SITE_DESCRIPTION } = Astro.props;
+const { title, description = SITE_DESCRIPTION, ogType = 'website' } = Astro.props;
 const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+
+// Canonical URL, official pattern from docs.astro.build/en/reference/api-reference/
+// ("Construct a canonical URL using your production domain"). Prerendered routes
+// get site-based URLs at build time because `site` is set in astro.config.mjs.
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Site-wide OG image. public/og.png is a Phase 6 deliverable (one static branded
+// 1200×630 PNG); the path is referenced now so social tags are complete the
+// moment the asset lands. Do not create a stand-in image.
+const ogImageURL = new URL('/og.png', Astro.site);
 
 const navItems = [
   { href: '/writing/', label: 'Writing' },
@@ -29,6 +41,13 @@ const isCurrent = (href: string) =>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <title>{pageTitle}</title>

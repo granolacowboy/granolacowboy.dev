@@ -1,0 +1,81 @@
+---
+# ==========================================================================
+# CASE-STUDY TEMPLATE — for Phase 4 writers. This file never builds:
+# the collection pattern '**/[^_]*.{md,mdx}' in src/content.config.ts
+# excludes "_"-prefixed files (see the comment there for the doc citation).
+#
+# How to use:
+#   1. Copy this file within src/content/case-studies/ and rename it to a
+#      kebab-case name WITHOUT the leading underscore, e.g.
+#      intake-automation-pi-firm.mdx. The file name becomes the entry's
+#      `id` (there is no "slug") and its URL: /work/<id>/
+#   2. Fill in every frontmatter field below.
+#   3. Replace the prose under the four section headings. KEEP the four
+#      headings and their order — the detail page is built around them.
+#   4. Set `draft: false` to publish. Drafts get no routes and never render.
+#
+# Body length target: 250–450 words total (PLAN Phase 4).
+# Honesty rules (non-negotiable):
+#   - No client-identifying details anywhere; NDA note renders automatically.
+#   - Every metric is user-attested and framed as directional with "~".
+#     Never absolute or audited-sounding claims.
+# Vocabulary to mirror naturally where truthful: discovery, evals,
+# production adoption, workflow, human-in-the-loop.
+# ==========================================================================
+
+# Display title of the case study (also the page <title> and og:title).
+title: "TEMPLATE: Case-study title"
+
+# Anonymized client descriptor: category + size, never a name.
+# Style: "a 25-attorney plaintiff-side personal-injury firm".
+# Renders as the eyebrow line above the title.
+client: "TEMPLATE: anonymized client descriptor"
+
+# One to two sentences. Renders under the title and as the meta description.
+summary: "TEMPLATE: what the engagement was and what changed, in one or two sentences."
+
+# Sort position in the home-page card list (1 = first).
+order: 99
+
+# Metric-led outcome bullets (3–5). Rendered as the "Outcomes" list on the
+# detail page. LEAD each bullet with the metric, keep the "~" directional
+# framing, e.g.:
+outcomes:
+  - "TEMPLATE: ~30% reduction in intake-to-engagement time (directional, internal figures)"
+  - "TEMPLATE: ~2x throughput on (workflow) without added headcount (directional)"
+
+# Tools/stack used, e.g. ["Claude", "Lawmatics", "Zapier"]. May be empty: []
+stack: []
+
+# Drafts get no routes and never render anywhere. Set false to publish.
+draft: true
+---
+
+{/* The four CSO sections below are the fixed body structure. The detail
+    page (src/pages/work/[id].astro) renders this body between the NDA
+    note and the Outcomes list. Total: 250–450 words. */}
+
+## Context
+
+TEMPLATE: Two to three sentences. The firm category and size (mirror the
+`client` line), what the engagement covered, and the starting state of the
+workflow before the work began.
+
+## Complication
+
+TEMPLATE: The operational problem and the change-resistance reality — what
+made this hard in a legal vertical (adoption risk, trust, compliance,
+partner skepticism), discovered how (discovery process).
+
+## What I built
+
+TEMPLATE: What was actually shipped — the workflow, integrations, and the
+human-in-the-loop design. Concrete and specific, no tool-name soup. Note
+how it was validated (evals, pilot, staged rollout) before production
+adoption.
+
+## Outcome
+
+TEMPLATE: What changed for the client and who uses it today. Narrate the
+result; the metric bullets in frontmatter `outcomes` carry the numbers
+(directional "~" framing only — no absolute claims).
