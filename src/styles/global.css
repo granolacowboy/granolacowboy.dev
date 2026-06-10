@@ -1,0 +1,427 @@
+/* ============================================================
+   granolacowboy.dev — design system
+   - Two palettes via CSS custom properties.
+   - Dark mode keys off `html.dark`, set by the inline no-FOUC
+     script in BaseLayout (docs.astro.build/en/tutorial/6-islands/2/).
+   - System font stack only. No webfonts, no client-side JS here.
+   ============================================================ */
+
+/* ---------- Design tokens ---------- */
+
+:root {
+  color-scheme: light;
+
+  /* Palette: light */
+  --color-bg: #fcfbf9;
+  --color-surface: #f3f1ec;
+  --color-text: #21242a;
+  --color-muted: #595f66;
+  --color-accent: #166749;
+  --color-accent-strong: #0e5239;
+  --color-border: #e2dfd7;
+
+  /* Type: modular scale, ratio 1.25 (major third) */
+  --step--1: 0.8rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.5625rem;
+  --step-3: 1.953rem;
+  --step-4: 2.441rem;
+
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+
+  /* Prose measure (~68ch) doubles as the single-column page width */
+  --measure: 68ch;
+  --space-gutter: 1.25rem;
+}
+
+html.dark {
+  color-scheme: dark;
+
+  /* Palette: dark */
+  --color-bg: #16181d;
+  --color-surface: #1f2228;
+  --color-text: #e9e7e2;
+  --color-muted: #a3a8b0;
+  --color-accent: #58c393;
+  --color-accent-strong: #79d2a9;
+  --color-border: #2e323a;
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--step-3);
+  margin-block: 0 0.75rem;
+}
+
+h2 {
+  font-size: var(--step-2);
+  margin-block: 2.5rem 0.75rem;
+}
+
+h3 {
+  font-size: var(--step-1);
+  margin-block: 1.5rem 0.5rem;
+}
+
+p {
+  margin-block: 0 1rem;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--color-accent-strong);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+}
+
+pre {
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  font-size: var(--step--1);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- Layout (single column, mobile-first) ---------- */
+
+.container {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--space-gutter);
+}
+
+main {
+  padding-block: 2.5rem 1rem;
+}
+
+/* ---------- Skip link ---------- */
+
+.skip-link {
+  position: fixed;
+  top: -10rem;
+  left: var(--space-gutter);
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-accent);
+  border-radius: 0.375rem;
+  color: var(--color-accent);
+}
+
+.skip-link:focus {
+  top: var(--space-gutter);
+}
+
+/* ---------- Header and nav (no JS: links wrap, never collapse) ---------- */
+
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header > .container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  padding-block: 1rem;
+}
+
+.wordmark {
+  font-weight: 650;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.wordmark:hover {
+  color: var(--color-accent);
+}
+
+.site-nav {
+  margin-inline-start: auto;
+}
+
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: var(--color-text);
+}
+
+.site-nav a[aria-current='page'] {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* ---------- Theme toggle (logic lives in the inline head script) ---------- */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: none;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-muted);
+}
+
+.sun {
+  fill: var(--color-text);
+}
+
+.moon {
+  fill: transparent;
+}
+
+html.dark .sun {
+  fill: transparent;
+}
+
+html.dark .moon {
+  fill: var(--color-text);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  padding-block-start: 1rem;
+}
+
+.lede {
+  color: var(--color-muted);
+  font-size: var(--step-1);
+}
+
+.cta {
+  display: inline-block;
+  margin-block-start: 0.5rem;
+  padding: 0.625rem 1.125rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 0.375rem;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cta:hover {
+  background-color: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
+  color: var(--color-bg);
+}
+
+/* ---------- Home sections, cards, lists ---------- */
+
+.home-section {
+  margin-block-start: 3.5rem;
+}
+
+.card-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background-color: var(--color-surface);
+}
+
+.card h2,
+.card h3 {
+  margin-block: 0 0.25rem;
+}
+
+.card h2 a,
+.card h3 a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.card h2 a:hover,
+.card h3 a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.card p:last-child {
+  margin-block-end: 0;
+}
+
+.eyebrow {
+  margin-block: 0 0.25rem;
+  color: var(--color-muted);
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.post-list {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.post-list .post-title {
+  margin-block: 0 0.25rem;
+  font-size: var(--step-1);
+}
+
+.post-list p {
+  margin-block: 0;
+  color: var(--color-muted);
+}
+
+/* ---------- Prose (article bodies) ---------- */
+
+.prose {
+  max-width: var(--measure);
+}
+
+.prose ul,
+.prose ol {
+  padding-inline-start: 1.25rem;
+}
+
+.prose li {
+  margin-block: 0.25rem;
+}
+
+.prose blockquote {
+  margin-inline: 0;
+  padding-inline-start: 1rem;
+  border-inline-start: 3px solid var(--color-border);
+  color: var(--color-muted);
+}
+
+.page-header {
+  margin-block-end: 2rem;
+}
+
+/* ---------- Contact list ---------- */
+
+.contact-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  margin-block-start: 4rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.site-footer > .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  justify-content: space-between;
+  padding-block: 1.5rem;
+  color: var(--color-muted);
+  font-size: var(--step--1);
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer a {
+  color: var(--color-muted);
+}
+
+.site-footer a:hover {
+  color: var(--color-text);
+}
+
+/* ---------- Wider screens: a little more air, larger display type ---------- */
+
+@media (min-width: 48rem) {
+  :root {
+    --space-gutter: 1.5rem;
+  }
+
+  main {
+    padding-block-start: 3.5rem;
+  }
+
+  h1 {
+    font-size: var(--step-4);
+  }
+}

@@ -1,0 +1,37 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SHOW_DATES } from '../../site.config';
+
+export async function getStaticPaths() {
+  // Draft posts get no routes (PLAN Phase 2). Slug semantics: post.id.
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="prose">
+    <header class="page-header">
+      <h1>{post.data.title}</h1>
+      {
+        SHOW_DATES && (
+          <p>
+            <time datetime={post.data.pubDate.toISOString()}>
+              {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium' })}
+            </time>
+          </p>
+        )
+      }
+    </header>
+    <Content />
+  </article>
+</BaseLayout>
