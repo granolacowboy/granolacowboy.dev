@@ -1,0 +1,33 @@
+---
+title: Legal Intake Triage System
+client: Mid-Sized Plaintiffs Firm
+summary: "A secure triage system that reduced initial client intake processing time by [PLACEHOLDER] percent while maintaining attorney-client privilege constraints."
+order: 1
+outcomes:
+  - "Reduced manual triage time by [PLACEHOLDER] hours per week"
+  - "Maintained compliance with [PLACEHOLDER] standard"
+  - Integrated directly with existing practice management software
+stack:
+  - TypeScript
+  - Model Context Protocol
+  - React
+draft: true
+---
+
+## Context
+
+The client is a mid-sized plaintiffs firm processing hundreds of potential new client inquiries every week. Their intake team manually reviewed each web submission, email, and phone transcript to determine if a case fit their specific criteria. This process was highly repetitive but required careful attention to detail to avoid missing critical filing deadlines or accepting cases outside their practice areas.
+
+## Complication
+
+Integrating an automated system in a legal environment presents strict data privacy and compliance challenges. Standard cloud-based AI tools were not an option because client data could not be sent to external APIs without strict processing agreements. The firm needed a solution that would securely process unstructured intake data, extract relevant facts, and flag potential conflicts of interest, all while keeping sensitive information within their controlled environment.
+
+## What I built
+
+I designed and implemented a secure legal intake triage system leveraging the Model Context Protocol. By keeping the language model separate from the direct data access layer, the system allowed the firm to parse incoming inquiries without exposing their entire database to a third-party service. 
+
+The application ingested raw inquiries from the firm's website and answering service. It then used a specialized context window to evaluate the facts against the firm's acceptance criteria. I built a custom dashboard for the intake team to review the system's recommendations, complete with citations to the original inquiry text. This ensured that human oversight remained central to the workflow.
+
+## Outcome
+
+The new triage system successfully handled the initial screening for over [PLACEHOLDER: X] inquiries in its first month. By automating the extraction of key facts (such as incident dates and involved parties), the intake team reduced their average review time per inquiry by [PLACEHOLDER: X] percent. The firm was able to respond to qualified leads much faster, significantly improving their conversion rate for high-value cases. The architecture also established a secure foundation for future automation projects within the firm.

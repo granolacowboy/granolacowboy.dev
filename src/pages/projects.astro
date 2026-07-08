@@ -6,7 +6,7 @@ import { ARTIFACT_NAME, ARTIFACT_REPO_URL, ARTIFACT_WRITEUP_PATH } from '../site
 
 // Screenshot slot (PLAN Phase 3 task 4). Drop a screenshot at
 // src/assets/projects/<ARTIFACT_NAME>.png and it renders; while absent, the
-// slot renders nothing — no broken <img>. Guarded dynamic import per
+// slot renders nothing (no broken <img>). Guarded dynamic import per
 // docs.astro.build/en/recipes/dynamically-importing-images/ (import.meta.glob
 // returns an object keyed by path; <Image src={images[path]()} />).
 const screenshots = import.meta.glob<{ default: ImageMetadata }>(
@@ -16,18 +16,18 @@ const screenshotPath = `/src/assets/projects/${ARTIFACT_NAME}.png`;
 const screenshot = screenshots[screenshotPath];
 ---
 
-<BaseLayout title="Projects" description="[PLACEHOLDER — Phase 4] Open-source work by [NAME].">
+<BaseLayout title="Projects" description="Open-source projects by Granola Cowboy.">
   <h1>Projects</h1>
   <section class="home-section" aria-labelledby="artifact-heading">
     <div class="card">
       <h2 id="artifact-heading">{ARTIFACT_NAME}</h2>
-      <p>[PLACEHOLDER — Phase 4: one paragraph on why this project exists.]</p>
+      <p>I built this as a reference implementation of what secure legal intake automation can look like using the Model Context Protocol. The server is fully deterministic (no LLM calls, no network calls) and handles conflict screening, matter validation, follow-up templating, and triage logging. The idea is that the language model does the language work, and the server does the record work, with a clean boundary between them.</p>
       {
         screenshot && (
           <Image
             class="project-shot"
             src={screenshot()}
-            alt={`[PLACEHOLDER — Phase 4: describe what the ${ARTIFACT_NAME} screenshot shows]`}
+            alt={`Screenshot of the ${ARTIFACT_NAME} interface showing a secure intake triage pipeline`}
           />
         )
       }
@@ -37,7 +37,7 @@ const screenshot = screenshots[screenshotPath];
           ARTIFACT_WRITEUP_PATH ? (
             <a href={ARTIFACT_WRITEUP_PATH}>Write-up</a>
           ) : (
-            <span>Write-up: [PLACEHOLDER — Phase 4: set ARTIFACT_WRITEUP_PATH in site.config.ts]</span>
+            <span>Write-up coming soon</span>
           )
         }
       </p>
