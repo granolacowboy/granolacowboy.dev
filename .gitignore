@@ -3,6 +3,11 @@ dist/
 # generated types
 .astro/
 
+# local deployment and browser-tool state
+.vercel/
+.netlify/
+.playwright-cli/
+
 # dependencies
 node_modules/
 
