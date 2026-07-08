@@ -244,6 +244,24 @@ main {
   border-color: var(--color-muted);
 }
 
+@media (max-width: 31rem) {
+  .site-header > .container {
+    gap: 0.5rem;
+  }
+
+  .site-nav {
+    order: 3;
+    width: 100%;
+    margin-inline-start: 0;
+  }
+
+  .theme-toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-inline-start: auto;
+  }
+}
+
 .sun {
   fill: var(--color-text);
 }

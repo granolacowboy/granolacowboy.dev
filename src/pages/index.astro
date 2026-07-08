@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NdaNote from '../components/NdaNote.astro';
-import { ARTIFACT_NAME, ARTIFACT_REPO_URL } from '../site.config';
+import { ARTIFACT_NAME, ARTIFACT_REPO_URL, HANDLE, PERSON_NAME } from '../site.config';
 
 // Drafts never render: excluded here and in every getStaticPaths (PLAN Phase 2).
 // Sections below render only when they have entries; empty sections are simply absent.
@@ -18,7 +18,7 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
 
 <BaseLayout>
   <section class="hero">
-    <h1>Granola Cowboy</h1>
+    <h1>{PERSON_NAME} <span aria-hidden="true">|</span> {HANDLE}</h1>
     <p class="lede">I run MHSB, where I help law firms get their automation right. This site is where I write about what I am learning along the way.</p>
     <a class="cta" href="/about/">More about me</a>
   </section>

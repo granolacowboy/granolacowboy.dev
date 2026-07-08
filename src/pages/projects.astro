@@ -2,7 +2,13 @@
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { ARTIFACT_NAME, ARTIFACT_REPO_URL, ARTIFACT_WRITEUP_PATH } from '../site.config';
+import {
+  ARTIFACT_NAME,
+  ARTIFACT_REPO_URL,
+  ARTIFACT_WRITEUP_PATH,
+  HANDLE,
+  PERSON_NAME,
+} from '../site.config';
 
 // Screenshot slot (PLAN Phase 3 task 4). Drop a screenshot at
 // src/assets/projects/<ARTIFACT_NAME>.png and it renders; while absent, the
@@ -16,7 +22,7 @@ const screenshotPath = `/src/assets/projects/${ARTIFACT_NAME}.png`;
 const screenshot = screenshots[screenshotPath];
 ---
 
-<BaseLayout title="Projects" description="Open-source projects by Granola Cowboy.">
+<BaseLayout title="Projects" description={`Open-source projects by ${PERSON_NAME} | ${HANDLE}.`}>
   <h1>Projects</h1>
   <section class="home-section" aria-labelledby="artifact-heading">
     <div class="card">
