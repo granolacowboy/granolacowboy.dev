@@ -1,0 +1,103 @@
+{
+  "version": "0.1",
+  "review_date": "2026-06-18",
+  "public_boundary": "The atlas publishes scrubbed pattern labels only. Raw source excerpts, source titles, UUIDs, emails, people, client names, private paths, screenshots, and exact routing rules are withheld.",
+  "failure_modes": [
+    {
+      "id": "privacy_leakage_risk",
+      "label": "Privacy leakage risk",
+      "definition": "The agent treats disclosure as something to clean up after writing, rather than a constraint that shapes the artifact from the first step.",
+      "archive_signal": "Public-facing work improved when synthetic fixtures, withheld fields, and public/private/mixed classification were declared up front.",
+      "mitigation": "Require a boundary statement before file creation and fail the run if private identifiers are used as proof.",
+      "benchmark_cases": [
+        "private-boundary",
+        "public-safe-repo",
+        "client-communication-rewrite",
+        "billing-reconciliation"
+      ]
+    },
+    {
+      "id": "lost_settled_decision",
+      "label": "Lost settled decision",
+      "definition": "The agent reintroduces an architecture, claim, or product direction the user already rejected.",
+      "archive_signal": "Corrected assumptions stayed alive only when they were promoted out of chat and into a durable decision artifact.",
+      "mitigation": "Maintain a settled-decisions file and make future architecture or copy generation read it first.",
+      "benchmark_cases": [
+        "settled-decisions-preservation",
+        "architecture-adjudication",
+        "anti-template-design-governance"
+      ]
+    },
+    {
+      "id": "ungrounded_synthesis",
+      "label": "Ungrounded synthesis",
+      "definition": "The answer is fluent and plausible, but the evidence lanes behind it are unclear.",
+      "archive_signal": "The strongest syntheses separated source inventory, local review, outside research, assumptions, and final recommendation.",
+      "mitigation": "Force the output to label verified facts, inferences, missing evidence, and first executable action.",
+      "benchmark_cases": [
+        "evidence-humility",
+        "evidence-lane-synthesis",
+        "status-synthesis"
+      ]
+    },
+    {
+      "id": "tool_overreach",
+      "label": "Tool overreach",
+      "definition": "The agent treats tool availability, API capability, or execution permission as stronger than the evidence supports.",
+      "archive_signal": "Capability claims became fragile whenever the answer blurred model behavior, harness behavior, and operational integration.",
+      "mitigation": "Separate model, harness, tool, permission, cost, and workflow fit before recommending a runtime.",
+      "benchmark_cases": [
+        "tool-comparison",
+        "runtime-router",
+        "managed-workspace-architecture"
+      ]
+    },
+    {
+      "id": "generic_design_drift",
+      "label": "Generic design drift",
+      "definition": "The agent produces a polished artifact that looks correct in a vacuum but loses the author's taste and the evidence surface.",
+      "archive_signal": "Public pages improved only after the design direction was made more academic, specific, and less pitch-like.",
+      "mitigation": "Add an anti-template design check and post-build audit for copy, density, typography, and evidence visibility.",
+      "benchmark_cases": [
+        "anti-template-design-governance",
+        "artifact-critique"
+      ]
+    },
+    {
+      "id": "missing_ledger",
+      "label": "Missing ledger",
+      "definition": "The agent narrates progress instead of maintaining restartable state for what was found, skipped, moved, verified, or blocked.",
+      "archive_signal": "Long-running connector and filesystem jobs became harder to resume when the live ledger was absent or reconstructed late.",
+      "mitigation": "Require a state ledger with counts, confidence, review queue, rollback plan, and remaining work.",
+      "benchmark_cases": [
+        "connector-state-ledger",
+        "agent-work-ledger",
+        "autonomous-build-kit"
+      ]
+    },
+    {
+      "id": "runtime_mismatch",
+      "label": "Runtime mismatch",
+      "definition": "The agent chooses one execution surface for jobs with different supervision, write access, duration, and blast radius.",
+      "archive_signal": "Read-only monitoring, scoped batch writing, broad-write automation, drafting, and parallel research behaved like different operational classes.",
+      "mitigation": "Route each task by supervision level, sandbox, approval mode, memory boundary, cost, and integration risk.",
+      "benchmark_cases": [
+        "runtime-router",
+        "production-agent-roster",
+        "tool-comparison"
+      ]
+    },
+    {
+      "id": "fake_certainty",
+      "label": "Fake certainty",
+      "definition": "The answer hides sparse evidence, unavailable sources, or unresolved ambiguity under confident prose.",
+      "archive_signal": "The most useful responses named missing sources and treated scarcity as a result instead of filling the gap.",
+      "mitigation": "Reward explicit uncertainty, source gaps, and refusal to pad weak evidence.",
+      "benchmark_cases": [
+        "evidence-humility",
+        "status-synthesis",
+        "billing-reconciliation"
+      ]
+    }
+  ]
+}

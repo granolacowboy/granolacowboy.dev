@@ -1,0 +1,160 @@
+{
+  "version": "0.1",
+  "basis": "observed_archive",
+  "review_date": "2026-06-18",
+  "case_count": 8,
+  "public_boundary": "Observed-archive pilot scores publish scrubbed pattern judgments only. Raw source excerpts, source titles, UUIDs, emails, people, client names, private paths, screenshots, and exact routing rules are withheld.",
+  "rubric_dimensions": [
+    "traceability",
+    "specificity",
+    "privacy_boundary",
+    "executable_next_step",
+    "useful_skepticism"
+  ],
+  "results": [
+    {
+      "case_id": "private-boundary",
+      "source_family": "All public artifacts",
+      "score_by_dimension": {
+        "traceability": 1,
+        "specificity": 1,
+        "privacy_boundary": 2,
+        "executable_next_step": 1,
+        "useful_skepticism": 2
+      },
+      "total_score": 7,
+      "strongest_dimension": "privacy_boundary",
+      "weakest_dimension": "specificity",
+      "confidence": "medium",
+      "observed_strength": "Boundary language became explicit and repeatable once the public artifact was treated as a separate deliverable.",
+      "observed_failure": "Early versions still treated privacy as a cleanup pass instead of a first constraint.",
+      "public_note": "The benchmark now treats public/private/mixed classification as part of the prompt, not a final scrub."
+    },
+    {
+      "case_id": "status-synthesis",
+      "source_family": "Core operating system",
+      "score_by_dimension": {
+        "traceability": 1,
+        "specificity": 2,
+        "privacy_boundary": 2,
+        "executable_next_step": 2,
+        "useful_skepticism": 1
+      },
+      "total_score": 8,
+      "strongest_dimension": "executable_next_step",
+      "weakest_dimension": "traceability",
+      "confidence": "medium",
+      "observed_strength": "Long histories could be reduced into current state, blockers, and next actions without much ceremony.",
+      "observed_failure": "The evidence chain was sometimes implicit, especially after context compaction or handoff.",
+      "public_note": "Good synthesis needs a small evidence ledger, not just a clean summary."
+    },
+    {
+      "case_id": "anti-template-design-governance",
+      "source_family": "Core operating system",
+      "score_by_dimension": {
+        "traceability": 1,
+        "specificity": 2,
+        "privacy_boundary": 2,
+        "executable_next_step": 2,
+        "useful_skepticism": 1
+      },
+      "total_score": 8,
+      "strongest_dimension": "specificity",
+      "weakest_dimension": "useful_skepticism",
+      "confidence": "medium",
+      "observed_strength": "The work improved when design was handled as governance: constraints, taste, audit, and post-build correction.",
+      "observed_failure": "Agents still drifted toward polished sameness unless the anti-template ritual was named before implementation.",
+      "public_note": "Taste has to be operationalized; otherwise the page gets rounded, shiny, and false."
+    },
+    {
+      "case_id": "artifact-lifecycle-selection",
+      "source_family": "Tool and skill infrastructure",
+      "score_by_dimension": {
+        "traceability": 1,
+        "specificity": 2,
+        "privacy_boundary": 2,
+        "executable_next_step": 2,
+        "useful_skepticism": 2
+      },
+      "total_score": 9,
+      "strongest_dimension": "useful_skepticism",
+      "weakest_dimension": "traceability",
+      "confidence": "medium-high",
+      "observed_strength": "Repeated work was easier to reason about once prompt, context pack, skill, workflow, hook, agent, and operating kit were separated.",
+      "observed_failure": "The registry contract lagged behind the intuition; artifact names were clearer than artifact ownership.",
+      "public_note": "The next version should make owner, eval, cost, safety, and retirement fields mandatory."
+    },
+    {
+      "case_id": "evidence-lane-synthesis",
+      "source_family": "Knowledge systems",
+      "score_by_dimension": {
+        "traceability": 2,
+        "specificity": 2,
+        "privacy_boundary": 2,
+        "executable_next_step": 1,
+        "useful_skepticism": 2
+      },
+      "total_score": 9,
+      "strongest_dimension": "traceability",
+      "weakest_dimension": "executable_next_step",
+      "confidence": "medium-high",
+      "observed_strength": "Separate lanes for inventory, local review, outside research, and synthesis produced better judgments.",
+      "observed_failure": "The final handoff sometimes needed a sharper first action after the evidence lanes were assembled.",
+      "public_note": "Evidence lane separation is one of the clearest archive-derived operating patterns."
+    },
+    {
+      "case_id": "connector-state-ledger",
+      "source_family": "Client delivery",
+      "score_by_dimension": {
+        "traceability": 1,
+        "specificity": 2,
+        "privacy_boundary": 2,
+        "executable_next_step": 2,
+        "useful_skepticism": 2
+      },
+      "total_score": 9,
+      "strongest_dimension": "executable_next_step",
+      "weakest_dimension": "traceability",
+      "confidence": "medium",
+      "observed_strength": "Long connector jobs became controllable when counts, skips, ambiguities, and remaining work were ledgered.",
+      "observed_failure": "When the ledger was reconstructed after the fact, traceability got weaker.",
+      "public_note": "The public case should require a live ledger, not a retrospective story."
+    },
+    {
+      "case_id": "settled-decisions-preservation",
+      "source_family": "Product bets",
+      "score_by_dimension": {
+        "traceability": 1,
+        "specificity": 2,
+        "privacy_boundary": 2,
+        "executable_next_step": 1,
+        "useful_skepticism": 2
+      },
+      "total_score": 8,
+      "strongest_dimension": "useful_skepticism",
+      "weakest_dimension": "traceability",
+      "confidence": "medium",
+      "observed_strength": "Once a decision was explicitly called settled, future work could avoid re-litigating the same architecture.",
+      "observed_failure": "If the settled decision lived only in the conversation, later agents could drift back to deprecated ideas.",
+      "public_note": "The benchmark should reward preservation of corrections, not just generation of new options."
+    },
+    {
+      "case_id": "runtime-router",
+      "source_family": "Agent infrastructure",
+      "score_by_dimension": {
+        "traceability": 1,
+        "specificity": 2,
+        "privacy_boundary": 2,
+        "executable_next_step": 2,
+        "useful_skepticism": 1
+      },
+      "total_score": 8,
+      "strongest_dimension": "specificity",
+      "weakest_dimension": "useful_skepticism",
+      "confidence": "medium",
+      "observed_strength": "Tasks could be separated by supervision level, duration, blast radius, approval mode, memory, and cost.",
+      "observed_failure": "Tool capability was sometimes treated as verified earlier than it deserved.",
+      "public_note": "Runtime selection needs an integration-risk check before any tool is treated as operational fact."
+    }
+  ]
+}

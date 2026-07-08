@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SessionNav from '../../../components/session-benchmark/SessionNav.astro';
+import atlas from '../../../data/session-benchmark/failure_mode_atlas.json';
+import '../../../styles/session-benchmark.css';
+---
+
+<BaseLayout title="Session Benchmark failure atlas" description="Eight scrubbed failure modes that Session Benchmark v0 is designed to catch." wide>
+  <article class="benchmark-page">
+    <header>
+      <p class="benchmark-kicker">Session Benchmark v0</p>
+      <h1>Failure mode atlas</h1>
+      <p class="benchmark-lede">Eight recurring patterns where confident agent output can lose evidence, privacy, constraints, or operational usefulness.</p>
+    </header>
+
+    <SessionNav current="failure-atlas" />
+
+    <section class="benchmark-section benchmark-section-wide" aria-labelledby="atlas-heading">
+      <h2 id="atlas-heading">Public failure modes</h2>
+      <div class="table-region" role="region" tabindex="0" aria-label="Failure mode atlas table">
+        <table class="benchmark-table">
+          <caption>Scrubbed failure patterns, archive signals, mitigations, and linked cases</caption>
+          <thead><tr><th scope="col">Failure mode</th><th scope="col">Definition</th><th scope="col">Archive signal</th><th scope="col">Mitigation</th><th scope="col">Linked cases</th></tr></thead>
+          <tbody>
+            {atlas.failure_modes.map((mode) => (
+              <tr data-failure-mode><th scope="row">{mode.label}</th><td>{mode.definition}</td><td>{mode.archive_signal}</td><td>{mode.mitigation}</td><td>{mode.benchmark_cases.join(', ')}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p><a href="/projects/session-benchmark/data/failure_mode_atlas.json">Download the structured atlas (JSON)</a></p>
+    </section>
+  </article>
+</BaseLayout>

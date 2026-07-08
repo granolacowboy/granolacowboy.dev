@@ -1,0 +1,31 @@
+asset_id,stage,asset_type,name,owner,trigger,depends_on,output,risk_note,public_note
+STG-01-FORM-LEAD,Lead Capture,form,New lead intake form,Client,Website submission,,Lead record created,PII capture requires minimal fields,Synthetic form asset
+STG-01-AUTO-ACK,Lead Capture,automation,Lead acknowledgement sequence,System,Lead record created,STG-01-FORM-LEAD,Confirmation email queued,Consent language must match channel,Synthetic automation
+STG-01-TASK-TRIAGE,Lead Capture,task,Initial triage task,Intake,Lead record created,STG-01-FORM-LEAD,Staff review task,Owner must be explicit,Synthetic task
+STG-02-AUTO-REMIND,Contact Attempt,automation,Unreached lead reminder,System,No appointment after 3 days,STG-01-AUTO-ACK,Reminder series queued,Over-contact risk,Synthetic automation
+STG-02-TASK-CALL,Contact Attempt,task,Outbound contact attempt,Intake,Triage task completed,STG-01-TASK-TRIAGE,Call note and disposition,Manual outcome must be captured,Synthetic task
+STG-02-EXIT-LOST,Contact Attempt,exit_rule,Unresponsive timeout,System,No response after window,STG-02-AUTO-REMIND,Lost status proposed,Human review before final close,Synthetic exit rule
+STG-03-FORM-INTAKE,Intake Call,form,Structured intake call form,Intake,Call scheduled,STG-02-TASK-CALL,Practice area and urgency fields,High-impact facts require review,Synthetic form
+STG-03-AUTO-SUMMARY,Intake Call,automation,Intake summary generation,System,Form submitted,STG-03-FORM-INTAKE,Summary note drafted,Summary must be labeled draft,Synthetic automation
+STG-03-TASK-QUALITY,Intake Call,task,Intake quality check,Intake,Summary drafted,STG-03-AUTO-SUMMARY,Ready for attorney review,Completeness gate required,Synthetic task
+STG-04-HOLD-UNSURE,Intake Hold,hold_rule,Needs more information hold,Intake,Incomplete intake,STG-03-TASK-QUALITY,Follow-up task and reminders,Do not advance without missing facts,Synthetic hold rule
+STG-04-AUTO-FOLLOWUP,Intake Hold,automation,Missing information follow-up,System,Hold rule set,STG-04-HOLD-UNSURE,Follow-up email series,May include sensitive context,Synthetic automation
+STG-05-DECISION-FIT,Fit Review,decision,Fit and scope screen,Attorney,Intake complete,STG-03-TASK-QUALITY,Fit decision,Decision rationale must be auditable,Synthetic decision
+STG-05-EXIT-REFER,Fit Review,exit_rule,Referred out path,Attorney,Not a fit,STG-05-DECISION-FIT,Referral guidance sent,No legal advice in referral,Synthetic exit rule
+STG-05-AUTO-NEXT,Fit Review,automation,Move to attorney review,System,Fit approved,STG-05-DECISION-FIT,Attorney review stage set,Stage change must be traceable,Synthetic automation
+STG-06-CAL-SCHEDULE,Consult Scheduling,calendar,Consult calendar event,Intake,Fit approved,STG-05-AUTO-NEXT,Consult scheduled,Timezone and invite accuracy,Synthetic calendar asset
+STG-06-AUTO-CONFIRM,Consult Scheduling,automation,Consult confirmation,System,Consult scheduled,STG-06-CAL-SCHEDULE,Confirmation and prep packet,Wrong-template risk,Synthetic automation
+STG-07-FORM-CONSULT,Consult,form,Consult notes form,Attorney,Consult held,STG-06-CAL-SCHEDULE,Consult findings captured,Privileged notes stay internal,Synthetic form
+STG-07-TASK-OUTCOME,Consult,task,Consult outcome selection,Attorney,Consult notes submitted,STG-07-FORM-CONSULT,Outcome recorded,Outcome drives downstream automation,Synthetic task
+STG-08-DOC-ENGAGEMENT,Attorney Review,document,Engagement packet draft,Attorney,Proceed outcome selected,STG-07-TASK-OUTCOME,Draft packet prepared,Legal review required before send,Synthetic document
+STG-08-AUTO-PAYLINK,Attorney Review,automation,Payment link preparation,System,Engagement packet approved,STG-08-DOC-ENGAGEMENT,Payment link drafted,Payment terms must be verified,Synthetic automation
+STG-08-GOV-AI,Attorney Review,governance,AI use attestation,Attorney,AI-assisted work used,STG-08-DOC-ENGAGEMENT,Disclosure fields updated,Human-in-the-loop required,Synthetic governance asset
+STG-09-AUTO-SEND,Engagement Sent,automation,Send engagement packet,System,Attorney approval,STG-08-DOC-ENGAGEMENT;STG-08-AUTO-PAYLINK,Packet sent,Send only after approval,Synthetic automation
+STG-09-AUTO-DRIP,Engagement Sent,automation,Unsigned packet follow-up,System,Packet sent not signed,STG-09-AUTO-SEND,Follow-up sequence,Over-contact and fee confusion risk,Synthetic automation
+STG-09-TASK-QUESTION,Engagement Sent,task,Question escalation task,Intake,Reply contains question,STG-09-AUTO-SEND,Attorney review task,Unanswered legal question risk,Synthetic task
+STG-10-AUTO-HIRED,Hired,automation,Mark hired and handoff,System,Signed and paid,STG-09-AUTO-SEND,Client handoff initiated,Payment and signature must both resolve,Synthetic automation
+STG-10-DATA-HANDOFF,Hired,integration,Practice management handoff,System,Hired status confirmed,STG-10-AUTO-HIRED,Client/matter handoff record,Duplicate matter risk,Synthetic integration
+GLOBAL-DICT-PA,Global,reference,Practice area dictionary,Operations,Registry update,,Controlled vocabulary,Taxonomy drift risk,Synthetic reference
+GLOBAL-DICT-BRAND,Global,reference,Brand and template routing,Operations,Registry update,,Template route rules,Wrong brand/template risk,Synthetic reference
+GLOBAL-REPORT-KPI,Global,report,Intake KPI report,Leadership,Weekly reporting cycle,STG-10-AUTO-HIRED,Conversion and velocity report,Metrics must define denominator,Synthetic report
+GLOBAL-RISK-REGISTER,Global,governance,Risk register,Operations,Risk change,,Open risks and owners,Unowned risks block deployment,Synthetic governance asset

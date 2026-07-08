@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SessionNav from '../../../components/session-benchmark/SessionNav.astro';
+import registry from '../../../data/session-benchmark/synthetic_asset_registry.json';
+import '../../../styles/session-benchmark.css';
+
+const stages = [...new Set(registry.map((asset) => asset.stage))];
+---
+
+<BaseLayout title="Synthetic registry fixture" description="A public-safe synthetic legal intake registry used by Session Benchmark v0." wide>
+  <article class="benchmark-page">
+    <header>
+      <p class="benchmark-kicker">Session Benchmark v0</p>
+      <h1>Synthetic registry fixture</h1>
+      <p class="benchmark-lede">Thirty synthetic assets model a legal intake workflow without exposing client systems, private routing, matter data, or production automation.</p>
+    </header>
+
+    <SessionNav current="registry" />
+
+    <section class="benchmark-section benchmark-section-wide" aria-labelledby="registry-heading">
+      <h2 id="registry-heading">Registry assets</h2>
+      <div class="registry-controls">
+        <label for="registry-search">Search assets<input id="registry-search" type="search" autocomplete="off" placeholder="ID, stage, type, name, or risk" /></label>
+        <label for="registry-stage">Filter by stage<select id="registry-stage"><option value="">All stages</option>{stages.map((stage) => <option value={stage}>{stage}</option>)}</select></label>
+        <button id="registry-clear" type="button">Clear filters</button>
+      </div>
+      <p id="registry-status" class="registry-status" aria-live="polite">Showing all {registry.length} synthetic assets.</p>
+
+      <div class="table-region" role="region" tabindex="0" aria-label="Synthetic registry assets table">
+        <table class="benchmark-table">
+          <caption>Public-safe synthetic intake assets with dependencies, outputs, and risk notes</caption>
+          <thead><tr><th scope="col">Asset</th><th scope="col">Stage</th><th scope="col">Type</th><th scope="col">Owner</th><th scope="col">Depends on</th><th scope="col">Output</th><th scope="col">Risk note</th><th scope="col">Trace</th></tr></thead>
+          <tbody>
+            {registry.map((asset) => (
+              <tr
+                data-registry-asset
+                data-search={`${asset.asset_id} ${asset.stage} ${asset.asset_type} ${asset.name} ${asset.owner} ${asset.risk_note}`.toLowerCase()}
+                data-stage={asset.stage}
+                data-asset-id={asset.asset_id}
+                data-name={asset.name}
+                data-owner={asset.owner}
+                data-trigger={asset.trigger}
+                data-depends-on={asset.depends_on || 'None'}
+                data-output={asset.output}
+                data-risk={asset.risk_note}
+              >
+                <th scope="row"><strong>{asset.asset_id}</strong><br />{asset.name}</th><td>{asset.stage}</td><td>{asset.asset_type}</td><td>{asset.owner}</td><td>{asset.depends_on || 'None'}</td><td>{asset.output}</td><td>{asset.risk_note}</td><td><button class="trace-button" type="button" data-trace-button aria-controls="registry-trace">View trace</button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p><a href="/projects/session-benchmark/data/synthetic_asset_registry.csv">Download the synthetic registry (CSV)</a></p>
+    </section>
+
+    <section id="registry-trace" class="trace-panel" aria-labelledby="trace-heading">
+      <h2 id="trace-heading">Dependency trace</h2>
+      <p id="trace-empty">Choose an asset to inspect its public-safe dependency and risk fields.</p>
+      <dl hidden id="trace-details">
+        <dt>Asset</dt><dd id="trace-asset"></dd><dt>Owner</dt><dd id="trace-owner"></dd><dt>Trigger</dt><dd id="trace-trigger"></dd><dt>Depends on</dt><dd id="trace-dependency"></dd><dt>Output</dt><dd id="trace-output"></dd><dt>Risk note</dt><dd id="trace-risk"></dd>
+      </dl>
+    </section>
+  </article>
+
+  <script>
+    const search = document.querySelector('#registry-search');
+    const stage = document.querySelector('#registry-stage');
+    const clear = document.querySelector('#registry-clear');
+    const status = document.querySelector('#registry-status');
+    const rows = [...document.querySelectorAll('[data-registry-asset]')];
+
+    const applyFilters = () => {
+      const query = search instanceof HTMLInputElement ? search.value.trim().toLowerCase() : '';
+      const selectedStage = stage instanceof HTMLSelectElement ? stage.value : '';
+      let visible = 0;
+      for (const row of rows) {
+        if (!(row instanceof HTMLTableRowElement)) continue;
+        const matchesQuery = !query || (row.dataset.search ?? '').includes(query);
+        const matchesStage = !selectedStage || row.dataset.stage === selectedStage;
+        row.hidden = !(matchesQuery && matchesStage);
+        if (!row.hidden) visible += 1;
+      }
+      if (status) status.textContent = `Showing ${visible} of ${rows.length} synthetic assets.`;
+    };
+
+    search?.addEventListener('input', applyFilters);
+    stage?.addEventListener('change', applyFilters);
+    clear?.addEventListener('click', () => {
+      if (search instanceof HTMLInputElement) search.value = '';
+      if (stage instanceof HTMLSelectElement) stage.value = '';
+      applyFilters();
+      if (search instanceof HTMLInputElement) search.focus();
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const button = target.closest('[data-trace-button]');
+      const row = button?.closest('[data-registry-asset]');
+      if (!(row instanceof HTMLTableRowElement)) return;
+      const values = {
+        '#trace-asset': `${row.dataset.assetId}: ${row.dataset.name}`,
+        '#trace-owner': row.dataset.owner,
+        '#trace-trigger': row.dataset.trigger,
+        '#trace-dependency': row.dataset.dependsOn,
+        '#trace-output': row.dataset.output,
+        '#trace-risk': row.dataset.risk,
+      };
+      for (const [selector, value] of Object.entries(values)) {
+        const node = document.querySelector(selector);
+        if (node) node.textContent = value ?? '';
+      }
+      const empty = document.querySelector('#trace-empty');
+      const details = document.querySelector('#trace-details');
+      if (empty instanceof HTMLElement) empty.hidden = true;
+      if (details instanceof HTMLElement) details.hidden = false;
+      document.querySelector('#registry-trace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,89 @@
+{
+  "version": "0.1",
+  "review_date": "2026-06-18",
+  "sessions_reviewed": 18,
+  "sampling_method": "proportional_to_figure_1_task_families",
+  "allocation": {
+    "Core operating system": 7,
+    "Tool and skill infrastructure": 3,
+    "Knowledge systems": 3,
+    "Client delivery": 3,
+    "Product bets": 1,
+    "Agent infrastructure": 1
+  },
+  "public_boundary": "Only scrubbed patterns, counts, and synthetic examples are published. Raw packets, source titles, UUIDs, raw source excerpts, people, clients, private paths, and exact routing rules are withheld.",
+  "themes": [
+    {
+      "theme": "Artifact choice before agent choice",
+      "summary": "Repeated work should become the smallest useful artifact: prompt, context pack, skill, workflow, hook, specialist agent, or full operating kit.",
+      "improvement": "Create a formal artifact registry with owner, version, evals, retirement criteria, provenance, safety notes, and cost notes.",
+      "benchmark_case": "artifact-lifecycle-selection"
+    },
+    {
+      "theme": "Autonomy needs a ledger",
+      "summary": "Long-running agents need explicit state: discovered, classified, moved, skipped, ambiguous, verified, remaining, and blocked.",
+      "improvement": "Require live progress ledgers, checkpoints, rollback plans, and regenerated handoffs for connector or overnight jobs.",
+      "benchmark_case": "connector-state-ledger"
+    },
+    {
+      "theme": "Public-safe by default",
+      "summary": "If a repo or page may become public, the data model must be synthetic from the start. Git history is part of the privacy surface.",
+      "improvement": "Add a public/private/mixed preflight question to every build request and use private overlays for real data.",
+      "benchmark_case": "public-safe-repo"
+    },
+    {
+      "theme": "Evidence before synthesis",
+      "summary": "Complex answers improve when source inventory, filesystem review, outside research, and final synthesis are separate lanes.",
+      "improvement": "Use evidence lanes with schema, provenance, fallback rules, and no premature recommendations.",
+      "benchmark_case": "evidence-lane-synthesis"
+    },
+    {
+      "theme": "Settled decisions must bind future work",
+      "summary": "The agent should not reintroduce deprecated architecture after the user has corrected it.",
+      "improvement": "Maintain a settled-decisions file and require every future agent to read it before generating architecture or copy.",
+      "benchmark_case": "settled-decisions-preservation"
+    },
+    {
+      "theme": "Runtime selection follows risk",
+      "summary": "Different jobs need different harnesses: read-only monitoring, scoped batch writing, broad-write automation, drafting, and parallel research are not the same agent problem.",
+      "improvement": "Define agent tiers, approval modes, sandbox rules, memory boundaries, and cost tracking.",
+      "benchmark_case": "runtime-router"
+    },
+    {
+      "theme": "Design is a governance problem",
+      "summary": "Avoiding generic AI design requires a pre-build ritual: diagnose convergence, choose a direction, bind the design spec, and audit the result.",
+      "improvement": "Add an anti-template design check to public-facing builds.",
+      "benchmark_case": "anti-template-design-governance"
+    },
+    {
+      "theme": "Scope discipline is a quality signal",
+      "summary": "A strong agent preserves ambition while shipping the smallest useful version first.",
+      "improvement": "Label requirements as ship-now, later, or not-yet before producing implementation plans.",
+      "benchmark_case": "mvp-scope-control"
+    },
+    {
+      "theme": "Communication work is operational work",
+      "summary": "Useful agents turn rough notes into concise client-safe recaps, decision requests, and next actions without inflating the tone.",
+      "improvement": "Create reusable briefs for audience, tone, must-include facts, must-avoid phrases, and privacy constraints.",
+      "benchmark_case": "client-communication-rewrite"
+    },
+    {
+      "theme": "Billing requires reconciliation",
+      "summary": "Chat/session history alone is not enough for client-facing billing; calendars, emails, drafts, deliverables, and unrelated noise must be reconciled.",
+      "improvement": "Standardize fields for work date, source-event date, evidence, delivery status, billability, estimate, confidence, and follow-up.",
+      "benchmark_case": "billing-reconciliation"
+    }
+  ],
+  "website_additions": [
+    "Session Deep Dive section",
+    "What I Should Improve table",
+    "Expanded benchmark case list",
+    "Observed archive pilot results",
+    "Failure mode atlas",
+    "Worked public-safe-repo case",
+    "Operating principles",
+    "Artifact translation table",
+    "Open questions",
+    "Privacy-safe methodology note"
+  ]
+}
