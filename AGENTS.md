@@ -24,7 +24,7 @@ This repo is an Astro 6 static portfolio site for `granolacowboy.dev`, deployed 
   - `caseStudies` render at `/work/<id>/`.
   - `draft: true` entries are filtered out.
   - `_TEMPLATE.mdx` files are intentionally excluded by the glob.
-- The current hero, About, Projects, and three posts are candidate drafts. Claim approval is not recorded, so do not push or deploy them until Rich completes the local claim ledger and approves the exact public wording.
+- The hero, About, Projects, and three launch posts were approved and deployed from commit `9be68f5` on 2026-07-08. Preserve their forward-deployed/applied-AI positioning and exact identity unless Rich requests another content pass.
 - Metric tokens remain in the three case studies. They are `draft: true` and produce no routes; keep them unpublished until Rich supplies and approves the narrative facts, anonymization treatment, and directional metrics.
 - Blog dates are intentionally hidden through `SHOW_DATES = false`; do not change this unless the user asks.
 - `NdaNote.astro` copy is fixed. Do not reword it without user sign-off.
@@ -93,7 +93,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
 
 5. Deployment and cutover.
    - Follow `planning/PHASE7-DEPLOY-RUNBOOK.md`.
-   - A push to GitHub `main` or any Vercel production deployment is an external change and requires explicit approval after `npm.cmd run verify` passes.
+- A push to GitHub `main` or any Vercel production deployment is an external change and requires explicit approval after `npm.cmd run verify` passes. Approval for the 2026-07-08 launch was granted and consumed; future releases require a new explicit instruction.
    - The launch `vercel.json` must contain security headers only, with no global `noindex`.
    - If the old production build must be hidden first, prepare the temporary header on `codex/noindex-hotfix`; do not merge or deploy it without explicit production approval, and remove it before launch.
    - After deployment, verify HTTPS, apex/www redirects, sitemap, RSS, zero placeholders, launch security headers, no noindex, and PageSpeed/Lighthouse.
