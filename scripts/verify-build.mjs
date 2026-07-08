@@ -199,6 +199,44 @@ const rssPaths = rssItems.map((item) => {
 const postPaths = publishedPostIds.map((id) => `/writing/${id}/`).sort();
 check(JSON.stringify(rssPaths) === JSON.stringify(postPaths), 'RSS item links exactly match published post routes');
 
+const expectedPostTitles = new Set([
+  'Deploying AI in a change-resistant vertical: field notes from a decade in law firms',
+  'Anatomy of a legal intake automation',
+  "What regulated-industry buyers actually need before they'll adopt AI",
+]);
+const postSourceDirectory = path.join(root, 'src', 'content', 'posts');
+const postSourceFiles = (await readdir(postSourceDirectory))
+  .filter((name) => !name.startsWith('_') && /\.mdx?$/.test(name));
+const publishedPostSources = [];
+for (const file of postSourceFiles) {
+  const source = await readFile(path.join(postSourceDirectory, file), 'utf8');
+  const parts = source.split(/^---\s*$/m);
+  const frontmatter = parts[1] ?? '';
+  const body = parts.slice(2).join('---');
+  if (/^draft:\s*true\s*$/im.test(frontmatter)) continue;
+  const title = frontmatter.match(/^title:\s*["']?(.*?)["']?\s*$/im)?.[1];
+  const wordCount = [...body.matchAll(/\b[\p{L}\p{N}][\p{L}\p{N}'-]*\b/gu)].length;
+  publishedPostSources.push({ file, title, wordCount, body });
+}
+check(publishedPostSources.length === 3, 'exactly 3 non-draft post sources exist');
+check(
+  publishedPostSources.every(({ wordCount }) => wordCount >= 800 && wordCount <= 1500),
+  `all published posts contain 800-1500 words (${publishedPostSources.map(({ file, wordCount }) => `${file}: ${wordCount}`).join(', ')})`
+);
+check(
+  publishedPostSources.every(({ body }) => /\bI\b|\bmy\b/i.test(body)),
+  'all published posts use a first-person voice'
+);
+check(
+  publishedPostSources.every(({ title }) => expectedPostTitles.has(title)),
+  'published post titles match the approved launch titles'
+);
+
+const emDashHtmlFiles = textEntries
+  .filter(([file, contents]) => path.extname(file).toLowerCase() === '.html' && contents.includes('—'))
+  .map(([file]) => path.relative(dist, file));
+check(emDashHtmlFiles.length === 0, 'published HTML contains no em dashes');
+
 const sitemapFiles = files.filter((file) => /^sitemap(?:-index|-\d+)?\.xml$/i.test(path.basename(file)));
 check(sitemapFiles.length >= 2, 'sitemap index and generated sitemap exist');
 const sitemapContents = (await Promise.all(sitemapFiles.map((file) => readFile(file, 'utf8')))).join('\n');
