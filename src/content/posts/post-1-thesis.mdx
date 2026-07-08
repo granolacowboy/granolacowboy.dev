@@ -1,6 +1,6 @@
 ---
-title: Why I Think Legal Tech Is About Plumbing, Not Chat Windows
-description: The real opportunity in legal technology is not another AI chatbot. It is the boring, invisible infrastructure between systems that nobody wants to build.
+title: "Deploying AI in a change-resistant vertical: field notes from a decade in law firms"
+description: What a decade inside law firms taught me about discovery, integration, evaluation, and production adoption.
 pubDate: 2026-07-01
 draft: false
 ---
@@ -11,9 +11,15 @@ Right now the hype cycle is all about chat interfaces. Every vendor has one. Dro
 
 The real work is plumbing. Connecting system A to system B in a way that does not break when someone changes a custom field. Making sure that when a new lead comes in through the website, it flows through conflict checks, gets routed to the right attorney, and lands in the practice management system without anyone having to retype anything. That is not glamorous work, but it is where the actual value lives.
 
+That distinction changes how I approach discovery. I do not start by asking which model a firm wants to use. I start by mapping where information enters, who touches it, which system is supposed to own it, and where the handoffs fail. A workflow diagram usually reveals more than a feature wishlist. It exposes duplicate entry, undocumented judgment calls, missing approval gates, and the places where staff have built manual workarounds because the official process does not match reality.
+
+Only then do I define what a successful deployment should prove. The acceptance criteria need to be operational: which fields must be captured, which decisions require human review, what happens when confidence is low, how the team can override a recommendation, and what gets logged for later review. Those details are not cleanup work after the model demo. They are the product. If the system cannot explain its boundaries and failure path to the people expected to use it, it is not ready for production.
+
 I started MHSB because I kept seeing firms buy good tools and then underuse them. Lawmatics is a great example. It can do a lot, but most firms I encounter are using maybe 30% of its capabilities. Not because they are lazy, but because nobody took the time to sit down and figure out how the tool should actually fit into their specific workflow. That requires someone who understands both the technology and the daily reality of running a law firm. It requires patience and attention to detail, not a sales pitch.
 
 Here is what I have noticed about the firms that get this right. They start small. They pick one workflow that is clearly broken (usually intake, because it is high-volume and highly repetitive) and they fix it properly. They do not try to automate everything at once. They get one pipeline working reliably, train the team on it, and then move to the next thing. It is boring and incremental and it works.
+
+The training step is part of the engineering. I want the people doing the work to see their own language, exceptions, and escalation paths reflected in the system. That makes feedback concrete and gives the team a reason to trust the next iteration. Adoption is not a launch-day communication problem. It is evidence that the discovery and implementation process included the people who understand the workflow best.
 
 The AI angle is real but it is overblown in the press. Yes, language models can extract structured data from an unstructured intake narrative faster than a human can. That is genuinely useful. But the hard part is not the extraction. The hard part is what happens next: validating the data, checking for conflicts, routing to the right person, logging the decision, all while maintaining attorney-client privilege and keeping data where it is supposed to be. That is systems engineering. That is plumbing.
 

@@ -1,6 +1,6 @@
 ---
-title: What I Learned Building an Intake Triage Server
-description: Notes from building an open-source MCP server for legal intake. What worked, what surprised me, and why I made the choices I did.
+title: Anatomy of a legal intake automation
+description: A concrete teardown of a legal intake workflow, its deterministic tools, human gates, and evaluation strategy.
 pubDate: 2026-07-02
 draft: false
 ---
@@ -12,6 +12,8 @@ The project started from a simple observation. Every law firm I work with has so
 I wanted to build a reference implementation that showed what a clean intake pipeline could look like. Not a product, just an example of one way to do it right.
 
 **The key design decision was separation of concerns.** The MCP architecture gives you a natural boundary: the language model handles the language work (parsing a messy intake narrative into structured fields), and the server handles the record work (validating those fields, screening for conflicts, generating follow-up templates, logging the triage decision). The server makes zero LLM calls. Everything it does is deterministic and testable.
+
+That boundary also makes evaluation more useful. Instead of asking whether the whole system "seems smart," I can test each deterministic contract directly. A practice-area lookup should return the same reference and provenance every time. Matter validation should produce the same missing-field warnings for the same input. The conflicts gate should block an unscreened record unless a named person supplies a reasoned override. Those are behaviors a team can review before any model is placed in the workflow, and they remain stable even when the client model changes.
 
 I was surprised by how much this clarified my thinking. When you force the server to be deterministic, you have to be explicit about every decision point. What are the conflict-matching thresholds? What fields count as "recommended" for a complete intake? What happens when someone tries to log a triage record without running a conflict check first? You end up with a system where every behavior is documented and testable, which is exactly what you want in a legal context.
 
@@ -26,5 +28,7 @@ I wrote 42 unit tests for the deterministic logic, which gave me a lot of confid
 **Things I would do differently.** The bundled sample data is all fictional, which is necessary for an open-source project but limits how realistic the demos can be. If I were building this for a specific firm, I would spend more time on the data model and less on the templating. The follow-up email templates are useful but formulaic; in practice, the language model is better at generating those than a deterministic template engine.
 
 I also want to explore what happens when you chain multiple MCP tools together in a single intake workflow. Right now each tool is independent. A more interesting architecture would let the client orchestrate a full pipeline: list practice areas, validate the matter, screen for conflicts, generate follow-up questions, and log the result, all in one conversation. That is closer to how intake actually works in a real firm.
+
+The orchestration still needs explicit stop conditions. Missing dates, ambiguous parties, or a possible conflict should pause the pipeline and ask for review instead of producing a confident-looking final record. That is where human-in-the-loop design becomes concrete: not a disclaimer at the end, but a set of gates tied to specific risks and logged decisions.
 
 I will keep iterating on this. If you are interested, the code is on GitHub and I welcome feedback on the architecture. I am learning in public here, and I would rather get corrected early than build on wrong assumptions.
