@@ -2,12 +2,14 @@
  * Central site configuration.
  */
 
-/** Working wordmark until real branding copy lands in Phase 4. */
-export const SITE_TITLE = 'Granola Cowboy';
+export const SITE_URL = 'https://granolacowboy.dev';
+export const PERSON_NAME = 'Rich Berman';
+export const HANDLE = 'granolacowboy';
+export const SITE_TITLE = `${PERSON_NAME} | ${HANDLE}`;
 
 /** Default meta description; pages override via BaseLayout's `description` prop. */
 export const SITE_DESCRIPTION =
-  'Notes on legal technology, automation, and building things for law firms. By the founder of MHSB.';
+  'Portfolio of Rich Berman, focused on forward-deployed engineering and applied AI.';
 
 /**
  * Blog posts render WITHOUT visible dates (PLAN Open Item #3, resolved 2026-06-10).
@@ -16,8 +18,12 @@ export const SITE_DESCRIPTION =
  */
 export const SHOW_DATES: boolean = false;
 
-/** Known profile links. */
+/** Public contact and profile links. */
+export const EMAIL = 'info@mhsbsolutions.com';
+export const EMAIL_URL = `mailto:${EMAIL}`;
+export const LINKEDIN_URL = 'https://linkedin.com/in/mhsb';
 export const GITHUB_URL = 'https://github.com/granolacowboy';
+export const RESUME_URL = '/resume.pdf';
 
 /** The Phase 5 open-source artifact (repo is created in Phase 5). */
 export const ARTIFACT_NAME = 'intake-triage-mcp';

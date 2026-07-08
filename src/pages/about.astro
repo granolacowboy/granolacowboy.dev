@@ -1,9 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { GITHUB_URL } from '../site.config';
+import {
+  EMAIL,
+  EMAIL_URL,
+  GITHUB_URL,
+  HANDLE,
+  LINKEDIN_URL,
+  PERSON_NAME,
+} from '../site.config';
 ---
 
-<BaseLayout title="About" description="About Granola Cowboy. Founder of MHSB, legal tech automation, Lawmatics, and building things in public.">
+<BaseLayout title="About" description={`About ${PERSON_NAME} | ${HANDLE}.`}>
   <article class="prose">
     <h1>About</h1>
     <p>I am the founder of <a href="https://mhsbsolutions.com">MHSB</a>, a consultancy in Greenville, SC that helps law firms get their technology right. We do Lawmatics implementations, CRM integrations, workflow automation, and (increasingly) AI adoption for firms of all sizes.</p>
@@ -13,9 +20,9 @@ import { GITHUB_URL } from '../site.config';
 
     <h2 id="contact">Contact</h2>
     <ul class="contact-list">
-      <li>Email: <a href="mailto:info@mhsbsolutions.com">info@mhsbsolutions.com</a></li>
+      <li>Email: <a href={EMAIL_URL}>{EMAIL}</a></li>
       <li><a href={GITHUB_URL}>GitHub</a></li>
-      <li><a href="https://linkedin.com/in/mhsb">LinkedIn</a></li>
+      <li><a href={LINKEDIN_URL}>LinkedIn</a></li>
       <li>Company: <a href="https://mhsbsolutions.com">mhsbsolutions.com</a></li>
     </ul>
   </article>
