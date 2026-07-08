@@ -152,6 +152,10 @@ img {
   padding-inline: var(--space-gutter);
 }
 
+.container-wide {
+  max-width: 78rem;
+}
+
 main {
   padding-block: 2.5rem 1rem;
 }

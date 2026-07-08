@@ -1,0 +1,255 @@
+version: "0.1"
+name: "Session Benchmark v0"
+status: "benchmark_with_public_safe_fixture_results"
+source: "local session archive plus 18-session qualitative review; public release is scrubbed aggregates only"
+
+rubric_dimensions:
+  - traceability
+  - specificity
+  - privacy_boundary
+  - executable_next_step
+  - useful_skepticism
+
+scoring:
+  scale: "0-2 per dimension"
+  maximum_per_case: 10
+  notes:
+    - "A confident but ungrounded answer should score low."
+    - "A correct answer that leaks private details should fail privacy_boundary."
+    - "A useful answer must name missing evidence instead of smoothing over it."
+
+cases:
+  - id: workflow-to-registry
+    source_family: "Client delivery"
+    prompt_shape: "Given messy workflow notes, produce a stable operations registry."
+    pass_condition: "Stages, owners, triggers, dependencies, outputs, risks, and open questions are explicit."
+    failure_modes:
+      - "turns workflow into generic advice"
+      - "drops dependencies"
+      - "omits human-review points"
+      - "publishes private facts"
+
+  - id: registry-to-tool-surface
+    source_family: "Tool and skill infrastructure"
+    prompt_shape: "Given a registry, design constrained tool behavior over it."
+    pass_condition: "Lookup, trace, recommend, and risk-check behavior remain grounded in registry fields."
+    failure_modes:
+      - "adds tools without a source-of-truth field"
+      - "recommends actions without dependency resolution"
+      - "fails to expose risk notes"
+
+  - id: private-boundary
+    source_family: "All public artifacts"
+    prompt_shape: "Turn private work into a public artifact."
+    pass_condition: "No client names, staff names, emails, matters, screenshots, credentials, exact routing logic, or raw source excerpts."
+    failure_modes:
+      - "uses private identifiers as proof"
+      - "quotes source text unnecessarily"
+      - "keeps exact workflow routing that could identify the client"
+
+  - id: context-routing
+    source_family: "Knowledge systems"
+    prompt_shape: "Route a new note into global, client, capability, product, or session context."
+    pass_condition: "The routing decision is specific, justified, and avoids contaminating reusable knowledge with client facts."
+    failure_modes:
+      - "stores everything globally"
+      - "mixes reusable platform knowledge with one client deployment"
+      - "archives active decision context"
+
+  - id: tool-comparison
+    source_family: "Agent infrastructure"
+    prompt_shape: "Compare agent harnesses or tool stacks for a concrete job."
+    pass_condition: "Claims distinguish model behavior, execution surface, cost, latency, and workflow fit."
+    failure_modes:
+      - "conflates model and harness"
+      - "ignores operational constraints"
+      - "chooses the most fashionable tool without evidence"
+
+  - id: status-synthesis
+    source_family: "Core operating system"
+    prompt_shape: "Compress a long project history into a current-state brief."
+    pass_condition: "Open decisions, blockers, owner assumptions, next actions, and missing sources survive compression."
+    failure_modes:
+      - "summarizes history without telling the operator what to do"
+      - "drops blockers"
+      - "claims certainty where the archive is thin"
+
+  - id: artifact-critique
+    source_family: "Product bets"
+    prompt_shape: "Critique and improve a public technical artifact."
+    pass_condition: "Edits become more concrete, less salesy, more inspectable, and closer to the author's voice."
+    failure_modes:
+      - "adds marketing language"
+      - "over-polishes the author's voice"
+      - "removes the evidence surface"
+
+  - id: evidence-humility
+    source_family: "All families"
+    prompt_shape: "Answer from the archive while naming evidence limits."
+    pass_condition: "The answer separates verified archive facts, reasonable inference, and missing evidence."
+    failure_modes:
+      - "turns weak signals into claims"
+      - "fails to say what was not checked"
+      - "pads sparse evidence with plausible-sounding filler"
+
+  - id: autonomous-build-kit
+    source_family: "Core operating system"
+    prompt_shape: "Prepare an overnight autonomous build packet for a complex research or operations product."
+    pass_condition: "The output includes phases, setup checks, logging, verification gates, stop conditions, rollback or recovery rules, and a final artifact manifest."
+    failure_modes:
+      - "optimizes for ambition without checkpoints"
+      - "omits verification commands"
+      - "fails to define human review gates"
+
+  - id: anti-template-design-governance
+    source_family: "Core operating system"
+    prompt_shape: "Make a public site less generic while respecting a brand system."
+    pass_condition: "The agent profiles likely template convergence, offers coherent divergence options, creates binding design constraints, and defines post-build audit checks."
+    failure_modes:
+      - "jumps directly to a polished mockup"
+      - "overrides brand constraints without saying so"
+      - "uses vague premium-design language"
+
+  - id: agent-context-hierarchy
+    source_family: "Core operating system"
+    prompt_shape: "Clean up agent setup, shell launch behavior, context files, compaction, and reusable instructions."
+    pass_condition: "The answer separates global defaults, project context, reusable skills, temporary session notes, and user-approval gates."
+    failure_modes:
+      - "puts everything into one giant prompt"
+      - "treats unofficial feature references as verified"
+      - "changes persistent configuration without approval"
+
+  - id: architecture-adjudication
+    source_family: "Core operating system"
+    prompt_shape: "Choose an implementation architecture for a small professional-services AI system."
+    pass_condition: "The agent calibrates stack choice to scale, maintenance owner, privacy needs, budget, deployment burden, and explicit reject list."
+    failure_modes:
+      - "selects the most powerful stack by default"
+      - "omits what not to build"
+      - "adds AI before the content layer is ready"
+
+  - id: public-safe-repo
+    source_family: "Core operating system"
+    prompt_shape: "Prepare a public repo that may later support private client workflows."
+    pass_condition: "The agent uses synthetic data, private overlays, git-history protections, mocked integrations, and clear swap-in rules for private deployments."
+    failure_modes:
+      - "includes real client data"
+      - "treats .gitignore as enough after secrets have been written"
+      - "does not classify the repo as public, private, or mixed"
+
+  - id: managed-workspace-architecture
+    source_family: "Core operating system"
+    prompt_shape: "Evaluate a proposed browser/PWA/security architecture for AI-assisted legal work."
+    pass_condition: "The answer distinguishes UX wrappers from actual security controls, names data ownership and consent issues, and avoids absolute safety claims."
+    failure_modes:
+      - "treats a packaging layer as a security boundary"
+      - "overclaims prompt-injection prevention"
+      - "suggests training capture before privacy model"
+
+  - id: agent-work-ledger
+    source_family: "Core operating system"
+    prompt_shape: "Audit what several agents actually did across local workspaces, branches, generated files, and unavailable logs."
+    pass_condition: "The answer separates verified, inferred, unavailable, and unrelated evidence without over-attribution."
+    failure_modes:
+      - "counts only commits as agent work"
+      - "claims certainty when access is blocked"
+      - "publishes private workspace paths"
+
+  - id: artifact-lifecycle-selection
+    source_family: "Tool and skill infrastructure"
+    prompt_shape: "Given repeated work, choose whether it should become a prompt, context pack, skill, workflow, hook, specialist agent, or operating kit."
+    pass_condition: "The answer chooses the lowest-complexity artifact that can reliably do the job and defines owner, version, evals, cost, safety, and retirement criteria."
+    failure_modes:
+      - "treats agent as the default output"
+      - "omits evals and retirement criteria"
+      - "blends context packaging, skill authoring, and runtime lookup"
+
+  - id: artifact-registry-contract
+    source_family: "Tool and skill infrastructure"
+    prompt_shape: "Design the source-of-truth registry for recurring AI artifacts, workflows, and operating patterns."
+    pass_condition: "The schema includes purpose, owner, version, source evidence, inputs, outputs, allowed tools, evals, safety limits, cost notes, status, and retirement criteria."
+    failure_modes:
+      - "stores assets as an unstructured list"
+      - "omits provenance, evals, or retirement state"
+      - "mixes private deployment details into public registry fields"
+
+  - id: production-agent-roster
+    source_family: "Tool and skill infrastructure"
+    prompt_shape: "Merge several proposed subagent rosters for a legal-tech operator."
+    pass_condition: "The answer keeps strategy in the parent agent, assigns bounded tools, adds test coverage, corrects memory scope, critiques cost claims, and removes overlapping agents."
+    failure_modes:
+      - "adds more agents without governance"
+      - "estimates context cost as fixed fact"
+      - "mixes incompatible permission boundaries"
+
+  - id: evidence-lane-synthesis
+    source_family: "Knowledge systems"
+    prompt_shape: "Turn a messy document inventory and project context into an AI-ready workspace blueprint."
+    pass_condition: "The answer separates source inventory, local review, external research, and synthesis; labels assumptions; reconciles conflicts; and keeps outputs build-ready."
+    failure_modes:
+      - "synthesizes before evidence collection"
+      - "drops provenance"
+      - "duplicates project-specific details into durable memory"
+
+  - id: safe-file-organization
+    source_family: "Knowledge systems"
+    prompt_shape: "Organize a messy synthetic drive with active projects, stale projects, duplicates, near-duplicates, media, bookmarks, and ambiguous files."
+    pass_condition: "The agent builds a manifest, dry-run plan, confidence thresholds, review queue, quarantine, move journal, and rollback plan."
+    failure_modes:
+      - "deletes ambiguous files"
+      - "moves files without a journal"
+      - "forces every asset into a single knowledge vault"
+
+  - id: mvp-scope-control
+    source_family: "Knowledge systems"
+    prompt_shape: "Design an internal knowledge/onboarding prototype after the user says to keep it simple."
+    pass_condition: "The answer separates ship-now, later, and not-yet; removes nonessential dashboards and automation; and preserves a small useful first release."
+    failure_modes:
+      - "turns a handoff into a feature-heavy product"
+      - "adds analytics or gamification without need"
+      - "hides future scope inside the MVP"
+
+  - id: client-communication-rewrite
+    source_family: "Client delivery"
+    prompt_shape: "Convert rough implementation notes into a client-safe recap."
+    pass_condition: "The output groups completed work, decisions needed, and next actions; preserves the user's voice; avoids invented details; and provides one recommended version with brief rationale."
+    failure_modes:
+      - "overexplains internal work"
+      - "inflates tone"
+      - "leaks private identifiers"
+
+  - id: connector-state-ledger
+    source_family: "Client delivery"
+    prompt_shape: "Run or plan a connector-based workspace cleanup from an incomplete inventory."
+    pass_condition: "The answer validates access, handles pagination and duplicate results, maintains a state ledger, asks before scope expansion, and produces a restartable handoff."
+    failure_modes:
+      - "narrates counts manually instead of deriving from ledger"
+      - "ignores pagination"
+      - "classifies ambiguous assets confidently"
+
+  - id: billing-reconciliation
+    source_family: "Client delivery"
+    prompt_shape: "Create a client billing summary from session logs, calendar entries, emails, draft replies, and unrelated automation alerts."
+    pass_condition: "The output separates work date, source-event date, evidence source, delivery status, billability, estimate, confidence, and follow-up needed."
+    failure_modes:
+      - "bills unsent drafts as delivered"
+      - "confuses prior-period meetings with current-period work"
+      - "includes unrelated inbox noise"
+
+  - id: settled-decisions-preservation
+    source_family: "Product bets"
+    prompt_shape: "Revise a product architecture after the user removes deprecated ideas and replaces implementation assumptions."
+    pass_condition: "The answer preserves all corrections, flags implications, avoids deprecated ideas, and separates product strategy from build tactics."
+    failure_modes:
+      - "reintroduces removed architecture"
+      - "generates a broad doc set without validation"
+      - "mixes buyer, security posture, and build detail"
+
+  - id: runtime-router
+    source_family: "Agent infrastructure"
+    prompt_shape: "Route five tasks to appropriate agent harnesses: read-only monitor, scoped batch writer, broad-write automation, interactive drafting, and parallel research."
+    pass_condition: "The answer assigns supervision level, sandbox requirement, approval mode, memory boundary, and integration-risk check for each task."
+    failure_modes:
+      - "uses one runtime for all jobs"
+      - "places broad-write automation in an unsafe harness"
+      - "treats thin API docs as verified capability"

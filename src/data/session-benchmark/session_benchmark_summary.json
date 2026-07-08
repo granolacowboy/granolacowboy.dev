@@ -1,0 +1,107 @@
+{
+  "version": "0.1",
+  "generated_from": "local_session_export_scrubbed",
+  "public_boundary": {
+    "published": [
+      "aggregate counts",
+      "scrubbed task-family labels",
+      "benchmark case definitions",
+      "mocked candidate fixture results",
+      "observed-archive pilot scores",
+      "failure-mode labels",
+      "synthetic registry fixture"
+    ],
+    "withheld": [
+      "client names",
+      "staff names",
+      "matters",
+      "emails",
+      "screenshots",
+      "credentials",
+      "private field names",
+      "raw source excerpts",
+      "production automations",
+      "exact routing logic",
+      "local source UUIDs"
+    ]
+  },
+  "corpus": {
+    "conversation_count": 1299,
+    "date_min": "2025-01-17",
+    "date_max": "2026-06-15",
+    "project_count": 146,
+    "project_memory_count": 62,
+    "ai_relevant_conversations": 869,
+    "ai_relevant_percent": 66.9,
+    "multi_entity_conversations": 528,
+    "multi_entity_percent": 40.6,
+    "long_threads_ge_8_messages": 244,
+    "long_threads_percent": 18.8,
+    "median_message_count": 3
+  },
+  "task_families": [
+    {
+      "label": "Core operating system",
+      "conversation_count": 674,
+      "entity_hits": 13897,
+      "public_note": "Identity, operating principles, reusable delivery context, and routing shells."
+    },
+    {
+      "label": "Tool and skill infrastructure",
+      "conversation_count": 298,
+      "entity_hits": 5386,
+      "public_note": "Repeatable workflows, execution surfaces, research helpers, and packaging."
+    },
+    {
+      "label": "Knowledge systems",
+      "conversation_count": 279,
+      "entity_hits": 3399,
+      "public_note": "Project memory, long-term knowledge bases, file organization, and context layers."
+    },
+    {
+      "label": "Client delivery",
+      "conversation_count": 258,
+      "entity_hits": 5508,
+      "public_note": "Scrubbed legal-operations delivery work and implementation planning."
+    },
+    {
+      "label": "Product bets",
+      "conversation_count": 179,
+      "entity_hits": 2192,
+      "public_note": "Product strategy, UX, public positioning, and experimental applications."
+    },
+    {
+      "label": "Agent infrastructure",
+      "conversation_count": 149,
+      "entity_hits": 3423,
+      "public_note": "Agent harnesses, runtime patterns, orchestration, and comparison work."
+    }
+  ],
+  "rubric_dimensions": [
+    "traceability",
+    "specificity",
+    "privacy_boundary",
+    "executable_next_step",
+    "useful_skepticism"
+  ],
+  "qualitative_deep_dive": {
+    "sessions_reviewed": 18,
+    "allocation": {
+      "Core operating system": 7,
+      "Tool and skill infrastructure": 3,
+      "Knowledge systems": 3,
+      "Client delivery": 3,
+      "Product bets": 1,
+      "Agent infrastructure": 1
+    },
+    "new_cases_added": 18
+  },
+  "candidate_fixture_results": {
+    "basis": "mocked_public_safe_fixture_run",
+    "candidate_count": 3,
+    "case_count": 26,
+    "pass_threshold": 8,
+    "result_file": "data/session_candidate_results.json"
+  },
+  "benchmark_status": "26_case_definitions_with_3_candidate_fixture_results_and_8_case_observed_archive_pilot"
+}

@@ -1,0 +1,1217 @@
+{
+  "version": "0.1",
+  "generated_on": "2026-06-19",
+  "basis": "mocked_public_safe_fixture_run",
+  "case_suite_status": "benchmark_with_public_safe_fixture_results",
+  "case_count": 26,
+  "candidate_count": 3,
+  "rubric_dimensions": [
+    "traceability",
+    "specificity",
+    "privacy_boundary",
+    "executable_next_step",
+    "useful_skepticism"
+  ],
+  "maximum_per_case": 10,
+  "pass_threshold": 8,
+  "public_boundary": "Mocked answer sets publish rubric scores and response patterns only. No raw source excerpts, source titles, client identifiers, private paths, emails, screenshots, credentials, exact routing logic, or live credential-dependent output are included.",
+  "live_run_status": {
+    "attempted": false,
+    "reason": "No live model credentials or provider CLI were available during local inspection; the public artifact uses deterministic mocked answer sets."
+  },
+  "methodology": [
+    "Each mocked candidate supplies one public-safe response pattern and five rubric scores for every case.",
+    "The runner validates complete 26-case coverage and computes totals from the score_by_dimension values.",
+    "A case passes when its total score is at least 8 out of 10.",
+    "These fixture results are smoke-test evidence for the benchmark harness, not live model claims."
+  ],
+  "score_table": [
+    {
+      "candidate_id": "baseline-generalist",
+      "label": "Baseline generalist",
+      "basis": "mocked answer set",
+      "cases_scored": 26,
+      "average_score": 3.85,
+      "pass_count": 0,
+      "strongest_dimension": "executable_next_step",
+      "weakest_dimension": "useful_skepticism"
+    },
+    {
+      "candidate_id": "privacy-first-operator",
+      "label": "Privacy-first operator",
+      "basis": "mocked answer set",
+      "cases_scored": 26,
+      "average_score": 8.54,
+      "pass_count": 25,
+      "strongest_dimension": "privacy_boundary",
+      "weakest_dimension": "executable_next_step"
+    },
+    {
+      "candidate_id": "fde-style-operator",
+      "label": "FDE-style operator",
+      "basis": "mocked answer set",
+      "cases_scored": 26,
+      "average_score": 9.73,
+      "pass_count": 26,
+      "strongest_dimension": "traceability",
+      "weakest_dimension": "useful_skepticism"
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "baseline-generalist",
+      "label": "Baseline generalist",
+      "basis": "mocked answer set",
+      "profile": "Fluent, broadly helpful answers that often sound reasonable before evidence and constraints are tied down.",
+      "case_count": 26,
+      "average_score": 3.85,
+      "pass_count": 0,
+      "pass_threshold": 8,
+      "strongest_dimension": "executable_next_step",
+      "weakest_dimension": "useful_skepticism",
+      "dimension_averages": {
+        "traceability": 0.62,
+        "specificity": 1.0,
+        "privacy_boundary": 1.0,
+        "executable_next_step": 1.08,
+        "useful_skepticism": 0.15
+      },
+      "results": [
+        {
+          "case_id": "workflow-to-registry",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Summarizes the workflow and suggests a registry but leaves owners and dependency checks vague."
+        },
+        {
+          "case_id": "registry-to-tool-surface",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Proposes generic lookup and reporting tools without binding every behavior to registry fields."
+        },
+        {
+          "case_id": "private-boundary",
+          "source_family": "All public artifacts",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 1
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Mentions anonymization but treats publication safety as a final review step."
+        },
+        {
+          "case_id": "context-routing",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Separates some note types but overuses global memory as the default destination."
+        },
+        {
+          "case_id": "tool-comparison",
+          "source_family": "Agent infrastructure",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 3,
+          "passed": false,
+          "response_pattern": "Compares tools by brand and feature list more than operating fit or execution risk."
+        },
+        {
+          "case_id": "status-synthesis",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 2,
+            "useful_skepticism": 0
+          },
+          "total_score": 5,
+          "passed": false,
+          "response_pattern": "Produces a clean status brief but does not preserve the evidence chain behind blockers."
+        },
+        {
+          "case_id": "artifact-critique",
+          "source_family": "Product bets",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Improves polish but adds generic positioning language and softens the evidence surface."
+        },
+        {
+          "case_id": "evidence-humility",
+          "source_family": "All families",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 3,
+          "passed": false,
+          "response_pattern": "Answers confidently from thin signals and does not separate verified facts from inference."
+        },
+        {
+          "case_id": "autonomous-build-kit",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 2,
+            "useful_skepticism": 1
+          },
+          "total_score": 6,
+          "passed": false,
+          "response_pattern": "Lays out phases but leaves stop conditions, logging, and recovery rules under-specified."
+        },
+        {
+          "case_id": "anti-template-design-governance",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Gives taste direction but not enough binding constraints or post-build audit checks."
+        },
+        {
+          "case_id": "agent-context-hierarchy",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Recommends a single setup document instead of separating durable, project, and temporary context."
+        },
+        {
+          "case_id": "architecture-adjudication",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Chooses a capable stack before fully accounting for owner, privacy, budget, and reject list."
+        },
+        {
+          "case_id": "public-safe-repo",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 1
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Mentions synthetic data but treats ignore files and later cleanup as sufficient safeguards."
+        },
+        {
+          "case_id": "managed-workspace-architecture",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 3,
+          "passed": false,
+          "response_pattern": "Explains the wrapper concept but overstates the security value of packaging and browser UX."
+        },
+        {
+          "case_id": "agent-work-ledger",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 3,
+          "passed": false,
+          "response_pattern": "Summarizes likely agent work but blurs verified, inferred, and unavailable evidence."
+        },
+        {
+          "case_id": "artifact-lifecycle-selection",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Chooses an artifact type but skips owner, eval, cost, retirement, and safety criteria."
+        },
+        {
+          "case_id": "artifact-registry-contract",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Creates a useful list of fields but misses provenance, evaluation, and retirement semantics."
+        },
+        {
+          "case_id": "production-agent-roster",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 3,
+          "passed": false,
+          "response_pattern": "Adds specialists for coverage without removing overlaps or keeping strategy in the parent agent."
+        },
+        {
+          "case_id": "evidence-lane-synthesis",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Combines source inventory and synthesis too early, losing provenance in the handoff."
+        },
+        {
+          "case_id": "safe-file-organization",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 3,
+          "passed": false,
+          "response_pattern": "Suggests organization categories but lacks manifest, confidence thresholds, and rollback journal."
+        },
+        {
+          "case_id": "mvp-scope-control",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 1
+          },
+          "total_score": 5,
+          "passed": false,
+          "response_pattern": "Keeps the goal recognizable but allows dashboard and automation scope to creep into the MVP."
+        },
+        {
+          "case_id": "client-communication-rewrite",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Produces a client-friendly note but overexplains internal implementation work."
+        },
+        {
+          "case_id": "connector-state-ledger",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 3,
+          "passed": false,
+          "response_pattern": "Gives progress narration instead of a restartable ledger with counts, skips, and ambiguity."
+        },
+        {
+          "case_id": "billing-reconciliation",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 0,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 3,
+          "passed": false,
+          "response_pattern": "Builds a billing summary but blurs work date, evidence date, and delivery status."
+        },
+        {
+          "case_id": "settled-decisions-preservation",
+          "source_family": "Product bets",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Acknowledges corrections but keeps deprecated options in play as if they were still live."
+        },
+        {
+          "case_id": "runtime-router",
+          "source_family": "Agent infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 1,
+            "executable_next_step": 1,
+            "useful_skepticism": 0
+          },
+          "total_score": 4,
+          "passed": false,
+          "response_pattern": "Routes tasks to tools, but uses one preferred runtime more often than risk warrants."
+        }
+      ]
+    },
+    {
+      "candidate_id": "privacy-first-operator",
+      "label": "Privacy-first operator",
+      "basis": "mocked answer set",
+      "profile": "Boundary-aware answers that reliably withhold sensitive material but sometimes under-specify the operational next move.",
+      "case_count": 26,
+      "average_score": 8.54,
+      "pass_count": 25,
+      "pass_threshold": 8,
+      "strongest_dimension": "privacy_boundary",
+      "weakest_dimension": "executable_next_step",
+      "dimension_averages": {
+        "traceability": 1.46,
+        "specificity": 1.96,
+        "privacy_boundary": 2.0,
+        "executable_next_step": 1.12,
+        "useful_skepticism": 2.0
+      },
+      "results": [
+        {
+          "case_id": "workflow-to-registry",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Builds a scrubbed registry with dependencies and open questions, but leaves automation detail light."
+        },
+        {
+          "case_id": "registry-to-tool-surface",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Constrains tools to registry fields and risk notes, with only moderate execution detail."
+        },
+        {
+          "case_id": "private-boundary",
+          "source_family": "All public artifacts",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Classifies the artifact boundary before writing and names exactly what stays withheld."
+        },
+        {
+          "case_id": "context-routing",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Routes client, capability, product, and session notes separately with contamination checks."
+        },
+        {
+          "case_id": "tool-comparison",
+          "source_family": "Agent infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Distinguishes model, harness, permissions, and workflow fit while avoiding unverified capability claims."
+        },
+        {
+          "case_id": "status-synthesis",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Gives current state and blockers while marking missing sources, but the first action is soft."
+        },
+        {
+          "case_id": "artifact-critique",
+          "source_family": "Product bets",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 1,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 7,
+          "passed": false,
+          "response_pattern": "Keeps the author's voice and evidence surface, but gives fewer concrete edit examples than ideal."
+        },
+        {
+          "case_id": "evidence-humility",
+          "source_family": "All families",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Separates verified, inferred, and missing evidence and refuses to pad thin signal."
+        },
+        {
+          "case_id": "autonomous-build-kit",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Defines gates, logs, stop conditions, and recovery rules with public-safe inputs only."
+        },
+        {
+          "case_id": "anti-template-design-governance",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Names anti-template checks and keeps brand constraints explicit, but leaves some audit steps broad."
+        },
+        {
+          "case_id": "agent-context-hierarchy",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Separates durable defaults, project context, session notes, and approval-gated config changes."
+        },
+        {
+          "case_id": "architecture-adjudication",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Calibrates stack choice to owner, budget, privacy, and reject list with conservative defaults."
+        },
+        {
+          "case_id": "public-safe-repo",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Requires public, private, or mixed classification before files are created."
+        },
+        {
+          "case_id": "managed-workspace-architecture",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Distinguishes UX wrapper from security control and names ownership and consent risks."
+        },
+        {
+          "case_id": "agent-work-ledger",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Separates verified, inferred, unavailable, and unrelated work without exposing local details."
+        },
+        {
+          "case_id": "artifact-lifecycle-selection",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Chooses the lowest-complexity artifact and names owner, eval, safety, and retirement criteria."
+        },
+        {
+          "case_id": "artifact-registry-contract",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Defines a public-safe registry with provenance, evals, cost, status, and retirement fields."
+        },
+        {
+          "case_id": "production-agent-roster",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Reduces overlapping agents and bounds tool access, but implementation sequencing is light."
+        },
+        {
+          "case_id": "evidence-lane-synthesis",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Keeps source inventory, local review, outside research, and synthesis in separate lanes."
+        },
+        {
+          "case_id": "safe-file-organization",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Requires manifest, dry run, confidence thresholds, quarantine, move journal, and rollback."
+        },
+        {
+          "case_id": "mvp-scope-control",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Splits ship-now, later, and not-yet while preserving a small useful first release."
+        },
+        {
+          "case_id": "client-communication-rewrite",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Groups completed work, decisions, and next actions without invented or private detail."
+        },
+        {
+          "case_id": "connector-state-ledger",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Maintains restartable state and access checks, but some ledger fields are summarized."
+        },
+        {
+          "case_id": "billing-reconciliation",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Separates work date, evidence date, delivery status, confidence, and follow-up needed."
+        },
+        {
+          "case_id": "settled-decisions-preservation",
+          "source_family": "Product bets",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Preserves corrections and rejects deprecated ideas, but follow-up artifact is only sketched."
+        },
+        {
+          "case_id": "runtime-router",
+          "source_family": "Agent infrastructure",
+          "score_by_dimension": {
+            "traceability": 1,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 8,
+          "passed": true,
+          "response_pattern": "Routes by supervision, sandbox, approval mode, memory boundary, and integration risk."
+        }
+      ]
+    },
+    {
+      "candidate_id": "fde-style-operator",
+      "label": "FDE-style operator",
+      "basis": "mocked answer set",
+      "profile": "Field-deployment-style answers that turn ambiguity into bounded artifacts, verification gates, and public-safe next actions.",
+      "case_count": 26,
+      "average_score": 9.73,
+      "pass_count": 26,
+      "pass_threshold": 8,
+      "strongest_dimension": "traceability",
+      "weakest_dimension": "useful_skepticism",
+      "dimension_averages": {
+        "traceability": 2.0,
+        "specificity": 2.0,
+        "privacy_boundary": 2.0,
+        "executable_next_step": 1.96,
+        "useful_skepticism": 1.77
+      },
+      "results": [
+        {
+          "case_id": "workflow-to-registry",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 1
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Creates a source-grounded registry with owners, triggers, dependencies, outputs, risks, and open questions."
+        },
+        {
+          "case_id": "registry-to-tool-surface",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 1
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Defines lookup, trace, recommend, and risk-check behavior strictly against registry fields."
+        },
+        {
+          "case_id": "private-boundary",
+          "source_family": "All public artifacts",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Makes publication safety a first constraint and lists withheld material before drafting."
+        },
+        {
+          "case_id": "context-routing",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Routes notes to the narrowest durable context layer and flags contamination risk."
+        },
+        {
+          "case_id": "tool-comparison",
+          "source_family": "Agent infrastructure",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Separates model, harness, execution surface, cost, latency, permission, and workflow fit."
+        },
+        {
+          "case_id": "status-synthesis",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 1
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Preserves current state, blockers, assumptions, next action, and evidence gaps."
+        },
+        {
+          "case_id": "artifact-critique",
+          "source_family": "Product bets",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 1
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Makes the artifact more inspectable while preserving voice and removing vague pitch language."
+        },
+        {
+          "case_id": "evidence-humility",
+          "source_family": "All families",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Labels verified facts, reasonable inference, missing evidence, and the next evidence-gathering step."
+        },
+        {
+          "case_id": "autonomous-build-kit",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Defines phases, setup checks, logs, gates, stop rules, recovery, and final artifact manifest."
+        },
+        {
+          "case_id": "anti-template-design-governance",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Turns taste into constraints, divergence options, and post-build audit checks."
+        },
+        {
+          "case_id": "agent-context-hierarchy",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Separates global defaults, project context, reusable skills, temporary notes, and approval gates."
+        },
+        {
+          "case_id": "architecture-adjudication",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Chooses the least burdensome architecture that satisfies scale, owner, privacy, budget, and reject list."
+        },
+        {
+          "case_id": "public-safe-repo",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Uses synthetic-first fixtures, private overlays, history protections, and swap-in rules."
+        },
+        {
+          "case_id": "managed-workspace-architecture",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 1,
+            "useful_skepticism": 2
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Distinguishes UX wrappers from security controls and avoids absolute safety claims."
+        },
+        {
+          "case_id": "agent-work-ledger",
+          "source_family": "Core operating system",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Audits verified, inferred, unavailable, and unrelated work with no private path disclosure."
+        },
+        {
+          "case_id": "artifact-lifecycle-selection",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Selects the smallest reliable artifact and defines owner, version, evals, cost, safety, and retirement."
+        },
+        {
+          "case_id": "artifact-registry-contract",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Builds a registry contract with provenance, allowed tools, evals, safety, status, and retirement."
+        },
+        {
+          "case_id": "production-agent-roster",
+          "source_family": "Tool and skill infrastructure",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 1
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Bounds agent roles, removes overlap, keeps strategy centralized, and adds test coverage."
+        },
+        {
+          "case_id": "evidence-lane-synthesis",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Keeps inventory, local review, outside research, and synthesis separate until conflicts are reconciled."
+        },
+        {
+          "case_id": "safe-file-organization",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Plans manifest, dry run, confidence thresholds, review queue, quarantine, journal, and rollback."
+        },
+        {
+          "case_id": "mvp-scope-control",
+          "source_family": "Knowledge systems",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Protects a small first release and explicitly defers or rejects nonessential dashboards and automation."
+        },
+        {
+          "case_id": "client-communication-rewrite",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 1
+          },
+          "total_score": 9,
+          "passed": true,
+          "response_pattern": "Produces one client-safe recap with completed work, decisions, next actions, and no invented facts."
+        },
+        {
+          "case_id": "connector-state-ledger",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Validates access, handles pagination and duplicates, maintains a state ledger, and asks before scope expansion."
+        },
+        {
+          "case_id": "billing-reconciliation",
+          "source_family": "Client delivery",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Separates work date, source-event date, evidence, status, billability, estimate, confidence, and follow-up."
+        },
+        {
+          "case_id": "settled-decisions-preservation",
+          "source_family": "Product bets",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Promotes corrections into constraints and excludes deprecated architecture from the revised plan."
+        },
+        {
+          "case_id": "runtime-router",
+          "source_family": "Agent infrastructure",
+          "score_by_dimension": {
+            "traceability": 2,
+            "specificity": 2,
+            "privacy_boundary": 2,
+            "executable_next_step": 2,
+            "useful_skepticism": 2
+          },
+          "total_score": 10,
+          "passed": true,
+          "response_pattern": "Routes each task by supervision, sandbox, approval, memory, duration, and integration risk."
+        }
+      ]
+    }
+  ]
+}

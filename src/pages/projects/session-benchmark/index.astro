@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SessionNav from '../../../components/session-benchmark/SessionNav.astro';
+import summary from '../../../data/session-benchmark/session_benchmark_summary.json';
+import deepDive from '../../../data/session-benchmark/session_deep_dive_summary.json';
+import '../../../styles/session-benchmark.css';
+
+const dataBase = '/projects/session-benchmark/data';
+---
+
+<BaseLayout
+  title="Session Benchmark v0"
+  description="A public, client-scrubbed benchmark for evaluating agent work across messy, private, and long-running context."
+  wide
+>
+  <article class="benchmark-page">
+    <header>
+      <p class="benchmark-kicker">Research artifact</p>
+      <h1>Session Benchmark v0</h1>
+      <p class="benchmark-lede">A benchmark shell built from aggregate patterns across 1,299 agent sessions. It tests whether an agent can keep evidence, constraints, privacy boundaries, and useful next actions intact when the source context is messy.</p>
+      <div class="benchmark-notice">
+        <p><strong>Public boundary:</strong> this project publishes scrubbed aggregates, benchmark definitions, mocked candidate fixtures, subjective pilot scores, and synthetic registry data. The private source archive remains local. It does not publish raw source excerpts, source identifiers, client details, credentials, screenshots, or production routing.</p>
+      </div>
+    </header>
+
+    <SessionNav current="overview" />
+
+    <ul class="metric-grid" aria-label="Benchmark summary">
+      <li><strong>{summary.corpus.conversation_count.toLocaleString()}</strong><span>sessions in the source archive</span></li>
+      <li><strong>{summary.corpus.ai_relevant_conversations.toLocaleString()}</strong><span>AI-relevant sessions</span></li>
+      <li><strong>{deepDive.sessions_reviewed}</strong><span>sessions reviewed qualitatively</span></li>
+      <li><strong>{summary.candidate_fixture_results.case_count}</strong><span>benchmark cases</span></li>
+    </ul>
+
+    <section class="benchmark-section" aria-labelledby="artifact-shift-heading">
+      <h2 id="artifact-shift-heading">From deployment artifact to session benchmark</h2>
+      <p>The project began as a synthetic registry-first deployment example. The more useful anchor was the archive itself: a long trail of sessions where recurring work becomes visible in aggregate.</p>
+      <p>The benchmark asks a narrower question than whether an agent can write a polished answer. It asks whether the agent can preserve constraints while crossing between rough notes, tools, private context, and public artifacts. The current release contains 26 cases, three mocked public-safe candidate profiles, and an eight-case observed-archive pilot used as calibration.</p>
+      <p>This is not a live leaderboard. The fixture proves the scoring harness and public artifact shape before any provider-backed candidate run is claimed.</p>
+    </section>
+
+    <section class="benchmark-section benchmark-section-wide" aria-labelledby="corpus-heading">
+      <h2 id="corpus-heading">Corpus shape</h2>
+      <div class="table-region" role="region" tabindex="0" aria-label="Corpus task families table">
+        <table class="benchmark-table">
+          <caption>Scrubbed task-family counts derived from the local archive</caption>
+          <thead><tr><th scope="col">Task family</th><th scope="col">Sessions</th><th scope="col">Public note</th></tr></thead>
+          <tbody>
+            {summary.task_families.map((family) => (
+              <tr><th scope="row">{family.label}</th><td>{family.conversation_count}</td><td>{family.public_note}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="benchmark-section" aria-labelledby="deep-dive-heading">
+      <h2 id="deep-dive-heading">What the qualitative review added</h2>
+      <p>The 18-session proportional review added cases where generic benchmark prompts usually miss operational detail.</p>
+      <ol class="theme-list">
+        {deepDive.themes.map((theme) => (
+          <li><strong>{theme.theme}</strong><span>{theme.summary}</span></li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="benchmark-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">Publication boundary</h2>
+      <p><strong>Published:</strong> {summary.public_boundary.published.join(', ')}.</p>
+      <p><strong>Withheld:</strong> {summary.public_boundary.withheld.join(', ')}.</p>
+    </section>
+
+    <section class="benchmark-section" aria-labelledby="downloads-heading">
+      <h2 id="downloads-heading">Data and eval downloads</h2>
+      <ul class="download-list">
+        <li><a href={`${dataBase}/session_benchmark_summary.json`}>Corpus summary (JSON)</a></li>
+        <li><a href={`${dataBase}/session_deep_dive_summary.json`}>Qualitative review summary (JSON)</a></li>
+        <li><a href={`${dataBase}/session_benchmark_cases.yml`}>Benchmark cases (YAML)</a></li>
+        <li><a href={`${dataBase}/candidate_answer_sets.json`}>Mocked candidate answer sets (JSON)</a></li>
+        <li><a href={`${dataBase}/session_candidate_results.json`}>Mocked fixture results (JSON)</a></li>
+        <li><a href={`${dataBase}/session_pilot_results.json`}>Observed-archive pilot results (JSON)</a></li>
+        <li><a href={`${dataBase}/failure_mode_atlas.json`}>Failure mode atlas (JSON)</a></li>
+        <li><a href={`${dataBase}/synthetic_asset_registry.csv`}>Synthetic asset registry (CSV)</a></li>
+      </ul>
+    </section>
+  </article>
+</BaseLayout>

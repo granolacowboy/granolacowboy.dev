@@ -7,6 +7,7 @@ dist/
 .vercel/
 .netlify/
 .playwright-cli/
+.playwright-mcp/
 
 # dependencies
 node_modules/
@@ -34,3 +35,6 @@ artifact/
 # local planning material - never ship in public repo
 PLAN.md
 planning/
+
+# local session export and import staging; contains private source material
+sessions/

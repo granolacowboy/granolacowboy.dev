@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SessionNav from '../../../components/session-benchmark/SessionNav.astro';
+import cases from '../../../data/session-benchmark/session_benchmark_cases.json';
+import candidateResults from '../../../data/session-benchmark/session_candidate_results.json';
+import pilotResults from '../../../data/session-benchmark/session_pilot_results.json';
+import '../../../styles/session-benchmark.css';
+---
+
+<BaseLayout title="Session Benchmark cases" description="The 26 cases, mocked fixture profiles, and observed-archive pilot for Session Benchmark v0." wide>
+  <article class="benchmark-page">
+    <header>
+      <p class="benchmark-kicker">Session Benchmark v0</p>
+      <h1>Cases and results</h1>
+      <p class="benchmark-lede">Twenty-six cases test traceability, specificity, privacy boundaries, executable next steps, and useful skepticism.</p>
+      <div class="benchmark-notice"><p><strong>Interpretation:</strong> candidate scores are deterministic mocked fixtures. Pilot scores are subjective calibration judgments from eight archive patterns. Neither is a live model leaderboard.</p></div>
+    </header>
+
+    <SessionNav current="cases" />
+
+    <section class="benchmark-section benchmark-section-wide" aria-labelledby="candidate-heading">
+      <h2 id="candidate-heading">Mocked candidate fixture</h2>
+      <div class="table-region" role="region" tabindex="0" aria-label="Mocked candidate fixture results table">
+        <table class="benchmark-table">
+          <caption>Three public-safe mocked profiles scored across all 26 cases</caption>
+          <thead><tr><th scope="col">Profile</th><th scope="col">Average</th><th scope="col">Passes</th><th scope="col">Strongest dimension</th><th scope="col">Weakest dimension</th></tr></thead>
+          <tbody>
+            {candidateResults.score_table.map((candidate) => (
+              <tr data-candidate-profile>
+                <th scope="row">{candidate.label}</th><td>{candidate.average_score.toFixed(2)}</td><td>{candidate.pass_count} / {candidate.cases_scored}</td><td>{candidate.strongest_dimension}</td><td>{candidate.weakest_dimension}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="benchmark-section benchmark-section-wide" aria-labelledby="pilot-heading">
+      <h2 id="pilot-heading">Observed-archive pilot</h2>
+      <div class="table-region" role="region" tabindex="0" aria-label="Observed archive pilot table">
+        <table class="benchmark-table">
+          <caption>Eight subjective calibration scores from representative archive patterns</caption>
+          <thead><tr><th scope="col">Case</th><th scope="col">Score</th><th scope="col">Confidence</th><th scope="col">Observed strength</th><th scope="col">Observed failure</th></tr></thead>
+          <tbody>
+            {pilotResults.results.map((result) => (
+              <tr data-pilot-result><th scope="row">{result.case_id}</th><td>{result.total_score} / 10</td><td>{result.confidence}</td><td>{result.observed_strength}</td><td>{result.observed_failure}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="benchmark-section benchmark-section-wide" aria-labelledby="cases-heading">
+      <h2 id="cases-heading">Case definitions</h2>
+      <div class="table-region" role="region" tabindex="0" aria-label="Benchmark case definitions table">
+        <table class="benchmark-table">
+          <caption>All 26 benchmark cases and their public pass conditions</caption>
+          <thead><tr><th scope="col">Case</th><th scope="col">Source family</th><th scope="col">Prompt shape</th><th scope="col">Pass condition</th><th scope="col">Failure modes</th></tr></thead>
+          <tbody>
+            {cases.cases.map((entry) => (
+              <tr data-benchmark-case><th scope="row">{entry.id}</th><td>{entry.source_family}</td><td>{entry.prompt_shape}</td><td>{entry.pass_condition}</td><td>{entry.failure_modes.join('; ')}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p><a href="/projects/session-benchmark/data/session_benchmark_cases.yml">Download the complete case definitions (YAML)</a></p>
+    </section>
+  </article>
+</BaseLayout>
