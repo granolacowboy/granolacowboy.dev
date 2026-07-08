@@ -1,0 +1,33 @@
+---
+title: Secure CRM Integration
+client: Enterprise Legal Department
+summary: "Custom integration bridging a legacy CRM with modern compliance tools, resulting in [PLACEHOLDER] percent faster onboarding."
+order: 2
+outcomes:
+  - "Eliminated [PLACEHOLDER] manual data entry steps per client"
+  - Ensured secure data transit between on-premise and cloud environments
+  - Achieved full adoption by the legal operations team
+stack:
+  - Python
+  - Node.js
+  - REST APIs
+draft: true
+---
+
+## Context
+
+An enterprise legal department was struggling to manage its growing volume of external counsel relationships. They relied on a legacy CRM that was heavily customized but increasingly disconnected from their modern communication and billing platforms. The legal operations team was forced to manually copy information between systems, which led to data inconsistencies and delayed vendor onboarding.
+
+## Complication
+
+The legacy CRM had limited API support and strict firewall rules. Any new integration had to navigate a complex set of internal security policies and pass a rigorous InfoSec review. Furthermore, the data being synchronized included sensitive contract terms and billing rates, meaning that standard middleware services like Zapier were explicitly prohibited.
+
+## What I built
+
+I architected a custom middleware solution that sat behind the corporate firewall. This application securely polled the legacy CRM database for changes and pushed updates to the modern billing platform using encrypted API channels. 
+
+I wrote robust data transformation scripts to map the archaic database schema of the CRM to the modern REST API requirements. To ensure reliability, I implemented a comprehensive logging and alerting system that notified the legal operations team of any synchronization failures. I also built a lightweight internal web portal that allowed the team to monitor data flows and trigger manual syncs when necessary.
+
+## Outcome
+
+The custom integration seamlessly connected the disparate systems, eliminating the need for manual data entry. Vendor onboarding time dropped from an average of [PLACEHOLDER: X] days to just [PLACEHOLDER: X] hours. Data accuracy improved dramatically, reducing billing discrepancies and saving the department an estimated [PLACEHOLDER: X] dollars in the first quarter. The solution successfully passed all InfoSec audits and is now maintained by the internal IT team.

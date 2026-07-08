@@ -1,14 +1,13 @@
 /**
  * Central site configuration.
- * [NAME] and [PLACEHOLDER — Phase 4] values are replaced with real copy in Phase 4.
  */
 
 /** Working wordmark until real branding copy lands in Phase 4. */
-export const SITE_TITLE = 'granolacowboy.dev';
+export const SITE_TITLE = 'Granola Cowboy';
 
 /** Default meta description; pages override via BaseLayout's `description` prop. */
 export const SITE_DESCRIPTION =
-  '[PLACEHOLDER — Phase 4] Portfolio of [NAME]: AI implementation in the legal vertical.';
+  'Notes on legal technology, automation, and building things for law firms. By the founder of MHSB.';
 
 /**
  * Blog posts render WITHOUT visible dates (PLAN Open Item #3, resolved 2026-06-10).
@@ -30,4 +29,4 @@ export const ARTIFACT_REPO_URL = 'https://github.com/granolacowboy/intake-triage
  * Leave '' until the post ships; write-up link slots render a placeholder
  * instead of a link while this is empty.
  */
-export const ARTIFACT_WRITEUP_PATH: string = '';
+export const ARTIFACT_WRITEUP_PATH: string = '/writing/post-2-intake-anatomy/';

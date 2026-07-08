@@ -2,7 +2,7 @@
 
 Source for [granolacowboy.dev](https://granolacowboy.dev), a personal portfolio site.
 
-**Stack:** [Astro 6](https://astro.build) static output (no client-side framework, no adapter), deployed on [Netlify](https://www.netlify.com/).
+**Stack:** [Astro 6](https://astro.build) static output (no client-side framework, no adapter), deployed on [Vercel](https://vercel.com/) (static `dist/`, auto-deploy from GitHub `main`).
 
 ## Commands
 

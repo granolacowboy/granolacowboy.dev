@@ -18,9 +18,9 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
 
 <BaseLayout>
   <section class="hero">
-    <h1>[NAME]</h1>
-    <p class="lede">[PLACEHOLDER — Phase 4: two-sentence hero positioning per report §B.1.]</p>
-    <a class="cta" href="/about/">[PLACEHOLDER — Phase 4: CTA label]</a>
+    <h1>Granola Cowboy</h1>
+    <p class="lede">I run MHSB, where I help law firms get their automation right. This site is where I write about what I am learning along the way.</p>
+    <a class="cta" href="/about/">More about me</a>
   </section>
 
   {
@@ -65,7 +65,7 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
     <h2 id="featured-project-heading">Featured project</h2>
     <div class="card">
       <h3>{ARTIFACT_NAME}</h3>
-      <p>[PLACEHOLDER — Phase 4: one-paragraph description of the intake-triage MCP artifact.]</p>
+      <p>An open-source MCP server for legal intake triage. Deterministic conflict checks, matter validation, and follow-up templating, with no LLM calls inside the server. I built it to show what a secure, auditable intake pipeline looks like in practice.</p>
       <p>
         <a href={ARTIFACT_REPO_URL}>Repository</a> · <a href="/projects/">About this project</a>
       </p>

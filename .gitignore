@@ -23,9 +23,6 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# cloudflare
-.wrangler/
-
 # MCP artifact develops here; ships in its own repo, never in this one
 artifact/
 

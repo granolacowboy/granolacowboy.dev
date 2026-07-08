@@ -10,7 +10,7 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
 );
 ---
 
-<BaseLayout title="Writing" description="[PLACEHOLDER — Phase 4] Writing by [NAME].">
+<BaseLayout title="Writing" description="Essays on legal technology, forward-deployed engineering, and building for regulated buyers.">
   <h1>Writing</h1>
   {
     posts.length > 0 && (

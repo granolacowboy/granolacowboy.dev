@@ -1,0 +1,30 @@
+---
+title: What I Learned Building an Intake Triage Server
+description: Notes from building an open-source MCP server for legal intake. What worked, what surprised me, and why I made the choices I did.
+pubDate: 2026-07-02
+draft: false
+---
+
+I recently finished building an open-source legal intake triage server using the Model Context Protocol, and I want to write down what I learned while it is still fresh.
+
+The project started from a simple observation. Every law firm I work with has some version of the same intake problem: leads come in through multiple channels (web forms, phone calls, emails, referrals), someone has to manually review each one, figure out if it fits the firm's criteria, check for conflicts, and get it into the practice management system. It is repetitive, error-prone, and usually the first thing that breaks when a firm gets busy.
+
+I wanted to build a reference implementation that showed what a clean intake pipeline could look like. Not a product, just an example of one way to do it right.
+
+**The key design decision was separation of concerns.** The MCP architecture gives you a natural boundary: the language model handles the language work (parsing a messy intake narrative into structured fields), and the server handles the record work (validating those fields, screening for conflicts, generating follow-up templates, logging the triage decision). The server makes zero LLM calls. Everything it does is deterministic and testable.
+
+I was surprised by how much this clarified my thinking. When you force the server to be deterministic, you have to be explicit about every decision point. What are the conflict-matching thresholds? What fields count as "recommended" for a complete intake? What happens when someone tries to log a triage record without running a conflict check first? You end up with a system where every behavior is documented and testable, which is exactly what you want in a legal context.
+
+**The conflict-screening logic was trickier than I expected.** Name matching sounds simple until you realize that "Meridian Fabrication LLC" and "Meridian Fabrication" and "Meridian Fabrication, L.L.C." all need to match, but "Meridian Holdings" should only be flagged as a possible match, not an exact one. I ended up using a three-pass approach: normalize the raw string (lowercase, strip punctuation, collapse whitespace), strip common legal suffixes (LLC, Inc, Corp, Co, etc.), and then compare both the original normalized strings and the sorted token sequences. The max of all three similarity scores determines the match strength.
+
+It works well enough for a sample dataset, but it made me appreciate why real conflict-checking systems are complicated. In production you would need phonetic matching, nickname resolution, entity relationship tracking, and probably a human review step for anything above a certain threshold. My implementation is honest about this: it labels its results as "screen-level only, not a firm-wide conflicts clearance."
+
+**The conflicts gate turned out to be my favorite feature.** It is a simple idea: the server refuses to log a triage record if the conflicts status is "not-run" unless someone explicitly provides their name and a documented rationale for bypassing the check. This prevents the common failure mode where an AI system silently skips a safety step. If you want to bypass it, you can, but you have to be explicit about it, and the override is permanently recorded in the log.
+
+I wrote 42 unit tests for the deterministic logic, which gave me a lot of confidence in the core behavior. The tests cover name normalization edge cases, all nine cells of the severity-times-likelihood risk matrix, the conflicts gate blocking and override paths, and the append-only log format. Running `pytest` and seeing all 42 pass is a good feeling.
+
+**Things I would do differently.** The bundled sample data is all fictional, which is necessary for an open-source project but limits how realistic the demos can be. If I were building this for a specific firm, I would spend more time on the data model and less on the templating. The follow-up email templates are useful but formulaic; in practice, the language model is better at generating those than a deterministic template engine.
+
+I also want to explore what happens when you chain multiple MCP tools together in a single intake workflow. Right now each tool is independent. A more interesting architecture would let the client orchestrate a full pipeline: list practice areas, validate the matter, screen for conflicts, generate follow-up questions, and log the result, all in one conversation. That is closer to how intake actually works in a real firm.
+
+I will keep iterating on this. If you are interested, the code is on GitHub and I welcome feedback on the architecture. I am learning in public here, and I would rather get corrected early than build on wrong assumptions.

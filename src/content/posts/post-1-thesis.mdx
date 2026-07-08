@@ -1,0 +1,24 @@
+---
+title: Why I Think Legal Tech Is About Plumbing, Not Chat Windows
+description: The real opportunity in legal technology is not another AI chatbot. It is the boring, invisible infrastructure between systems that nobody wants to build.
+pubDate: 2026-07-01
+draft: false
+---
+
+I have been doing legal technology work for a while now, and I keep coming back to the same conclusion: the interesting problems in this space are not where most people are looking.
+
+Right now the hype cycle is all about chat interfaces. Every vendor has one. Drop a question into a box, get an answer back. Some of them are genuinely useful. But when I sit down with a firm and look at where they are actually losing time and money, it is almost never "we need a chatbot." It is "our intake forms dump into a spreadsheet that somebody manually copies into Lawmatics twice a week" or "we have three systems that each think they are the source of truth for client contact info."
+
+The real work is plumbing. Connecting system A to system B in a way that does not break when someone changes a custom field. Making sure that when a new lead comes in through the website, it flows through conflict checks, gets routed to the right attorney, and lands in the practice management system without anyone having to retype anything. That is not glamorous work, but it is where the actual value lives.
+
+I started MHSB because I kept seeing firms buy good tools and then underuse them. Lawmatics is a great example. It can do a lot, but most firms I encounter are using maybe 30% of its capabilities. Not because they are lazy, but because nobody took the time to sit down and figure out how the tool should actually fit into their specific workflow. That requires someone who understands both the technology and the daily reality of running a law firm. It requires patience and attention to detail, not a sales pitch.
+
+Here is what I have noticed about the firms that get this right. They start small. They pick one workflow that is clearly broken (usually intake, because it is high-volume and highly repetitive) and they fix it properly. They do not try to automate everything at once. They get one pipeline working reliably, train the team on it, and then move to the next thing. It is boring and incremental and it works.
+
+The AI angle is real but it is overblown in the press. Yes, language models can extract structured data from an unstructured intake narrative faster than a human can. That is genuinely useful. But the hard part is not the extraction. The hard part is what happens next: validating the data, checking for conflicts, routing to the right person, logging the decision, all while maintaining attorney-client privilege and keeping data where it is supposed to be. That is systems engineering. That is plumbing.
+
+I am increasingly interested in architectures that make this plumbing more explicit. The Model Context Protocol is one example. By separating the reasoning (what the language model does) from the record-keeping (what the server does), you get a system where the deterministic parts are testable and auditable, and the language parts are clearly bounded. I built an open-source intake triage server using this pattern, and I have been writing about what I learned from that process.
+
+If you are a firm thinking about automation, my honest advice is: ignore the AI marketing for now. Look at where your team is doing copy-paste work between systems. Look at where data gets stale or inconsistent. Fix that first. The AI stuff will layer on top much more cleanly once your foundation is solid.
+
+I plan to keep writing here about what I am learning, what I am building, and what I am getting wrong. That last part matters. I do not have all the answers. I am figuring this out as I go, and I think the most useful thing I can do is be transparent about the process.
