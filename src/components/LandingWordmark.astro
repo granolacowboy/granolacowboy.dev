@@ -1,0 +1,116 @@
+---
+import { HANDLE } from '../site.config';
+
+const glyphs = Array.from(HANDLE);
+---
+
+<h1
+  id="landing-wordmark"
+  class="kinetic-wordmark"
+  aria-label={HANDLE}
+  data-wordmark
+>
+  {
+    glyphs.map((glyph, index) => (
+      <span
+        class="kinetic-wordmark__glyph"
+        aria-hidden="true"
+        data-wordmark-glyph
+        style={`--glyph-index: ${index};`}
+      >
+        {glyph}
+      </span>
+    ))
+  }
+</h1>
+
+<script is:inline>
+  (() => {
+    const wordmark = document.querySelector('[data-wordmark]');
+    if (!(wordmark instanceof HTMLElement)) return;
+
+    const glyphs = [...wordmark.querySelectorAll('[data-wordmark-glyph]')]
+      .filter((glyph) => glyph instanceof HTMLElement);
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reducedMotion.matches || glyphs.length === 0) return;
+
+    let animationFrame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    let hasPointer = false;
+
+    const reset = () => {
+      for (const glyph of glyphs) {
+        glyph.style.removeProperty('--glyph-y');
+        glyph.style.removeProperty('--glyph-rotate');
+        glyph.style.removeProperty('--glyph-scale-y');
+      }
+    };
+
+    const render = () => {
+      animationFrame = 0;
+      if (!hasPointer) {
+        reset();
+        return;
+      }
+
+      const wordmarkRect = wordmark.getBoundingClientRect();
+      const influenceRadius = Math.max(120, wordmarkRect.width * 0.18);
+
+      for (const glyph of glyphs) {
+        const rect = glyph.getBoundingClientRect();
+        const glyphX = rect.left + rect.width / 2;
+        const glyphY = rect.top + rect.height / 2;
+        const deltaX = pointerX - glyphX;
+        const deltaY = pointerY - glyphY;
+        const distance = Math.hypot(deltaX, deltaY);
+        const influence = Math.max(0, 1 - distance / influenceRadius);
+
+        const verticalDirection = deltaY === 0 ? 0 : deltaY / Math.abs(deltaY);
+        const horizontalDirection = deltaX === 0 ? 0 : deltaX / Math.abs(deltaX);
+
+        glyph.style.setProperty(
+          '--glyph-y',
+          `${(-verticalDirection * influence * 7).toFixed(2)}px`,
+        );
+        glyph.style.setProperty(
+          '--glyph-rotate',
+          `${(horizontalDirection * influence * 1.6).toFixed(2)}deg`,
+        );
+        glyph.style.setProperty(
+          '--glyph-scale-y',
+          `${(1 + influence * 0.045).toFixed(3)}`,
+        );
+      }
+    };
+
+    const requestRender = () => {
+      if (animationFrame) return;
+      animationFrame = window.requestAnimationFrame(render);
+    };
+
+    const handlePointerMove = (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      hasPointer = true;
+      requestRender();
+    };
+
+    const handlePointerLeave = () => {
+      hasPointer = false;
+      requestRender();
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    document.documentElement.addEventListener('pointerleave', handlePointerLeave);
+
+    reducedMotion.addEventListener('change', (event) => {
+      if (!event.matches) return;
+      hasPointer = false;
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+      reset();
+    });
+  })();
+</script>

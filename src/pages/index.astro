@@ -1,74 +1,25 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import NdaNote from '../components/NdaNote.astro';
-import { ARTIFACT_NAME, ARTIFACT_REPO_URL, HANDLE, PERSON_NAME } from '../site.config';
-
-// Drafts never render: excluded here and in every getStaticPaths (PLAN Phase 2).
-// Sections below render only when they have entries; empty sections are simply absent.
-const caseStudies = (await getCollection('caseStudies', ({ data }) => !data.draft)).sort(
-  (a, b) => a.data.order - b.data.order
-);
-
-// pubDate orders the list only; dates are never displayed (SHOW_DATES in site.config).
-const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+import LandingLayout from '../layouts/LandingLayout.astro';
+import LandingWordmark from '../components/LandingWordmark.astro';
 ---
 
-<BaseLayout>
-  <section class="hero">
-    <h1>{PERSON_NAME} <span aria-hidden="true">|</span> {HANDLE}</h1>
-    <p class="lede">I build and deploy applied-AI systems for regulated organizations, grounded in more than ten years of legal-operations work. My focus is the integration, evaluation, and adoption work that moves a promising model into a production workflow.</p>
-    <a class="cta" href="/projects/">See the work</a>
-  </section>
+<LandingLayout>
+  <LandingWordmark />
 
-  {
-    caseStudies.length > 0 && (
-      <section class="home-section" aria-labelledby="work-heading">
-        <h2 id="work-heading">Selected work</h2>
-        <ul class="card-list">
-          {caseStudies.map((study) => (
-            <li class="card">
-              <p class="eyebrow">{study.data.client}</p>
-              <h3>
-                <a href={`/work/${study.id}/`}>{study.data.title}</a>
-              </h3>
-              <p>{study.data.summary}</p>
-            </li>
-          ))}
-        </ul>
-        <NdaNote />
-      </section>
-    )
-  }
-
-  {
-    posts.length > 0 && (
-      <section class="home-section" aria-labelledby="writing-heading">
-        <h2 id="writing-heading">Writing</h2>
-        <ul class="post-list">
-          {posts.map((post) => (
-            <li>
-              <h3 class="post-title">
-                <a href={`/writing/${post.id}/`}>{post.data.title}</a>
-              </h3>
-              <p>{post.data.description}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )
-  }
-
-  <section class="home-section" aria-labelledby="featured-project-heading">
-    <h2 id="featured-project-heading">Featured project</h2>
-    <div class="card">
-      <h3>{ARTIFACT_NAME}</h3>
-      <p>An open-source MCP server for legal intake triage. Deterministic conflict checks, matter validation, and follow-up templating, with no LLM calls inside the server. I built it to show what a secure, auditable intake pipeline looks like in practice.</p>
-      <p>
-        <a href={ARTIFACT_REPO_URL}>Repository</a> · <a href="/projects/">About this project</a>
-      </p>
+  <nav class="landing-nav" aria-label="Navigation">
+    <div class="landing-nav__left">
+      <a class="landing-nav__owner" href="/" aria-label="Home">Rich Berman</a>
     </div>
-  </section>
-</BaseLayout>
+    <div class="landing-nav__right">
+      <a class="landing-nav__link" href="/projects/">Projects</a>
+      <a class="landing-nav__link" href="/writing/">Writing</a>
+      <a class="landing-nav__link" href="/about/">About</a>
+      <a class="landing-nav__github" href="https://github.com/granolacowboy" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .267.18.578.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </nav>
+</LandingLayout>
