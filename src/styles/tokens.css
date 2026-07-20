@@ -1,0 +1,157 @@
+/* ============================================================
+   granolacowboy.dev, design tokens
+   Source of truth: planning/design-system-spec.md (Prompt 1 token
+   block and Prompt 2 "Locked foundations"). Token names map 1:1 to
+   the spec. Dark is the only theme; there is no light palette.
+
+   Breakpoint: one mobile-first breakpoint at 860px, where layouts
+   shift from stacked to two-column. Media queries cannot read
+   custom properties, so keep the literal in sync wherever it is
+   used: @media (min-width: 860px) { ... }
+   ============================================================ */
+
+:root {
+  /* Dark only: hint native UI (form controls, scrollbars) dark. */
+  color-scheme: dark;
+
+  /* ---------- Color: neutral ramp (cool blue-graphite) ---------- */
+  --ink-950: #0f1216; /* deepest surface, code backgrounds */
+  --ink-900: #14171c; /* canonical page background */
+  --ink-800: #1b202a; /* surface / panel */
+  --ink-700: #232a35; /* raised surface / hover */
+  --ink-600: #2e3643; /* strong hover, filled dividers */
+  /* ink-400 does NOT clear WCAG AA on the ink surfaces. Restrict it
+     to large monospace labels and non-essential decoration only;
+     never use it for body text or essential information. */
+  --ink-400: #59616f;
+  --ink-300: #8b95a3; /* secondary text; clears AA for running copy */
+  --ink-050: #e7eaef; /* primary text */
+
+  /* ---------- Color: accent, sodium amber (the single brand signal) ---------- */
+  --amber-400: #f0b968; /* hover / active highlight */
+  --amber-500: #e8a33d; /* base accent: links, focus, one emphasis word per heading */
+  --amber-600: #c9862a; /* pressed */
+  --amber-soft: rgba(232, 163, 61, 0.14); /* tint fills, active backgrounds */
+
+  /* ---------- Color: critical coral ----------
+     Semantic only, never decorative: critical states, narrative
+     endpoints, final-stage emphasis. No other status hues exist,
+     and meaning is never carried by color alone. */
+  --coral-500: #e5604d;
+  --coral-soft: rgba(229, 96, 77, 0.16);
+
+  /* ---------- Borders (hairlines replace shadows everywhere) ---------- */
+  --border-subtle: rgba(231, 234, 239, 0.1);
+  --border-strong: rgba(231, 234, 239, 0.2);
+
+  /* ---------- Font stacks ----------
+     Self-hosted via fontsource variable packages; the three CSS
+     entries are imported once in BaseLayout.astro. */
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', system-ui, -apple-system,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-prose: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'Cascadia Code',
+    'Source Code Pro', Menlo, Consolas, monospace;
+
+  /* ---------- Type scale ----------
+     Family rule, verbatim from the spec: "Headings are Space
+     Grotesk. Anything read as prose is Source Serif 4. Anything
+     that labels, tags, times, indexes, or reads as data is
+     JetBrains Mono. No exceptions." */
+
+  /* display-xl: Space Grotesk 700 */
+  --display-xl-size: clamp(2.8rem, 1.6rem + 6vw, 6.5rem);
+  --display-xl-weight: 700;
+  --display-xl-lh: 0.96;
+  --display-xl-ls: -0.02em;
+
+  /* display-l: Space Grotesk 600 */
+  --display-l-size: clamp(2rem, 1.3rem + 3vw, 3.4rem);
+  --display-l-weight: 600;
+  --display-l-lh: 1.05;
+  --display-l-ls: -0.015em;
+
+  /* display-m: Space Grotesk 500 */
+  --display-m-size: clamp(1.5rem, 1.2rem + 1.6vw, 2.1rem);
+  --display-m-weight: 500;
+  --display-m-lh: 1.15;
+  --display-m-ls: -0.01em;
+
+  /* title-s: Space Grotesk 500 */
+  --title-s-size: 1.25rem;
+  --title-s-weight: 500;
+  --title-s-lh: 1.25;
+  --title-s-ls: -0.01em;
+
+  /* body-l: Source Serif 4 400 */
+  --body-l-size: 1.2rem;
+  --body-l-lh: 1.6;
+
+  /* body: Source Serif 4 400 */
+  --body-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.2rem);
+  --body-lh: 1.65;
+
+  /* body-s: Source Serif 4 400 */
+  --body-s-size: 0.95rem;
+  --body-s-lh: 1.55;
+
+  /* label: JetBrains Mono 500, uppercase. Spec permits 0.72rem to
+     0.78rem and tracking 0.16em to 0.22em; these are the canonical
+     defaults inside those ranges. */
+  --label-size: 0.75rem;
+  --label-weight: 500;
+  --label-lh: 1.2;
+  --label-ls: 0.18em;
+
+  /* data: JetBrains Mono 400, normal case. Spec permits tracking
+     0.04em to 0.14em; this is the canonical default. */
+  --data-size: 0.78rem;
+  --data-weight: 400;
+  --data-lh: 1.4;
+  --data-ls: 0.08em;
+
+  /* ---------- Spacing (4px base scale) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+  --space-11: 80px;
+  --space-12: 96px;
+  --space-13: 128px;
+  --space-14: 160px;
+
+  /* ---------- Layout ---------- */
+  --measure: 34rem; /* hard maximum line length for body copy */
+  --container: 78rem; /* content container */
+  --container-wide: 84rem; /* wide container for data-heavy pages */
+  --gutter: 1.5rem; /* widens to 3rem at the 860px breakpoint below */
+
+  /* ---------- Radius ----------
+     0 is the default: panels, cards, and sections stay sharp.
+     Pill is reserved for dots and pips only. */
+  --radius-2: 2px; /* focus rings, inputs */
+  --radius-4: 4px; /* small controls, code blocks */
+  --radius-pill: 999px; /* pips and dots only */
+
+  /* ---------- Motion ----------
+     Two-tier principle: JS owns discrete state changes, CSS owns
+     continuous scroll-linked motion; never blur the two. The global
+     prefers-reduced-motion override lives in global.css. */
+  --dur-fast: 200ms;
+  --dur-base: 300ms;
+  --dur-slow: 400ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Single 860px breakpoint: gutters widen with the two-column shift. */
+@media (min-width: 860px) {
+  :root {
+    --gutter: 3rem;
+  }
+}

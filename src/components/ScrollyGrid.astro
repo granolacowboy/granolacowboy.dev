@@ -1,0 +1,275 @@
+---
+/**
+ * ScrollyGrid: the flagship scrolly module (design-system spec, Prompt 4).
+ *
+ * Layout: above 860px, scrolling text steps sit left of a
+ * position-sticky graphic panel (ink-800, hairline border) on the
+ * right; below 860px the graphic pins on top and the text scrolls
+ * beneath it.
+ *
+ * Two-tier motion principle: the inline script owns the DISCRETE
+ * state only. An IntersectionObserver marks the step crossing the
+ * viewport midline as active by toggling classes and data
+ * attributes; CSS owns every visual transition between those states.
+ * Under prefers-reduced-motion the global override freezes the
+ * transitions while state changes still apply instantly.
+ *
+ * Progressive enhancement: without JavaScript the [data-enhanced]
+ * hook is never set, so every step renders at full contrast and the
+ * graphic panel is a static stage-1 view.
+ *
+ * The graphic arrives through the named "graphic" slot. Mark
+ * alternate stages with data-stage-item="1" through "12"; the
+ * observer keys visibility by setting data-stage="N" on the panel.
+ * Slotted content without data-stage-item renders in every stage.
+ *
+ * Usage (page or case-study MDX; work/[id].astro passes this
+ * component through the MDX components prop):
+ *
+ *   <ScrollyGrid steps={[{ body: '...' }, { body: '...' }]}>
+ *     <svg slot="graphic">
+ *       <g data-stage-item="1">...</g>
+ *       <g data-stage-item="2">...</g>
+ *     </svg>
+ *   </ScrollyGrid>
+ */
+
+interface Step {
+  /** Mono kicker; defaults to "STEP NN / NN". */
+  kicker?: string;
+  /** Optional Space Grotesk step title. */
+  title?: string;
+  /** Serif step copy. */
+  body: string;
+}
+
+interface Props {
+  steps: Step[];
+  /** Accessible name for the module region. */
+  label?: string;
+}
+
+const { steps = [], label = 'Step by step' } = Astro.props;
+const total = steps.length;
+const pad = (value: number) => String(value).padStart(2, '0');
+---
+
+<section class="scrolly" data-scrolly aria-label={label}>
+  <div class="scrolly-figure">
+    <div class="scrolly-panel" data-scrolly-panel data-stage="1">
+      <slot name="graphic" />
+    </div>
+    {/* Instrument readout: position only, duplicated by the step
+        kickers for assistive tech, so it stays decorative here. */}
+    <div class="scrolly-readout" aria-hidden="true">
+      <span class="pip-strip">
+        {
+          steps.map((_, i) => (
+            <span
+              class:list={['pip', { 'pip--active': i === 0, 'pip--terminal': i === total - 1 }]}
+              data-scrolly-pip
+            />
+          ))
+        }
+      </span>
+      <span class="data" data-scrolly-index>{pad(total > 0 ? 1 : 0)} / {pad(total)}</span>
+    </div>
+  </div>
+  <ol class="scrolly-steps">
+    {
+      steps.map((step, i) => (
+        <li class="scrolly-step" data-scrolly-step>
+          <p class="scrolly-kicker label">{step.kicker ?? `STEP ${pad(i + 1)} / ${pad(total)}`}</p>
+          {step.title && <p class="scrolly-title title-s">{step.title}</p>}
+          <p class="scrolly-body">{step.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .scrolly {
+    margin-block: var(--space-10);
+  }
+
+  /* Mobile-first: the graphic pins on top while the text scrolls
+     beneath it. Sticky travels the full module because the tall
+     .scrolly block is its containing block. */
+  .scrolly-figure {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    padding-block: var(--space-2) var(--space-3);
+    background-color: var(--ink-900);
+  }
+
+  .scrolly-panel {
+    min-height: 10rem;
+    padding: var(--space-5);
+    background-color: var(--ink-800);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .scrolly-panel :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Stage visibility, keyed by the data-stage attribute the observer
+     sets on the panel. Stage 1 is server-rendered, so the no-JS
+     render is a static stage-1 view. */
+  .scrolly-panel :global([data-stage-item]) {
+    display: none;
+  }
+
+  .scrolly-panel[data-stage='1'] :global([data-stage-item='1']),
+  .scrolly-panel[data-stage='2'] :global([data-stage-item='2']),
+  .scrolly-panel[data-stage='3'] :global([data-stage-item='3']),
+  .scrolly-panel[data-stage='4'] :global([data-stage-item='4']),
+  .scrolly-panel[data-stage='5'] :global([data-stage-item='5']),
+  .scrolly-panel[data-stage='6'] :global([data-stage-item='6']),
+  .scrolly-panel[data-stage='7'] :global([data-stage-item='7']),
+  .scrolly-panel[data-stage='8'] :global([data-stage-item='8']),
+  .scrolly-panel[data-stage='9'] :global([data-stage-item='9']),
+  .scrolly-panel[data-stage='10'] :global([data-stage-item='10']),
+  .scrolly-panel[data-stage='11'] :global([data-stage-item='11']),
+  .scrolly-panel[data-stage='12'] :global([data-stage-item='12']) {
+    display: block;
+  }
+
+  .scrolly-readout {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding-block-start: var(--space-3);
+  }
+
+  /* The terminal pip is the narrative endpoint: coral outline while
+     upcoming, coral fill once reached. Semantic, never decorative. */
+  .scrolly-readout .pip--terminal.pip--active,
+  .scrolly-readout .pip--terminal.pip--done {
+    background-color: var(--coral-500);
+    border-color: var(--coral-500);
+  }
+
+  .scrolly-steps {
+    margin: var(--space-8) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .scrolly-step {
+    max-width: var(--measure);
+  }
+
+  .scrolly-step + .scrolly-step {
+    margin-block-start: var(--space-10);
+  }
+
+  .scrolly-kicker {
+    margin-block: 0 var(--space-2);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .scrolly-title {
+    margin-block: 0 var(--space-2);
+    transition: color var(--dur-base) var(--ease);
+  }
+
+  .scrolly-body {
+    margin: 0;
+    font-family: var(--font-prose);
+    transition: color var(--dur-base) var(--ease);
+  }
+
+  /* Enhanced (JS present): non-active steps dim to secondary text,
+     which still clears AA; the active step reads at full contrast
+     with an amber kicker. Without [data-enhanced], every step stays
+     full-contrast. */
+  .scrolly[data-enhanced] .scrolly-title,
+  .scrolly[data-enhanced] .scrolly-body {
+    color: var(--ink-300);
+  }
+
+  .scrolly[data-enhanced] .scrolly-step.is-active .scrolly-title,
+  .scrolly[data-enhanced] .scrolly-step.is-active .scrolly-body {
+    color: var(--ink-050);
+  }
+
+  .scrolly[data-enhanced] .scrolly-step.is-active .scrolly-kicker {
+    color: var(--amber-500);
+  }
+
+  /* Single 860px breakpoint (documented in tokens.css): text column
+     left, sticky graphic column right. */
+  @media (min-width: 860px) {
+    .scrolly {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 30rem);
+      column-gap: var(--space-9);
+    }
+
+    .scrolly-figure {
+      grid-row: 1;
+      grid-column: 2;
+      align-self: start;
+      inset-block-start: var(--space-6);
+      z-index: auto;
+      padding-block: 0;
+      background-color: transparent;
+    }
+
+    .scrolly-steps {
+      grid-row: 1;
+      grid-column: 1;
+      margin-block-start: var(--space-2);
+    }
+  }
+</style>
+
+<script>
+  // JS owns the discrete state only: which step is active. All easing
+  // between states is CSS; reduced-motion freezes the easing while the
+  // state change still applies instantly.
+  const pad = (value: number) => String(value).padStart(2, '0');
+
+  for (const grid of document.querySelectorAll('[data-scrolly]')) {
+    const steps = Array.from(grid.querySelectorAll('[data-scrolly-step]'));
+    const panel = grid.querySelector('[data-scrolly-panel]');
+    const pips = Array.from(grid.querySelectorAll('[data-scrolly-pip]'));
+    const counter = grid.querySelector('[data-scrolly-index]');
+    if (steps.length === 0 || !('IntersectionObserver' in window)) continue;
+
+    grid.setAttribute('data-enhanced', '');
+
+    const apply = (active: number) => {
+      steps.forEach((step, i) => {
+        step.classList.toggle('is-active', i === active);
+        if (i === active) step.setAttribute('aria-current', 'step');
+        else step.removeAttribute('aria-current');
+      });
+      pips.forEach((pip, i) => {
+        pip.classList.toggle('pip--done', i < active);
+        pip.classList.toggle('pip--active', i === active);
+      });
+      if (panel) panel.setAttribute('data-stage', String(active + 1));
+      if (counter) counter.textContent = `${pad(active + 1)} / ${pad(steps.length)}`;
+    };
+
+    // A step becomes active as it crosses the viewport midline: the
+    // root margin collapses the observation box to that line.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) apply(steps.indexOf(entry.target));
+        }
+      },
+      { rootMargin: '-50% 0px -50% 0px' }
+    );
+
+    steps.forEach((step) => observer.observe(step));
+    apply(0);
+  }
+</script>

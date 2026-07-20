@@ -114,7 +114,13 @@ const stages = [...new Set(registry.map((asset) => asset.stage))];
       const details = document.querySelector('#trace-details');
       if (empty instanceof HTMLElement) empty.hidden = true;
       if (details instanceof HTMLElement) details.hidden = false;
-      document.querySelector('#registry-trace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Smooth scrolling is motion the global CSS reduced-motion kill
+      // cannot reach; fall back to an instant jump when reduced motion
+      // is requested.
+      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document
+        .querySelector('#registry-trace')
+        ?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
     });
   </script>
 </BaseLayout>

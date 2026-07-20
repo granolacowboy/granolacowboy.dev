@@ -1,6 +1,17 @@
 ---
+// Self-hosted variable fonts (fontsource), then tokens, then global styles.
+import '@fontsource-variable/space-grotesk/index.css';
+import '@fontsource-variable/source-serif-4/index.css';
+import '@fontsource-variable/jetbrains-mono/index.css';
+// Hashed URLs for the three latin variable woff2 files (the subsets every
+// page uses), preloaded in <head> below; the other subsets still load on
+// demand through each @font-face unicode-range.
+import spaceGroteskWoff2 from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import sourceSerifWoff2 from '@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2?url';
+import jetbrainsMonoWoff2 from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
+import '../styles/tokens.css';
 import '../styles/global.css';
-import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL } from '../site.config';
+import { GITHUB_URL, HANDLE, SITE_DESCRIPTION, SITE_TITLE } from '../site.config';
 
 interface Props {
   /** Page title, rendered as "{title} | {site title}". Omit on the home page. */
@@ -49,6 +60,11 @@ const isCurrent = (href: string) =>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    {/* Font fetches are CORS-mode even same-origin, so the preloads
+        need `crossorigin` or the browser refetches the files. */}
+    <link rel="preload" as="font" type="font/woff2" href={spaceGroteskWoff2} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={sourceSerifWoff2} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={jetbrainsMonoWoff2} crossorigin />
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonicalURL} />
@@ -74,62 +90,15 @@ const isCurrent = (href: string) =>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <title>{pageTitle}</title>
-    <script is:inline>
-      // Theme init + toggle: the ONLY JavaScript on this site.
-      // Official no-FOUC pattern from docs.astro.build/en/tutorial/6-islands/2/,
-      // placed in <head> so the class is set before first paint. Because this
-      // runs before <body> parses, the toggle button is wired via event
-      // delegation instead of getElementById.
-      const theme = (() => {
-        const localStorageTheme = localStorage?.getItem('theme') ?? '';
-        if (['dark', 'light'].includes(localStorageTheme)) {
-          return localStorageTheme;
-        }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
-        }
-        return 'light';
-      })();
-
-      if (theme === 'light') {
-        document.documentElement.classList.remove('dark');
-      } else {
-        document.documentElement.classList.add('dark');
-      }
-
-      window.localStorage.setItem('theme', theme);
-
-      const updateThemeToggle = (isDark) => {
-        const button = document.getElementById('themeToggle');
-        if (button instanceof HTMLButtonElement) {
-          button.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} theme`);
-        }
-      };
-
-      const handleToggleClick = () => {
-        const element = document.documentElement;
-        element.classList.toggle('dark');
-        const isDark = element.classList.contains('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        updateThemeToggle(isDark);
-      };
-
-      document.addEventListener('DOMContentLoaded', () => {
-        updateThemeToggle(document.documentElement.classList.contains('dark'));
-      });
-
-      document.addEventListener('click', (event) => {
-        if (event.target instanceof Element && event.target.closest('#themeToggle')) {
-          handleToggleClick();
-        }
-      });
-    </script>
+    {/* Dark is the only theme (design-system spec), so the former
+        theme-toggle script is gone and the site ships zero JavaScript
+        from this layout. */}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
       <div class="container">
-        <a class="wordmark" href="/">{SITE_TITLE}</a>
+        <a class="wordmark" href="/">{HANDLE}<span class="wordmark-accent">.dev</span></a>
         <nav class="site-nav" aria-label="Main">
           <ul>
             {
@@ -143,20 +112,6 @@ const isCurrent = (href: string) =>
             }
           </ul>
         </nav>
-        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark theme">
-          <svg aria-hidden="true" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-              class="sun"
-              fill-rule="evenodd"
-              d="M12 17.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zm0 1.5a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm12-7a.8.8 0 0 1-.8.8h-2.4a.8.8 0 0 1 0-1.6h2.4a.8.8 0 0 1 .8.8zM4 12a.8.8 0 0 1-.8.8H.8a.8.8 0 0 1 0-1.6h2.5a.8.8 0 0 1 .8.8zm16.5-8.5a.8.8 0 0 1 0 1l-1.8 1.8a.8.8 0 0 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM6.3 17.7a.8.8 0 0 1 0 1l-1.7 1.8a.8.8 0 1 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM12 0a.8.8 0 0 1 .8.8v2.5a.8.8 0 0 1-1.6 0V.8A.8.8 0 0 1 12 0zm0 20a.8.8 0 0 1 .8.8v2.4a.8.8 0 0 1-1.6 0v-2.4a.8.8 0 0 1 .8-.8zM3.5 3.5a.8.8 0 0 1 1 0l1.8 1.8a.8.8 0 1 1-1 1L3.5 4.6a.8.8 0 0 1 0-1zm14.2 14.2a.8.8 0 0 1 1 0l1.8 1.7a.8.8 0 0 1-1 1l-1.8-1.7a.8.8 0 0 1 0-1z"
-            />
-            <path
-              class="moon"
-              fill-rule="evenodd"
-              d="M16.5 6A10.5 10.5 0 0 1 4.7 16.4 8.5 8.5 0 1 0 16.4 4.7l.1 1.3zm-1.7-2a9 9 0 0 1 .2 2 9 9 0 0 1-11 8.8 9.4 9.4 0 0 1-.8-.3c-.4 0-.8.3-.7.7a10 10 0 0 0 .3.8 10 10 0 0 0 9.2 6 10 10 0 0 0 4-19.2 9.7 9.7 0 0 0-.9-.3c-.3-.1-.7.3-.6.7a9 9 0 0 1 .3.8z"
-            />
-          </svg>
-        </button>
       </div>
     </header>
     <main id="main-content" class:list={['container', { 'container-wide': wide }]} tabindex="-1">
@@ -164,7 +119,9 @@ const isCurrent = (href: string) =>
     </main>
     <footer class="site-footer">
       <div class="container">
-        <p>© {new Date().getFullYear()} {SITE_TITLE}</p>
+        {/* Uppercase presentation comes from CSS text-transform; markup
+            keeps the handle in its exact lowercase form. */}
+        <p>© {new Date().getFullYear()} · {HANDLE}.dev</p>
         <p><a href={GITHUB_URL}>GitHub</a></p>
       </div>
     </footer>

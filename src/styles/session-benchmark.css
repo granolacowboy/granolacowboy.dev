@@ -1,3 +1,7 @@
+/* Legacy benchmark surface running on the deprecated alias shim in
+   global.css. Radii sit on the token scale: nothing rounds past
+   --radius-4 except pips (design-system guardrail). */
+
 .benchmark-page {
   --benchmark-measure: 72ch;
 }
@@ -61,7 +65,7 @@
 .metric-grid li {
   padding: 1rem;
   border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
+  border-radius: var(--radius-4);
   background: var(--color-surface);
 }
 
@@ -80,7 +84,7 @@
   max-width: 100%;
   overflow-x: auto;
   border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
+  border-radius: var(--radius-4);
   background: var(--color-surface);
 }
 
@@ -160,7 +164,7 @@
   min-height: 2.75rem;
   padding: 0.55rem 0.75rem;
   border: 1px solid var(--color-border);
-  border-radius: 0.375rem;
+  border-radius: var(--radius-4);
   background: var(--color-bg);
   color: var(--color-text);
   font: inherit;
@@ -187,7 +191,7 @@
   margin-block-start: 2rem;
   padding: 1.25rem;
   border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
+  border-radius: var(--radius-4);
   background: var(--color-surface);
 }
 

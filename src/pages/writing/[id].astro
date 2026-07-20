@@ -6,32 +6,54 @@ import { SHOW_DATES } from '../../site.config';
 
 export async function getStaticPaths() {
   // Draft posts get no routes (PLAN Phase 2). Slug semantics: post.id.
-  const posts = await getCollection('posts', ({ data }) => !data.draft);
-  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+  // Newest first, matching the writing index, so every post carries a
+  // stable "NN / NN" position readout.
+  const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+  return posts.map((post, i) => ({
+    params: { id: post.id },
+    props: { post, position: i + 1, total: posts.length },
+  }));
 }
 
 interface Props {
   post: CollectionEntry<'posts'>;
+  position: number;
+  total: number;
 }
 
-const { post } = Astro.props;
+const { post, position, total } = Astro.props;
 const { Content } = await render(post);
+const pad = (value: number) => String(value).padStart(2, '0');
+
+// Reading time is derived from the actual body (words / 220 wpm);
+// with dates hidden it is the one honest data point the metadata row
+// can carry alongside the position index.
+const words = (post.body ?? '').match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu)?.length ?? 0;
+const minutes = Math.max(1, Math.round(words / 220));
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} ogType="article">
   <article class="prose">
     <header class="page-header">
+      <p class="eyebrow">WRITING · {pad(position)} <span class="accent">[FIELD NOTES]</span></p>
       <h1>{post.data.title}</h1>
-      {
-        SHOW_DATES && (
-          <p>
-            <time datetime={post.data.pubDate.toISOString()}>
-              {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium' })}
-            </time>
-          </p>
-        )
-      }
+      <p class="metadata">
+        {pad(position)} / {pad(total)} · {minutes} MIN
+        {
+          SHOW_DATES && (
+            <>
+              {' · '}
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium' })}
+              </time>
+            </>
+          )
+        }
+      </p>
     </header>
     <Content />
+    <div class="divider--labeled">END · {pad(position)}</div>
   </article>
 </BaseLayout>
