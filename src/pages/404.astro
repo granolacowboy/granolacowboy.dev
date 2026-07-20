@@ -3,7 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Page not found" description="This page does not exist." noindex>
-  <h1>Page not found</h1>
-  <p>That page does not exist or has moved.</p>
+  <header class="page-header">
+    <p class="eyebrow">ERROR · 404</p>
+    <h1>Page not found</h1>
+  </header>
+  <p class="measure">That page does not exist or has moved.</p>
   <p><a href="/">Back to the home page</a></p>
 </BaseLayout>

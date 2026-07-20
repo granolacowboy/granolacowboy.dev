@@ -11,19 +11,36 @@ import {
 ---
 
 <BaseLayout title="About" description={`About ${PERSON_NAME} | ${HANDLE}.`}>
-  <article class="prose">
-    <h1>About</h1>
-    <p>I am Rich Berman, also known as granolacowboy, and I have spent more than ten years working inside legal operations and technology.</p>
-    <p>Through <a href="https://mhsbsolutions.com">MHSB</a>, I help law firms improve intake, CRM, workflow automation, system integration, and applied-AI adoption.</p>
-    <p>I focus on forward-deployed work where discovery, evaluation, integration, and production adoption matter as much as the model itself.</p>
-    <p>This site documents the systems I can share publicly while keeping client details and confidential work protected.</p>
+  <article>
+    <header class="page-header">
+      <p class="eyebrow">FIELD RECORD · ABOUT</p>
+      <h1>About</h1>
+    </header>
+    <div class="prose">
+      <p>I am Rich Berman, also known as granolacowboy, and I have spent more than ten years working inside legal operations and technology.</p>
+      <p>Through <a href="https://mhsbsolutions.com">MHSB</a>, I help law firms improve intake, CRM, workflow automation, system integration, and applied-AI adoption.</p>
+      <p>I focus on forward-deployed work where discovery, evaluation, integration, and production adoption matter as much as the model itself.</p>
+      <p>This site documents the systems I can share publicly while keeping client details and confidential work protected.</p>
+    </div>
 
     <h2 id="contact">Contact</h2>
     <ul class="contact-list">
-      <li>Email: <a href={EMAIL_URL}>{EMAIL}</a></li>
-      <li><a href={GITHUB_URL}>GitHub</a></li>
-      <li><a href={LINKEDIN_URL}>LinkedIn</a></li>
-      <li>Company: <a href="https://mhsbsolutions.com">mhsbsolutions.com</a></li>
+      <li>
+        <span class="label">Email</span>
+        <a class="data" href={EMAIL_URL}>{EMAIL}</a>
+      </li>
+      <li>
+        <span class="label">GitHub</span>
+        <a class="data" href={GITHUB_URL}>github.com/{HANDLE}</a>
+      </li>
+      <li>
+        <span class="label">LinkedIn</span>
+        <a class="data" href={LINKEDIN_URL}>linkedin.com/in/mhsb</a>
+      </li>
+      <li>
+        <span class="label">Company</span>
+        <a class="data" href="https://mhsbsolutions.com">mhsbsolutions.com</a>
+      </li>
     </ul>
   </article>
 </BaseLayout>

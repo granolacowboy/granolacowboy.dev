@@ -1,52 +1,46 @@
 /* ============================================================
-   granolacowboy.dev — design system
-   - Two palettes via CSS custom properties.
-   - Dark mode keys off `html.dark`, set by the inline no-FOUC
-     script in BaseLayout (docs.astro.build/en/tutorial/6-islands/2/).
-   - System font stack only. No webfonts, no client-side JS here.
+   granolacowboy.dev, global styles
+   Instrument-readout system: hairline borders and monospace labels
+   on a dark ink ramp with one sodium-amber accent. Dark only.
+
+   Tokens live in src/styles/tokens.css, imported before this file
+   in BaseLayout.astro along with the three fontsource entries
+   (Space Grotesk, Source Serif 4, JetBrains Mono, all variable).
+
+   Hard rules carried from planning/design-system-spec.md:
+   - Headings are Space Grotesk; prose is Source Serif 4; every
+     label, tag, date, index, readout, and code span is JetBrains
+     Mono. No exceptions.
+   - Hairline 1px borders replace shadows everywhere. The only
+     sanctioned shadow is .overlay-shadow (true floating overlays,
+     tooltip/modal); it is defined here and applied nowhere.
+   - Sharp corners by default; 2px focus/inputs, 4px small controls
+     and code, pill for pips only.
+   - One accent (amber) plus strictly semantic coral. Never recolor
+     code with the brand amber.
    ============================================================ */
 
-/* ---------- Design tokens ---------- */
+/* ---------- Deprecated aliases ----------
+   Legacy variables still consumed by session-benchmark.css and
+   SessionNav.astro, remapped onto the token ramp so those pages
+   stay coherent until their own restyle pass. Do not use these in
+   new work; use the tokens directly. */
 
 :root {
-  color-scheme: light;
+  --color-bg: var(--ink-900);
+  --color-surface: var(--ink-800);
+  --color-text: var(--ink-050);
+  --color-muted: var(--ink-300);
+  --color-accent: var(--amber-500);
+  --color-accent-strong: var(--amber-400);
+  --color-border: var(--border-subtle);
 
-  /* Palette: light */
-  --color-bg: #fcfbf9;
-  --color-surface: #f3f1ec;
-  --color-text: #21242a;
-  --color-muted: #595f66;
-  --color-accent: #166749;
-  --color-accent-strong: #0e5239;
-  --color-border: #e2dfd7;
-
-  /* Type: modular scale, ratio 1.25 (major third) */
   --step--1: 0.8rem;
   --step-0: 1rem;
   --step-1: 1.25rem;
   --step-2: 1.5625rem;
   --step-3: 1.953rem;
   --step-4: 2.441rem;
-
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
-
-  /* Prose measure (~68ch) doubles as the single-column page width */
-  --measure: 68ch;
-  --space-gutter: 1.25rem;
-}
-
-html.dark {
-  color-scheme: dark;
-
-  /* Palette: dark */
-  --color-bg: #16181d;
-  --color-surface: #1f2228;
-  --color-text: #e9e7e2;
-  --color-muted: #a3a8b0;
-  --color-accent: #58c393;
-  --color-accent-strong: #79d2a9;
-  --color-border: #2e323a;
 }
 
 /* ---------- Base ---------- */
@@ -58,73 +52,136 @@ html.dark {
 }
 
 html {
-  font-family: var(--font-sans);
   -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-size: var(--step-0);
-  line-height: 1.65;
+  background-color: var(--ink-900);
+  color: var(--ink-050);
+  font-family: var(--font-prose);
+  font-size: var(--body-size);
+  line-height: var(--body-lh);
 }
+
+/* ---------- Headings: display scale, Space Grotesk ----------
+   h1 maps to display-l, h2 to display-m, h3 to title-s (page titles
+   and article subheads per the page mockups). display-xl is
+   reserved for the home hero; compose it with the .display-xl
+   utility below. */
 
 h1,
 h2,
 h3,
-h4 {
-  line-height: 1.2;
-  letter-spacing: -0.015em;
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: var(--ink-050);
   text-wrap: balance;
 }
 
 h1 {
-  font-size: var(--step-3);
-  margin-block: 0 0.75rem;
+  font-size: var(--display-l-size);
+  font-weight: var(--display-l-weight);
+  line-height: var(--display-l-lh);
+  letter-spacing: var(--display-l-ls);
+  margin-block: 0 var(--space-4);
 }
 
 h2 {
-  font-size: var(--step-2);
-  margin-block: 2.5rem 0.75rem;
+  font-size: var(--display-m-size);
+  font-weight: var(--display-m-weight);
+  line-height: var(--display-m-lh);
+  letter-spacing: var(--display-m-ls);
+  margin-block: var(--space-8) var(--space-3);
 }
 
 h3 {
-  font-size: var(--step-1);
-  margin-block: 1.5rem 0.5rem;
+  font-size: var(--title-s-size);
+  font-weight: var(--title-s-weight);
+  line-height: var(--title-s-lh);
+  letter-spacing: var(--title-s-ls);
+  margin-block: var(--space-6) var(--space-2);
+}
+
+h4,
+h5,
+h6 {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
+  margin-block: var(--space-5) var(--space-2);
+}
+
+/* Type-scale utilities for composing pages (e.g. the hero). */
+
+.display-xl {
+  font-family: var(--font-display);
+  font-size: var(--display-xl-size);
+  font-weight: var(--display-xl-weight);
+  line-height: var(--display-xl-lh);
+  letter-spacing: var(--display-xl-ls);
+}
+
+.display-l {
+  font-family: var(--font-display);
+  font-size: var(--display-l-size);
+  font-weight: var(--display-l-weight);
+  line-height: var(--display-l-lh);
+  letter-spacing: var(--display-l-ls);
+}
+
+.display-m {
+  font-family: var(--font-display);
+  font-size: var(--display-m-size);
+  font-weight: var(--display-m-weight);
+  line-height: var(--display-m-lh);
+  letter-spacing: var(--display-m-ls);
+}
+
+.title-s {
+  font-family: var(--font-display);
+  font-size: var(--title-s-size);
+  font-weight: var(--title-s-weight);
+  line-height: var(--title-s-lh);
+  letter-spacing: var(--title-s-ls);
+}
+
+/* Signature emphasis device: exactly one amber word per display
+   heading, done with color, never with italics or weight. */
+.accent {
+  color: var(--amber-500);
 }
 
 p {
-  margin-block: 0 1rem;
+  margin-block: 0 var(--space-4);
 }
 
+/* ---------- Links ---------- */
+
 a {
-  color: var(--color-accent);
+  color: var(--amber-500);
+  text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.15em;
+  text-underline-offset: 3px;
+  transition: color var(--dur-fast) var(--ease);
 }
 
 a:hover {
-  color: var(--color-accent-strong);
+  color: var(--amber-400);
 }
+
+a:active {
+  color: var(--amber-600);
+}
+
+/* ---------- Focus: mandatory on every interactive element ---------- */
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-code,
-pre {
-  font-family: var(--font-mono);
-}
-
-pre {
-  padding: 1rem;
-  overflow-x: auto;
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  font-size: var(--step--1);
+  outline: 2px solid var(--amber-500);
+  outline-offset: 3px;
+  border-radius: var(--radius-2);
 }
 
 img {
@@ -132,32 +189,31 @@ img {
   height: auto;
 }
 
-/* Respect users who ask for reduced motion. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* ---------- Layout utilities ---------- */
+
+.measure {
+  max-width: var(--measure);
 }
 
-/* ---------- Layout (single column, mobile-first) ---------- */
-
 .container {
-  max-width: var(--measure);
+  max-width: var(--container);
   margin-inline: auto;
-  padding-inline: var(--space-gutter);
+  padding-inline: var(--gutter);
 }
 
 .container-wide {
-  max-width: 78rem;
+  max-width: var(--container-wide);
 }
 
 main {
-  padding-block: 2.5rem 1rem;
+  padding-block: var(--space-8) var(--space-6);
+}
+
+/* Single 860px breakpoint (documented in tokens.css). */
+@media (min-width: 860px) {
+  main {
+    padding-block-start: var(--space-10);
+  }
 }
 
 /* ---------- Skip link ---------- */
@@ -165,41 +221,53 @@ main {
 .skip-link {
   position: fixed;
   top: -10rem;
-  left: var(--space-gutter);
+  left: var(--gutter);
   z-index: 10;
-  padding: 0.5rem 1rem;
-  background-color: var(--color-bg);
-  border: 2px solid var(--color-accent);
-  border-radius: 0.375rem;
-  color: var(--color-accent);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--ink-900);
+  border: 1px solid var(--amber-500);
+  color: var(--amber-500);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-decoration: none;
 }
 
 .skip-link:focus {
-  top: var(--space-gutter);
+  top: var(--gutter);
 }
 
 /* ---------- Header and nav (no JS: links wrap, never collapse) ---------- */
 
 .site-header {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .site-header > .container {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 1.5rem;
-  padding-block: 1rem;
+  gap: var(--space-2) var(--space-6);
+  padding-block: var(--space-4);
 }
 
 .wordmark {
-  font-weight: 650;
-  color: var(--color-text);
+  color: var(--ink-050);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
 }
 
-.wordmark:hover {
-  color: var(--color-accent);
+.wordmark-accent {
+  color: var(--amber-500);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.wordmark:hover,
+.wordmark:hover .wordmark-accent {
+  color: var(--amber-400);
 }
 
 .site-nav {
@@ -209,174 +277,469 @@ main {
 .site-nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
+  gap: var(--space-1) var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .site-nav a {
-  color: var(--color-muted);
+  color: var(--ink-300);
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  line-height: var(--label-lh);
+  letter-spacing: var(--label-ls);
+  text-transform: uppercase;
   text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
 }
 
 .site-nav a:hover {
-  color: var(--color-text);
+  color: var(--ink-050);
 }
 
+/* Current page: amber plus the standard 1px link underline, so the
+   state never reads by color alone (WCAG 1.4.1). The 3px offset
+   carries over from the base anchor rule; .site-nav a resets only
+   the decoration line. */
 .site-nav a[aria-current='page'] {
-  color: var(--color-text);
-  font-weight: 600;
+  color: var(--amber-500);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
 }
 
-/* ---------- Theme toggle (logic lives in the inline head script) ---------- */
-
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  padding: 0;
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  background: none;
-  cursor: pointer;
-}
-
-.theme-toggle:hover {
-  border-color: var(--color-muted);
-}
-
-@media (max-width: 31rem) {
-  .site-header > .container {
-    gap: 0.5rem;
-  }
-
+@media (max-width: 30rem) {
   .site-nav {
-    order: 3;
     width: 100%;
     margin-inline-start: 0;
   }
-
-  .theme-toggle {
-    width: 2.75rem;
-    height: 2.75rem;
-    margin-inline-start: auto;
-  }
 }
 
-.sun {
-  fill: var(--color-text);
+/* ---------- Readout labels and data ----------
+   .eyebrow/.label sit at the decorative-label size where ink-400 is
+   permitted (large mono labels and decoration only; it fails AA for
+   body text). If a label carries essential information, bump it to
+   ink-300 at the call site. */
+
+.eyebrow,
+.label {
+  margin-block: 0 var(--space-2);
+  color: var(--ink-400);
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  line-height: var(--label-lh);
+  letter-spacing: var(--label-ls);
+  text-transform: uppercase;
 }
 
-.moon {
-  fill: transparent;
+.data,
+.metadata {
+  color: var(--ink-300);
+  font-family: var(--font-mono);
+  font-size: var(--data-size);
+  font-weight: var(--data-weight);
+  line-height: var(--data-lh);
+  letter-spacing: var(--data-ls);
 }
 
-html.dark .sun {
-  fill: transparent;
+/* A readout sitting directly above a heading hugs it; the heading's
+   own top margin is for running content, not for its eyebrow. */
+.eyebrow + h1,
+.eyebrow + h2,
+.eyebrow + h3 {
+  margin-block-start: 0;
 }
 
-html.dark .moon {
-  fill: var(--color-text);
-}
+/* ---------- Tag (tech tags, NDA-safe category labels) ----------
+   Mono, normal case, sharp corners (pill radius is for pips only). */
 
-/* ---------- Hero ---------- */
-
-.hero {
-  padding-block-start: 1rem;
-}
-
-.lede {
-  color: var(--color-muted);
-  font-size: var(--step-1);
-}
-
-.cta {
+.tag {
   display: inline-block;
-  margin-block-start: 0.5rem;
-  padding: 0.625rem 1.125rem;
-  border: 1px solid var(--color-accent);
-  border-radius: 0.375rem;
-  background-color: var(--color-accent);
-  color: var(--color-bg);
-  font-weight: 600;
-  text-decoration: none;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border-subtle);
+  color: var(--ink-300);
+  font-family: var(--font-mono);
+  font-size: var(--data-size);
+  font-weight: var(--data-weight);
+  line-height: var(--data-lh);
+  letter-spacing: var(--data-ls);
+  text-transform: none;
 }
 
-.cta:hover {
-  background-color: var(--color-accent-strong);
-  border-color: var(--color-accent-strong);
-  color: var(--color-bg);
+.tag--active {
+  color: var(--amber-500);
+  border-color: var(--amber-500);
 }
 
-/* ---------- Home sections, cards, lists ---------- */
-
-.home-section {
-  margin-block-start: 3.5rem;
-}
-
-.card-list {
-  display: grid;
-  gap: 1rem;
-  margin: 0;
+/* Tag pills composed as a list (project stacks, post categories). */
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block: 0 var(--space-4);
   padding: 0;
   list-style: none;
 }
 
+/* ---------- Button ----------
+   CTAs are rare and read as intentional: transparent fill, 1px
+   amber border, mono uppercase label. .cta is the legacy class name
+   still used on pages; it shares the treatment. */
+
+.btn,
+.cta {
+  display: inline-block;
+  padding: var(--space-3) var(--space-5);
+  background-color: transparent;
+  border: 1px solid var(--amber-500);
+  border-radius: 0;
+  color: var(--amber-500);
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  line-height: var(--label-lh);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.btn:hover,
+.cta:hover {
+  background-color: var(--amber-soft);
+  color: var(--amber-500);
+}
+
+.btn:active,
+.cta:active {
+  background-color: var(--amber-soft);
+  border-color: var(--amber-600);
+  color: var(--amber-600);
+  transform: translateY(1px); /* the subtle press inset */
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'],
+.cta[aria-disabled='true'] {
+  opacity: 0.45;
+  background-color: transparent;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---------- Divider ---------- */
+
+hr,
+.divider {
+  margin-block: var(--space-8);
+  border: 0;
+  border-block-start: 1px solid var(--border-subtle);
+}
+
+/* Variant with a small mono label sitting inline on the line,
+   e.g. <div class="divider--labeled">end · 03</div>. */
+.divider--labeled {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-block: var(--space-8);
+  border: 0;
+  border-block-start: 0;
+  color: var(--ink-400);
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  line-height: var(--label-lh);
+  letter-spacing: var(--label-ls);
+  text-transform: uppercase;
+}
+
+.divider--labeled::before,
+.divider--labeled::after {
+  content: '';
+  flex: 1 1 0;
+  border-block-start: 1px solid var(--border-subtle);
+}
+
+/* ---------- Code ----------
+   Code sits on ink-950 with a restrained, muted syntax palette.
+   Never recolor code with the brand amber. The !important on the
+   pre background is required to beat Shiki's inline style. */
+
+code {
+  font-family: var(--font-mono);
+}
+
+:not(pre) > code {
+  padding: 0.1em 0.35em;
+  background-color: var(--ink-950);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  font-size: 0.85em;
+}
+
+pre {
+  padding: var(--space-4);
+  overflow-x: auto;
+  background-color: var(--ink-950) !important;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-4);
+  font-size: var(--data-size);
+  line-height: 1.5;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+/* ---------- Callout / aside ----------
+   ink-800 surface with a 1px left accent and a mono kicker (use a
+   .label element inside for NOTE / CAUTION). Coral appears only via
+   the --caution variant; that is its semantic use. */
+
+.callout {
+  margin-block: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--ink-800);
+  border-inline-start: 1px solid var(--border-strong);
+}
+
+.callout--note {
+  border-inline-start-color: var(--amber-500);
+}
+
+.callout--caution {
+  border-inline-start-color: var(--coral-500);
+}
+
+.callout p:last-child {
+  margin-block-end: 0;
+}
+
+/* ---------- Card (project / case study) ----------
+   Flat panel, hairline border, no shadow. Hover lifts the border
+   from subtle to strong; never elevation, never transform. */
+
 .card {
-  padding: 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  background-color: var(--color-surface);
+  padding: var(--space-6);
+  background-color: var(--ink-800);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
 }
 
 .card h2,
 .card h3 {
-  margin-block: 0 0.25rem;
+  margin-block: 0 var(--space-2);
 }
 
 .card h2 a,
 .card h3 a {
-  color: var(--color-text);
+  color: var(--ink-050);
   text-decoration: none;
 }
 
 .card h2 a:hover,
 .card h3 a:hover {
-  color: var(--color-accent);
-  text-decoration: underline;
+  color: var(--amber-400);
 }
 
 .card p:last-child {
   margin-block-end: 0;
 }
 
-.eyebrow {
-  margin-block: 0 0.25rem;
-  color: var(--color-muted);
-  font-size: var(--step--1);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.post-list {
+.card-list {
   display: grid;
-  gap: 1.5rem;
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.post-list .post-title {
-  margin-block: 0 0.25rem;
-  font-size: var(--step-1);
+/* ---------- Pip strip ----------
+   Segmented dots showing discrete position in a sequence. The only
+   pill-radius shapes in the system. Default pip = upcoming (neutral
+   ink-400 outline: decoration, the permitted ink-400 use). Terminal
+   coral marks the narrative endpoint only. */
+
+.pip-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
-.post-list p {
-  margin-block: 0;
-  color: var(--color-muted);
+.pip {
+  width: 8px;
+  height: 8px;
+  background-color: transparent;
+  border: 1px solid var(--ink-400);
+  border-radius: var(--radius-pill);
+}
+
+.pip--done {
+  background-color: var(--amber-500);
+  border-color: var(--amber-500);
+}
+
+.pip--active {
+  background-color: var(--amber-soft);
+  border-color: var(--amber-500);
+}
+
+.pip--terminal {
+  border-color: var(--coral-500);
+}
+
+/* ---------- Overlay shadow ----------
+   The single sanctioned shadow, reserved for true floating overlays
+   (tooltip, modal). Defined for completeness; applied nowhere. Do
+   not use it on cards, panels, or anything in the page flow. */
+
+.overlay-shadow {
+  box-shadow: 0 4px 24px rgba(15, 18, 22, 0.55);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  padding-block-start: var(--space-4);
+}
+
+.lede {
+  max-width: var(--measure);
+  color: var(--ink-300);
+  font-family: var(--font-prose);
+  font-size: var(--body-l-size);
+  line-height: var(--body-l-lh);
+}
+
+/* Sweep cue: a mono affordance label beside a hairline carrying a
+   single amber sweep segment. The segment slides in once on entry;
+   the global reduced-motion override removes the animation, leaving
+   the segment resting at its end state. */
+
+.sweep-cue {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: var(--measure);
+  margin-block-start: var(--space-8);
+}
+
+.sweep-cue .label {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.sweep-line {
+  position: relative;
+  flex: 1 1 0;
+  height: 1px;
+  overflow: hidden;
+  background-color: var(--border-subtle);
+}
+
+.sweep-line::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 72px;
+  height: 1px;
+  background-color: var(--amber-500);
+  animation: sweep-in var(--dur-slow) var(--ease) 1 both;
+}
+
+@keyframes sweep-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ---------- Home sections and lists ---------- */
+
+.home-section {
+  margin-block-start: var(--space-9);
+}
+
+/* ---------- Writing index (home and /writing/) ----------
+   Hairline-divided rows: serif title, mono metadata readout. Dates
+   never render (SHOW_DATES stays false); rows carry a mono position
+   index instead. */
+
+.writing-index {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: 1px solid var(--border-subtle);
+}
+
+.writing-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-5);
+  border-block-end: 1px solid var(--border-subtle);
+}
+
+.writing-row-title {
+  margin: 0;
+  font-family: var(--font-prose);
+  font-size: var(--title-s-size);
+  line-height: var(--title-s-lh);
+}
+
+.writing-row-title a {
+  color: var(--ink-050);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.writing-row-title a:hover {
+  color: var(--amber-400);
+}
+
+.writing-row .metadata {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.writing-row-desc {
+  max-width: var(--measure);
+  margin: var(--space-1) 0 0;
+  color: var(--ink-300);
+  font-size: var(--body-s-size);
+  line-height: var(--body-s-lh);
+}
+
+@media (min-width: 860px) {
+  .writing-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-6);
+    align-items: baseline;
+  }
+
+  .writing-row-desc {
+    grid-column: 1;
+  }
 }
 
 /* ---------- Prose (article bodies) ---------- */
@@ -385,38 +748,82 @@ html.dark .moon {
   max-width: var(--measure);
 }
 
+.prose > :first-child {
+  margin-block-start: 0;
+}
+
 .prose ul,
 .prose ol {
-  padding-inline-start: 1.25rem;
+  padding-inline-start: var(--space-5);
 }
 
 .prose li {
-  margin-block: 0.25rem;
+  margin-block: var(--space-1);
 }
 
 .prose blockquote {
   margin-inline: 0;
-  padding-inline-start: 1rem;
-  border-inline-start: 3px solid var(--color-border);
-  color: var(--color-muted);
+  padding-inline-start: var(--space-4);
+  border-inline-start: 1px solid var(--border-strong);
+  color: var(--ink-300);
 }
 
 .page-header {
-  margin-block-end: 2rem;
+  margin-block-end: var(--space-7);
+}
+
+/* ---------- Case-study prose ----------
+   The case-study shell runs full width so the scrolly module can
+   spread to two columns; running text still holds the 34rem measure.
+   The MDX body's h2 sections (Context, Complication, What I built,
+   Outcome) render as mono uppercase section labels, the case-study
+   page treatment from the design spec. */
+
+.prose--case {
+  max-width: none;
+}
+
+.prose--case p,
+.prose--case ul,
+.prose--case ol,
+.prose--case blockquote,
+.prose--case .outcomes {
+  max-width: var(--measure);
+}
+
+.prose--case h2 {
+  max-width: var(--measure);
+  margin-block: var(--space-9) var(--space-3);
+  color: var(--ink-300);
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  line-height: var(--label-lh);
+  letter-spacing: var(--label-ls);
+  text-transform: uppercase;
+}
+
+/* Keep the outcomes panel heading on the same label treatment; the
+   later .outcomes h2 rule would otherwise restore title sizing. */
+.prose--case .outcomes h2 {
+  margin-block: 0 var(--space-3);
+  font-size: var(--label-size);
+  letter-spacing: var(--label-ls);
 }
 
 /* ---------- NDA note (copy is fixed in NdaNote.astro) ---------- */
 
 .nda-note {
-  margin-block: 1.25rem 0;
-  padding-inline-start: 0.875rem;
-  border-inline-start: 3px solid var(--color-border);
-  color: var(--color-muted);
-  font-size: var(--step--1);
+  margin-block: var(--space-5) 0;
+  padding-inline-start: var(--space-3);
+  border-inline-start: 1px solid var(--border-strong);
+  color: var(--ink-300);
+  font-size: var(--body-s-size);
+  line-height: var(--body-s-lh);
 }
 
 .nda-note p {
-  margin-block: 0 0.25rem;
+  margin-block: 0 var(--space-1);
 }
 
 .nda-note p:last-child {
@@ -426,16 +833,16 @@ html.dark .moon {
 /* ---------- Case-study outcomes (metric-led list from frontmatter) ---------- */
 
 .outcomes {
-  margin-block-start: 2.5rem;
-  padding: 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  background-color: var(--color-surface);
+  margin-block-start: var(--space-8);
+  padding: var(--space-5);
+  background-color: var(--ink-800);
+  border: 1px solid var(--border-subtle);
 }
 
 .outcomes h2 {
-  margin-block: 0 0.75rem;
-  font-size: var(--step-1);
+  margin-block: 0 var(--space-3);
+  font-size: var(--title-s-size);
+  letter-spacing: var(--title-s-ls);
 }
 
 .outcomes ul {
@@ -446,36 +853,58 @@ html.dark .moon {
 
 .project-shot {
   display: block;
-  margin-block: 0.5rem 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.375rem;
+  margin-block: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-subtle);
 }
 
-/* ---------- Contact list ---------- */
+/* ---------- Contact list ----------
+   Mono-labeled hairline rows: label column left, amber mono link
+   right. Labels carry essential information, so they sit at ink-300
+   rather than the decorative ink-400. */
 
 .contact-list {
-  display: grid;
-  gap: 0.5rem;
+  max-width: var(--measure);
   margin: 0;
   padding: 0;
   list-style: none;
+  border-block-start: 1px solid var(--border-subtle);
+}
+
+.contact-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-5);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--border-subtle);
+}
+
+.contact-list .label {
+  flex: 0 0 6.5rem;
+  margin: 0;
+  color: var(--ink-300);
 }
 
 /* ---------- Footer ---------- */
 
 .site-footer {
-  margin-block-start: 4rem;
-  border-top: 1px solid var(--color-border);
+  margin-block-start: var(--space-10);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .site-footer > .container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
+  gap: var(--space-2) var(--space-6);
   justify-content: space-between;
-  padding-block: 1.5rem;
-  color: var(--color-muted);
-  font-size: var(--step--1);
+  padding-block: var(--space-6);
+  color: var(--ink-300);
+  font-family: var(--font-mono);
+  font-size: var(--data-size);
+  font-weight: var(--data-weight);
+  line-height: var(--data-lh);
+  letter-spacing: var(--data-ls);
+  text-transform: uppercase;
 }
 
 .site-footer p {
@@ -483,25 +912,25 @@ html.dark .moon {
 }
 
 .site-footer a {
-  color: var(--color-muted);
+  color: var(--amber-500);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-ls);
+  text-decoration: none;
 }
 
 .site-footer a:hover {
-  color: var(--color-text);
+  color: var(--amber-400);
 }
 
-/* ---------- Wider screens: a little more air, larger display type ---------- */
+/* ---------- Reduced motion ----------
+   Transitions and animations are disabled outright; all content
+   stays readable and every state stays reachable. */
 
-@media (min-width: 48rem) {
-  :root {
-    --space-gutter: 1.5rem;
-  }
-
-  main {
-    padding-block-start: 3.5rem;
-  }
-
-  h1 {
-    font-size: var(--step-4);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }

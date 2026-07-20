@@ -3,32 +3,57 @@ import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NdaNote from '../../components/NdaNote.astro';
+import ScrollyGrid from '../../components/ScrollyGrid.astro';
 
 export async function getStaticPaths() {
-  // Draft case studies get no routes (PLAN Phase 2). Slug semantics: entry.id.
-  const caseStudies = await getCollection('caseStudies', ({ data }) => !data.draft);
-  return caseStudies.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+  // Draft case studies get no routes (PLAN Phase 2). Slug semantics:
+  // entry.id. Frontmatter `order` fixes each study's "NN / NN"
+  // position readout.
+  const caseStudies = (await getCollection('caseStudies', ({ data }) => !data.draft)).sort(
+    (a, b) => a.data.order - b.data.order
+  );
+  return caseStudies.map((entry, i) => ({
+    params: { id: entry.id },
+    props: { entry, position: i + 1, total: caseStudies.length },
+  }));
 }
 
 interface Props {
   entry: CollectionEntry<'caseStudies'>;
+  position: number;
+  total: number;
 }
 
-const { entry } = Astro.props;
+const { entry, position, total } = Astro.props;
 const { Content } = await render(entry);
+const pad = (value: number) => String(value).padStart(2, '0');
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.summary} ogType="article">
-  <article class="prose">
+  <article class="prose prose--case">
     <header class="page-header">
-      <p class="eyebrow">{entry.data.client}</p>
+      <p class="eyebrow">
+        CASE STUDY · {pad(position)} / {pad(total)} <span class="accent">[NDA-SAFE]</span>
+      </p>
       <h1>{entry.data.title}</h1>
       <p class="lede">{entry.data.summary}</p>
+      <p class="metadata">{entry.data.client}</p>
+      {
+        entry.data.stack.length > 0 && (
+          <ul class="tag-row" aria-label="Stack">
+            {entry.data.stack.map((item) => (
+              <li class="tag">{item}</li>
+            ))}
+          </ul>
+        )
+      }
       <NdaNote />
     </header>
-    {/* The MDX body carries the four CSO headings:
-        Context → Complication → What I built → Outcome. */}
-    <Content />
+    {/* The MDX body carries the four sections (Context, Complication,
+        What I built, Outcome); .prose--case renders their h2s as mono
+        section labels. <ScrollyGrid> is available inside case-study
+        MDX through the components prop, no per-file import needed. */}
+    <Content components={{ ScrollyGrid }} />
     {
       entry.data.outcomes.length > 0 && (
         <section class="outcomes" aria-labelledby="outcomes-heading">
@@ -43,5 +68,6 @@ const { Content } = await render(entry);
         </section>
       )
     }
+    <div class="divider--labeled">END · {pad(position)}</div>
   </article>
 </BaseLayout>
