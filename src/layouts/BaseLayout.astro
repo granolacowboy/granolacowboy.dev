@@ -11,7 +11,18 @@ import sourceSerifWoff2 from '@fontsource-variable/source-serif-4/files/source-s
 import jetbrainsMonoWoff2 from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/global.css';
-import { GITHUB_URL, HANDLE, SITE_DESCRIPTION, SITE_TITLE } from '../site.config';
+import {
+  GITHUB_URL,
+  HANDLE,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_URL,
+  CANONICAL_ORG_ID,
+  CANONICAL_PERSON_ID,
+  PERSON_CANONICAL_NAME,
+  PERSON_ALT_NAME,
+  PROFILE_SAME_AS,
+} from '../site.config';
 
 interface Props {
   /** Page title, rendered as "{title} | {site title}". Omit on the home page. */
@@ -52,6 +63,32 @@ const navItems = [
 const { pathname } = Astro.url;
 const isCurrent = (href: string) =>
   pathname === href || pathname === href.slice(0, -1) || pathname.startsWith(href);
+
+// Portfolio identity spine: the canonical Person (defined authoritatively on the
+// apex, mhsbsolutions.com, and reused here by @id) plus this site's own WebSite.
+const identityGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': CANONICAL_PERSON_ID,
+      name: PERSON_CANONICAL_NAME,
+      alternateName: PERSON_ALT_NAME,
+      url: `${SITE_URL}/`,
+      worksFor: { '@id': CANONICAL_ORG_ID },
+      sameAs: PROFILE_SAME_AS,
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      name: SITE_TITLE,
+      url: `${SITE_URL}/`,
+      description: SITE_DESCRIPTION,
+      author: { '@id': CANONICAL_PERSON_ID },
+      inLanguage: 'en-US',
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -90,6 +127,7 @@ const isCurrent = (href: string) =>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <title>{pageTitle}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(identityGraph)} />
     {/* Dark is the only theme (design-system spec), so the former
         theme-toggle script is gone and the site ships zero JavaScript
         from this layout. */}
