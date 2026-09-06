@@ -1,6 +1,6 @@
 # Ops & release notes
 
-Operational reminders for granolacowboy.dev. None of this is needed to run the site locally —
+Operational reminders for granolacowboy.dev. None of this is needed to run the site locally;
 see the [README](../README.md) for that.
 
 ## Release / deploy
