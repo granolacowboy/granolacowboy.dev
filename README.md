@@ -1,12 +1,12 @@
 # granolacowboy.dev
 
-Source for **[granolacowboy.dev](https://granolacowboy.dev)** — the personal site and field
+Source for **[granolacowboy.dev](https://granolacowboy.dev)**, the personal site and field
 notes of [Rich Berman](https://github.com/granolacowboy), a forward-deployed engineer in the
 legal vertical. Essays on deploying applied AI inside regulated, change-resistant work, where
 auditability and adoption matter as much as model capability.
 
 **Stack:** [Astro 6](https://astro.build) with static output (no client-side framework, no
-adapter), deployed on [Vercel](https://vercel.com/) — a static `dist/`, auto-deployed from the
+adapter), deployed on [Vercel](https://vercel.com/): a static `dist/`, auto-deployed from the
 GitHub `main` branch.
 
 ## Develop
