@@ -36,8 +36,11 @@ export const RESUME_URL = '/resume.pdf';
  */
 export const CANONICAL_ORG_ID = 'https://www.mhsbsolutions.com/#organization';
 export const CANONICAL_PERSON_ID = 'https://www.mhsbsolutions.com/#person';
-export const PERSON_CANONICAL_NAME = 'Richard Berman';
-export const PERSON_ALT_NAME = 'Rich Berman';
+// Aligned to entity-canon.json richBerman.nameRule: name 'Rich Berman',
+// alternateName 'Richard Berman' (these were previously inverted here, matching
+// the apex's own inversion; canon flips both).
+export const PERSON_CANONICAL_NAME = 'Rich Berman';
+export const PERSON_ALT_NAME = 'Richard Berman';
 export const PROFILE_SAME_AS = [GITHUB_URL, HUGGINGFACE_URL];
 
 /** The Phase 5 open-source artifact (repo is created in Phase 5). */

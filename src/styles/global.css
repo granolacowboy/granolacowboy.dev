@@ -922,6 +922,27 @@ pre code {
   color: var(--amber-400);
 }
 
+/* Family portfolio block: this site's own dark tokens, never MHSB cream.
+   Inherits the footer container's uppercase mono + amber links; only the
+   list layout and a separating hairline are added here. */
+.footer-family {
+  justify-content: flex-start;
+  align-items: baseline;
+}
+
+.footer-family ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-meta {
+  border-top: 1px solid var(--border-subtle);
+}
+
 /* ---------- Reduced motion ----------
    Transitions and animations are disabled outright; all content
    stays readable and every state stays reachable. */
