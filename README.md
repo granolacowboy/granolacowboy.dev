@@ -5,7 +5,7 @@ notes of [Rich Berman](https://github.com/granolacowboy), a forward-deployed eng
 legal vertical. Essays on deploying applied AI inside regulated, change-resistant work, where
 auditability and adoption matter as much as model capability.
 
-**Stack:** [Astro 6](https://astro.build) with static output (no client-side framework, no
+**Stack:** [Astro 7](https://astro.build) with static output (no client-side framework, no
 adapter), deployed on [Vercel](https://vercel.com/): a static `dist/`, auto-deployed from the
 GitHub `main` branch.
 
@@ -15,7 +15,7 @@ Run from the repo root:
 
 | Command           | Action                                          |
 | :---------------- | :---------------------------------------------- |
-| `npm install`     | Install dependencies                            |
+| `npm ci`          | Install the locked dependencies with Node 24    |
 | `npm run dev`     | Start the local dev server at `localhost:4321`  |
 | `npm run build`   | Build the production site to `./dist/`          |
 | `npm run check`   | Run Astro and TypeScript diagnostics            |

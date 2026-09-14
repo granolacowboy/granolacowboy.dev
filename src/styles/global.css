@@ -316,16 +316,12 @@ main {
   }
 }
 
-/* ---------- Readout labels and data ----------
-   .eyebrow/.label sit at the decorative-label size where ink-400 is
-   permitted (large mono labels and decoration only; it fails AA for
-   body text). If a label carries essential information, bump it to
-   ink-300 at the call site. */
+/* Readout labels remain readable at their small monospace size. */
 
 .eyebrow,
 .label {
   margin-block: 0 var(--space-2);
-  color: var(--ink-400);
+  color: var(--ink-300);
   font-family: var(--font-mono);
   font-size: var(--label-size);
   font-weight: var(--label-weight);
@@ -451,7 +447,7 @@ hr,
   margin-block: var(--space-8);
   border: 0;
   border-block-start: 0;
-  color: var(--ink-400);
+  color: var(--ink-300);
   font-family: var(--font-mono);
   font-size: var(--label-size);
   font-weight: var(--label-weight);

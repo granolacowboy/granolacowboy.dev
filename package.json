@@ -15,13 +15,14 @@
     "verify": "npm run check && npm run build && npm run verify:build"
   },
   "dependencies": {
-    "@astrojs/mdx": "^6.0.3",
+    "@astrojs/markdown-satteri": "0.3.8",
+    "@astrojs/mdx": "7.0.8",
     "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/sitemap": "3.7.4",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@fontsource-variable/source-serif-4": "^5.2.9",
     "@fontsource-variable/space-grotesk": "^5.2.10",
-    "astro": "^6.4.5"
+    "astro": "7.2.8"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
