@@ -1,4 +1,5 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import process from 'node:process';
 
@@ -574,12 +575,60 @@ const expectedHeaders = new Map([
   ['x-content-type-options', 'nosniff'],
   ['referrer-policy', 'strict-origin-when-cross-origin'],
   ['x-frame-options', 'DENY'],
+  ['permissions-policy', 'camera=(), microphone=(), geolocation=()'],
+  ['cross-origin-opener-policy', 'same-origin'],
+  ['cross-origin-resource-policy', 'same-origin'],
 ]);
-check(configuredHeaders.length === expectedHeaders.size, 'vercel.json contains only the launch security headers');
+check(vercelConfig.headers?.length === 1 && vercelConfig.headers[0].source === '/(.*)', 'security headers cover every route');
+check(configuredHeaders.length === expectedHeaders.size + 1, 'vercel.json contains the supported security headers and one enforcing CSP');
+check(new Set(configuredHeaders.map((header) => header.key.toLowerCase())).size === configuredHeaders.length, 'security header names are unique');
 for (const header of configuredHeaders) {
-  check(expectedHeaders.get(header.key.toLowerCase()) === header.value, `Vercel header ${header.key} has the expected launch value`);
+  if (header.key.toLowerCase() === 'content-security-policy') continue;
+  check(expectedHeaders.get(header.key.toLowerCase()) === header.value, `Vercel header ${header.key} has the expected value`);
 }
 check(!JSON.stringify(vercelConfig).toLowerCase().includes('noindex'), 'vercel.json has no launch-blocking noindex header');
+check(!JSON.stringify(vercelConfig).includes('REPORT_ENDPOINT'), 'security headers contain no placeholder reporting endpoint');
+
+const cspHeaders = configuredHeaders.filter((header) => header.key.toLowerCase() === 'content-security-policy');
+check(cspHeaders.length === 1, 'exactly one enforcing Content-Security-Policy is configured');
+const directives = (cspHeaders[0]?.value ?? '').split(';').map((part) => part.trim().split(/\s+/)).filter(([name]) => name);
+const policy = new Map(directives.map(([name, ...values]) => [name, values]));
+check(policy.size === directives.length, 'CSP contains no duplicate directives');
+const requiredDirectives = new Map([
+  ['default-src', ["'none'"]], ['base-uri', ["'none'"]],
+  ['object-src', ["'none'"]], ['frame-ancestors', ["'none'"]],
+  ['form-action', ["'none'"]], ['script-src-attr', ["'none'"]],
+  ['style-src', ["'self'", "'unsafe-inline'"]], ['img-src', ["'self'", 'data:']],
+  ['font-src', ["'self'", 'data:']], ['connect-src', ["'none'"]],
+  ['frame-src', ["'none'"]], ['manifest-src', ["'self'"]],
+]);
+check(policy.size === requiredDirectives.size + 1, 'CSP has only the intended resource directives');
+for (const [name, values] of requiredDirectives) {
+  check(JSON.stringify(policy.get(name)) === JSON.stringify(values), `CSP enforces ${name}`);
+}
+const scriptSources = policy.get('script-src') ?? [];
+check(scriptSources.includes("'self'") && scriptSources.every((source) => source === "'self'" || /^'sha256-[A-Za-z0-9+/]{43}='$/.test(source)), 'CSP allows only same-origin scripts and SHA-256 hashes');
+const usedHashes = new Set();
+for (const file of htmlFiles) {
+  const html = await readFile(file, 'utf8');
+  const route = routeForHtml(file) ?? '/404.html';
+  for (const [tag, attributes, contents] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)) {
+    const source = attribute(`<script ${attributes}>`, 'src');
+    if (source) {
+      const url = new URL(source, siteOrigin);
+      check(url.origin === siteOrigin && (await resolveLocalLink(source, route)).valid, `${route} script source resolves locally`);
+    } else {
+      const hash = `'sha256-${createHash('sha256').update(contents).digest('base64')}'`;
+      usedHashes.add(hash);
+      check(scriptSources.includes(hash), `${route} inline script matches an approved CSP hash (${hash})`);
+      if (attribute(tag, 'type') === 'application/ld+json') {
+        try { JSON.parse(contents); } catch { check(false, `${route} JSON-LD parses`); }
+      }
+    }
+  }
+  check(!tags(html, '[a-z][a-z0-9-]*').some((tag) => /\son[a-z]+\s*=/i.test(tag)), `${route} has no inline event handlers`);
+}
+check(scriptSources.filter((source) => source.startsWith("'sha256-")).every((hash) => usedHashes.has(hash)), 'CSP has no stale inline-script hashes');
 
 const packageJson = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 check(!Object.keys({ ...packageJson.dependencies, ...packageJson.devDependencies }).some((name) => name === '@astrojs/vercel'), 'static Astro build has no Vercel server adapter');
