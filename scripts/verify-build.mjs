@@ -574,10 +574,30 @@ const expectedHeaders = new Map([
   ['x-content-type-options', 'nosniff'],
   ['referrer-policy', 'strict-origin-when-cross-origin'],
   ['x-frame-options', 'DENY'],
+  ['permissions-policy', 'camera=(), microphone=(), geolocation=()'],
+  ['cross-origin-opener-policy', 'same-origin'],
+  ['cross-origin-resource-policy', 'same-origin'],
+  // Placeholder report sink from 8233c0f, kept until a real reporting endpoint exists.
+  // Asserted exactly, so wiring a real endpoint must update this allowlist deliberately.
+  ['reporting-endpoints', 'csp-endpoint="https://REPORT_ENDPOINT/csp"'],
+  ['content-security-policy-report-only', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; report-to csp-endpoint"],
 ]);
-check(configuredHeaders.length === expectedHeaders.size, 'vercel.json contains only the launch security headers');
+check(configuredHeaders.length === expectedHeaders.size, 'vercel.json contains only the expected security headers');
+const headerKeys = new Set(configuredHeaders.map((header) => header.key.toLowerCase()));
+check(headerKeys.size === configuredHeaders.length, 'vercel.json security headers have no duplicate keys');
 for (const header of configuredHeaders) {
-  check(expectedHeaders.get(header.key.toLowerCase()) === header.value, `Vercel header ${header.key} has the expected launch value`);
+  check(expectedHeaders.get(header.key.toLowerCase()) === header.value, `Vercel header ${header.key} has the expected value`);
+}
+const reportToHeader = configuredHeaders.find((header) => header.key.toLowerCase() === 'reporting-endpoints');
+if (reportToHeader) {
+  const cspHeader = configuredHeaders.find((header) => header.key.toLowerCase() === 'content-security-policy-report-only');
+  const declaredEndpoints = new Set((reportToHeader.value.match(/(?:^|,\s*)([^=;]+)=/g) ?? []).map((token) => token.replace(/(?:^|,\s*)([^=;]+)=/, '$1').trim()));
+  const csp = cspHeader?.value ?? '';
+  const reportToNames = new Set((csp.match(/(?:^|;\s*)report-to\s+([^;]+)/g) ?? []).flatMap((directive) => directive.replace(/(?:^|;\s*)report-to\s+/, '').split(/\s+/).filter(Boolean)));
+  check(csp.includes('report-to '), 'CSP-Report-Only still references a report-to endpoint group');
+  for (const name of reportToNames) {
+    check(declaredEndpoints.has(name), `CSP report-to group "${name}" is declared in Reporting-Endpoints`);
+  }
 }
 check(!JSON.stringify(vercelConfig).toLowerCase().includes('noindex'), 'vercel.json has no launch-blocking noindex header');
 
