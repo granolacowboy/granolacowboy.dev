@@ -95,6 +95,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
    - Follow `planning/PHASE7-DEPLOY-RUNBOOK.md`.
 - A push to GitHub `main` or any Vercel production deployment is an external change and requires explicit approval after `npm.cmd run verify` passes. Approval for the 2026-07-08 launch was granted and consumed; future releases require a new explicit instruction.
    - The launch `vercel.json` must contain security headers only, with no global `noindex`.
+   - The Vercel project build command is `npm run verify` (platform setting, set in the Vercel dashboard for project `granolacowboy-dev`; not stored in `vercel.json`, which stays headers-only per the contract above). Every preview and production build therefore runs `astro check`, `astro build`, and the `scripts/verify-build.mjs` dist-gate; a failure fails the build and the PR's `Vercel` status check, which is a required check on `main`. GitHub Actions cannot serve as the gate: the account is billing-locked and Actions jobs never start.
    - If the old production build must be hidden first, prepare the temporary header on `codex/noindex-hotfix`; do not merge or deploy it without explicit production approval, and remove it before launch.
    - After deployment, verify HTTPS, apex/www redirects, sitemap, RSS, zero placeholders, launch security headers, no noindex, and PageSpeed/Lighthouse.
 
