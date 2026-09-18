@@ -25,7 +25,9 @@ On Windows PowerShell, use `npm.cmd` if the `npm.ps1` execution-policy shim is b
 ## Deployment
 
 The Vercel project deploys the GitHub `main` branch to production automatically; `vercel.json`
-carries security headers only. Release and content-gating notes live in
+carries security headers only. The Vercel build command (platform setting) is `npm run verify`,
+so every preview and production build runs the full check + build + dist-gate before it can
+succeed. Release and content-gating notes live in
 [`docs/ops.md`](docs/ops.md).
 
 ## License
