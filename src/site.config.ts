@@ -9,7 +9,7 @@ export const SITE_TITLE = `${PERSON_NAME} | ${HANDLE}`;
 
 /** Default meta description; pages override via BaseLayout's `description` prop. */
 export const SITE_DESCRIPTION =
-  'Forward-deployed engineering and applied AI for regulated organizations, by Rich Berman | granolacowboy.';
+  '[NAME] sabotage probe: forward-deployed engineering and applied AI for regulated organizations.';
 
 /**
  * Blog posts render WITHOUT visible dates (PLAN Open Item #3, resolved 2026-06-10).
