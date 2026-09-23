@@ -222,7 +222,13 @@ check(
   `public source and docs contain no spaced or title-cased handle variants${identityVariantFiles.length ? ` (${identityVariantFiles.join(', ')})` : ''}`
 );
 
-const expectedPublishedPostCount = 4;
+const expectedPostTitles = new Set([
+  'Deploying AI in a change-resistant vertical: field notes from a decade in law firms',
+  'Anatomy of a legal intake automation',
+  "What regulated-industry buyers actually need before they'll adopt AI",
+  'How I use AI agents to build deterministic systems without trusting the agents to be deterministic',
+]);
+const expectedPublishedPostCount = expectedPostTitles.size;
 const writingDirectory = path.join(dist, 'writing');
 const writingEntries = await readdir(writingDirectory, { withFileTypes: true });
 const publishedPostIds = [];
@@ -251,12 +257,6 @@ const rssPaths = rssItems.map((item) => {
 const postPaths = publishedPostIds.map((id) => `/writing/${id}/`).sort();
 check(JSON.stringify(rssPaths) === JSON.stringify(postPaths), 'RSS item links exactly match published post routes');
 
-const expectedPostTitles = new Set([
-  'Deploying AI in a change-resistant vertical: field notes from a decade in law firms',
-  'Anatomy of a legal intake automation',
-  "What regulated-industry buyers actually need before they'll adopt AI",
-  'How I use AI agents to build deterministic systems without trusting the agents to be deterministic',
-]);
 const postSourceDirectory = path.join(root, 'src', 'content', 'posts');
 const postSourceFiles = (await readdir(postSourceDirectory))
   .filter((name) => !name.startsWith('_') && /\.mdx?$/.test(name));
