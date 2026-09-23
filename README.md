@@ -35,3 +35,7 @@ MIT, see [LICENSE](LICENSE).
 ---
 
 <sub>© Rich Berman / [MHSB Solutions](https://github.com/MHSBai) · [granolacowboy.dev](https://granolacowboy.dev)</sub>
+
+## Featured engineering note
+
+- [How I use AI agents to build deterministic systems without trusting the agents to be deterministic](https://granolacowboy.dev/writing/post-4-deterministic-ai)

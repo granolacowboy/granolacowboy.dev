@@ -222,6 +222,13 @@ check(
   `public source and docs contain no spaced or title-cased handle variants${identityVariantFiles.length ? ` (${identityVariantFiles.join(', ')})` : ''}`
 );
 
+const expectedPostTitles = new Set([
+  'Deploying AI in a change-resistant vertical: field notes from a decade in law firms',
+  'Anatomy of a legal intake automation',
+  "What regulated-industry buyers actually need before they'll adopt AI",
+  'How I use AI agents to build deterministic systems without trusting the agents to be deterministic',
+]);
+const expectedPublishedPostCount = expectedPostTitles.size;
 const writingDirectory = path.join(dist, 'writing');
 const writingEntries = await readdir(writingDirectory, { withFileTypes: true });
 const publishedPostIds = [];
@@ -231,14 +238,14 @@ for (const entry of writingEntries) {
   }
 }
 publishedPostIds.sort();
-check(publishedPostIds.length === 3, `exactly 3 published post routes exist (found ${publishedPostIds.length})`);
+check(publishedPostIds.length === expectedPublishedPostCount, `exactly ${expectedPublishedPostCount} published post routes exist (found ${publishedPostIds.length})`);
 
 const rssPath = path.join(dist, 'rss.xml');
 check(await exists(rssPath), 'rss.xml exists');
 const rss = await readFile(rssPath, 'utf8');
 assertWellFormedXml(rss, 'rss.xml');
 const rssItems = [...rss.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)].map((match) => match[1]);
-check(rssItems.length === 3, `RSS contains exactly 3 items (found ${rssItems.length})`);
+check(rssItems.length === expectedPublishedPostCount, `RSS contains exactly ${expectedPublishedPostCount} items (found ${rssItems.length})`);
 const rssPaths = rssItems.map((item) => {
   const link = item.match(/<link>([\s\S]*?)<\/link>/i)?.[1] ?? '';
   try {
@@ -250,11 +257,6 @@ const rssPaths = rssItems.map((item) => {
 const postPaths = publishedPostIds.map((id) => `/writing/${id}/`).sort();
 check(JSON.stringify(rssPaths) === JSON.stringify(postPaths), 'RSS item links exactly match published post routes');
 
-const expectedPostTitles = new Set([
-  'Deploying AI in a change-resistant vertical: field notes from a decade in law firms',
-  'Anatomy of a legal intake automation',
-  "What regulated-industry buyers actually need before they'll adopt AI",
-]);
 const postSourceDirectory = path.join(root, 'src', 'content', 'posts');
 const postSourceFiles = (await readdir(postSourceDirectory))
   .filter((name) => !name.startsWith('_') && /\.mdx?$/.test(name));
@@ -269,7 +271,7 @@ for (const file of postSourceFiles) {
   const wordCount = [...body.matchAll(/\b[\p{L}\p{N}][\p{L}\p{N}'-]*\b/gu)].length;
   publishedPostSources.push({ file, title, wordCount, body });
 }
-check(publishedPostSources.length === 3, 'exactly 3 non-draft post sources exist');
+check(publishedPostSources.length === expectedPublishedPostCount, `exactly ${expectedPublishedPostCount} non-draft post sources exist`);
 check(
   publishedPostSources.every(({ wordCount }) => wordCount >= 800 && wordCount <= 1500),
   `all published posts contain 800-1500 words (${publishedPostSources.map(({ file, wordCount }) => `${file}: ${wordCount}`).join(', ')})`
@@ -280,7 +282,7 @@ check(
 );
 check(
   publishedPostSources.every(({ title }) => expectedPostTitles.has(title)),
-  'published post titles match the approved launch titles'
+  'published post titles match the approved published titles'
 );
 
 const emDashHtmlFiles = textEntries
