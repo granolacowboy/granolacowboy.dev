@@ -1,0 +1,218 @@
+---
+title: "How I use AI agents to build deterministic systems without trusting the agents to be deterministic"
+description: "A practical engineering pattern for using AI aggressively while keeping rules, evidence, approvals, and release decisions testable."
+pubDate: 2026-09-23
+draft: false
+---
+
+I use AI coding agents constantly. I also design systems on the assumption that the agent can misunderstand the requirement, choose the wrong tool, invent a fact, miss an edge case, or produce a patch that looks cleaner than it actually is.
+
+Those positions are not contradictory.
+
+The useful distinction is between **who proposes a change** and **what is allowed to decide that the change is correct**.
+
+An agent can explore a codebase, draft an implementation, write tests, challenge another agent's implementation, and summarize the result. But when the system touches legal operations, security controls, client data, money, or durable records, I do not want correctness to depend on the model having a good day.
+
+My preferred pattern is:
+
+```text
+human intent
+    ↓
+explicit invariants
+    ↓
+agent implementation
+    ↓
+independent/adversarial review
+    ↓
+deterministic tests + evals
+    ↓
+provenance and evidence
+    ↓
+human-controlled release
+```
+
+The agents are powerful participants in the process. They are not the root of trust.
+
+## Put determinism at the boundary where failure matters
+
+Language models are useful precisely because they handle ambiguity well. They can read an intake narrative, identify likely entities, draft a follow-up, compare several architectural approaches, or inspect a repository for inconsistencies.
+
+That does not mean every downstream decision should also be probabilistic.
+
+For a legal-intake workflow, I would rather have a model extract a proposed party name and then hand that value to a deterministic conflicts tool than ask the model to "remember" whether a conflict check happened. I would rather have a schema reject an unknown field than hope the model inferred the right shape. I would rather have a write operation refuse to proceed until a required gate is satisfied than explain the gate only in a system prompt.
+
+That is the design behind my public [intake-triage-mcp](https://github.com/granolacowboy/intake-triage-mcp) project.
+
+The model does language work. The server does record work.
+
+The server has no model call in its decision path. It validates structured inputs, screens a fictional conflicts dataset, applies a fixed risk matrix, returns provenance, and protects the append-only triage log with a hard conflicts gate. If conflicts were not run, the write is refused unless a named human override and rationale are supplied.
+
+The important property is not that the model is "safe." It is that the model cannot silently redefine the invariant.
+
+## Tests should evaluate the path, not only the final sentence
+
+This distinction becomes more important with tool-using agents.
+
+Suppose an agent is asked to screen a prospective adverse party. It returns the correct final answer: `pending`.
+
+Was the system correct?
+
+Not necessarily.
+
+The agent might have guessed. It might have called the wrong tool and happened to recover. It might have written a record before running the screen. It might have made five unnecessary calls, including a side-effecting one.
+
+A final-answer test cannot distinguish those cases.
+
+That is why I separated a reusable [intake-eval-harness](https://github.com/granolacowboy/intake-eval-harness) from the intake server. A useful evaluation case can describe two contracts:
+
+1. **Answer contract:** what result should the user receive?
+2. **Execution contract:** what behavior must or must not occur while producing it?
+
+For example:
+
+```xml
+<qa_pair>
+  <question>Screen the prospective adverse party.</question>
+  <answer match="exact">pending</answer>
+  <required_tools>
+    <tool>intake_check_conflicts</tool>
+  </required_tools>
+  <forbidden_tools>
+    <tool>intake_log_triage</tool>
+  </forbidden_tools>
+  <max_tool_calls>2</max_tool_calls>
+</qa_pair>
+```
+
+The answer can be correct while the execution is wrong. In that case the evaluation should fail.
+
+This is a broader lesson for agent systems: **observable behavior is part of correctness**.
+
+## Provenance is more useful than a confidence adjective
+
+"High confidence" is not a reproducibility mechanism.
+
+When I publish or compare an evaluation result, I want enough context to understand what actually produced it:
+
+- the model identifier;
+- the exact evaluation suite hash;
+- the server commit, tag, or image digest;
+- the harness revision;
+- the timestamp;
+- the scoring rule;
+- the observed tool trace;
+- the pass/fail policy.
+
+Then a statement such as "10/10" has an identity.
+
+Without that information, the number is mostly marketing. The suite might have changed. The model might have changed. The server might have changed. A static badge can stay green long after the underlying claim stopped being reproducible.
+
+For the same reason, tool inputs are not automatically dumped into public reports. Evidence has to be useful without becoming a new data-leak path. The eval harness keeps tool inputs out of the Markdown report by default and makes their inclusion explicit.
+
+## Adversarial review is a role, not an oracle
+
+I regularly ask a second agent to attack the first agent's work.
+
+That helps, but "an AI reviewed the AI" is not a control by itself.
+
+The reviewer needs a job.
+
+A useful adversarial review asks concrete questions:
+
+- What assumption did the implementation introduce that the requirement did not authorize?
+- Which failure mode is not represented in tests?
+- Can an invalid state reach a write boundary?
+- Are version numbers derived from one source of truth or copied into several places?
+- Can a workflow appear green without executing the important check?
+- Are we measuring the thing the README claims we measure?
+- Is a security mechanism substantive, or merely visible?
+
+This kind of review has already caught mundane but important problems in my own public repositories. A release workflow for the intake MCP, for example, originally triggered on `v*` tags while hard-coding the `0.1.0` image version. The workflow looked automated. It was also capable of publishing the wrong version.
+
+The fix was not a better prompt. The fix was to derive the version, validate the tag against the declared server version, and fail closed when they disagree.
+
+## AI assistance should increase the amount of verification, not replace it
+
+One reason agents are valuable is that they lower the marginal cost of doing work that used to be skipped.
+
+If an agent can draft an implementation quickly, I can spend more of the project budget on:
+
+- negative tests;
+- boundary cases;
+- schema validation;
+- documentation that explains design intent;
+- reproducible examples;
+- threat modeling;
+- dependency review;
+- release verification;
+- independent implementation review.
+
+That is the productivity gain I care about.
+
+"Generated faster" is not very interesting by itself. "Generated faster, then subjected to more verification than I would otherwise have had time to perform" is.
+
+## Releases need evidence too
+
+The same principle applies after the tests pass.
+
+A repository can have excellent source code and still publish an artifact that is difficult to trust. So I want the release process to preserve evidence about the thing users actually run.
+
+For the intake MCP container, that means a release pipeline designed around:
+
+- a non-root runtime user;
+- tag/version consistency;
+- deterministic unit tests and protocol smoke tests;
+- an immutable OCI image digest;
+- a CycloneDX software bill of materials;
+- vulnerability scanning with an explicit failure policy;
+- keyless signing tied to the GitHub Actions identity;
+- public-pull verification;
+- MCP Registry validation;
+- release artifacts that record the evidence.
+
+The goal is not to accumulate security logos. It is to make the published object easier to inspect and harder to confuse with some other build.
+
+## Humans stay in the control plane
+
+"Human in the loop" can become meaningless if the human is asked to approve every trivial action.
+
+The better question is where human authority is actually valuable.
+
+I want automation to handle repeatable validation. I want agents to handle language-heavy analysis and implementation. I want deterministic gates to reject states that should never pass automatically.
+
+Human approval belongs at the remaining judgment boundaries: accepting a business exception, changing a safety invariant, authorizing a consequential side effect, deciding that evidence is sufficient for release, or deliberately overriding a failed gate.
+
+The human is not there to click "yes" 200 times a day. The human is there to own the decisions that should not be silently delegated.
+
+## AI co-authorship should be visible but not treated as evidence
+
+Some of my commits identify AI co-authorship. I think that is useful context.
+
+It is not a quality claim.
+
+A human-written patch can be wrong. An AI-assisted patch can be excellent. The relevant question is what process the patch survived.
+
+For public work, I would rather show:
+
+- the invariant;
+- the test;
+- the evaluation;
+- the build;
+- the evidence artifact;
+- the review history;
+
+than ask someone to trust either my name or the model's name.
+
+Transparency about AI assistance matters. Verification matters more.
+
+## The operating rule
+
+I want agents to have increasing freedom to **propose, explore, implement, test, and challenge**.
+
+I want decreasing freedom to silently redefine **policy, authorization, provenance, and irreversible side effects**.
+
+That leads to a simple engineering rule:
+
+> Use probabilistic systems where ambiguity is valuable. Use deterministic systems where a failure must be explainable, reproducible, or refused.
+
+The point is not to make AI less capable. It is to give capable AI a system around it that deserves more trust than the model alone.
