@@ -37,7 +37,7 @@ const minutes = Math.max(1, Math.round(words / 220));
 <BaseLayout title={post.data.title} description={post.data.description} ogType="article">
   <article class="prose">
     <header class="page-header">
-      <p class="eyebrow">WRITING · {pad(position)} <span class="accent">[FIELD NOTES]</span></p>
+      <p class="eyebrow">WRITING · {pad(position)} / {pad(total)}</p>
       <h1>{post.data.title}</h1>
       <p class="metadata">
         {pad(position)} / {pad(total)} · {minutes} MIN

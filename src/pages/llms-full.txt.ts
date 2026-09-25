@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { PERSON_NAME, HANDLE, SITE_DESCRIPTION, SITE_URL } from '../site.config';
+import { FIELD_NOTES, PERSON_NAME, HANDLE, SITE_DESCRIPTION, SITE_URL } from '../site.config';
 
 // Full-text corpus for answer engines: the clean body of the indexable pages,
 // with no nav/footer chrome. About prose and the Session Benchmark overview are
@@ -13,13 +13,13 @@ const DATA_BASE = `${SITE_URL}/projects/session-benchmark/data`;
 
 const ABOUT = `# About
 
-I am Rich Berman, also known as granolacowboy, and I have spent more than ten years working inside legal operations and technology.
+I am Rich Berman, also known as granolacowboy. I work across the operational and technical layers of law firms, from intake, CRM, reporting, and document workflows to integrations, automation, and the AI systems around them.
 
-Through MHSB, I help law firms improve intake, CRM, workflow automation, system integration, and applied-AI adoption.
+Through MHSB Solutions, I help firms improve intake, CRM, workflow automation, system integration, and applied-AI adoption. The work runs from the data model up: what a managing partner wants, what an intake team actually does all day, why a CRM fails, how integrations break, and what has to be built to fix it.
 
-I focus on forward-deployed work where discovery, evaluation, integration, and production adoption matter as much as the model itself.
+That is the rare part. I understand both the operating environment and the technology, so the systems I build survive contact with how a firm really runs.
 
-This site documents the systems I can share publicly while keeping client details and confidential work protected.`;
+This site documents the systems and research I can share publicly while keeping client details and confidential work protected.`;
 
 const INTAKE_SAFETY = `# Deterministic legal intake safety proof
 
@@ -60,12 +60,17 @@ export const GET: APIRoute = async () => {
   const writing = posts
     .map((post) => `## ${post.data.title}\n\n${(post.body ?? '').trim()}`)
     .join('\n\n');
+  const fieldNotes = FIELD_NOTES.map((note) => `- ${note}`).join('\n');
 
   const body = `# ${PERSON_NAME} (${HANDLE}) | ${SITE_URL}
 
 ${SITE_DESCRIPTION}
 
 ${ABOUT}
+
+# Field Notes
+
+${fieldNotes}
 
 # Writing
 

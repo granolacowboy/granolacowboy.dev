@@ -2,7 +2,7 @@
 
 ## granolacowboy.dev agent handoff
 
-This repo is an Astro 6 static portfolio site for `granolacowboy.dev`, deployed on Vercel (static `dist/`, auto-deploy from GitHub `main`). The project is intentionally small: no client framework, no adapter, no site chatbot, no Tailwind unless the user explicitly asks for it. Keep the site fast, static, professional, and focused on forward-deployed engineering in the legal vertical.
+This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed on Vercel (static `dist/`, auto-deploy from GitHub `main`). The project is intentionally small: no client framework, no adapter, no site chatbot, no Tailwind unless the user explicitly asks for it. Keep the site fast, static, professional, and focused on legal-technology systems, automation, and applied AI for law firms (an MHSB Solutions business-development hub).
 
 ### First read
 
@@ -15,7 +15,7 @@ This repo is an Astro 6 static portfolio site for `granolacowboy.dev`, deployed 
 
 ### Current known state
 
-- Framework: Astro 6 static output, MDX content, sitemap integration.
+- Framework: Astro 7 static output, MDX content, sitemap integration.
 - Hosting: Vercel project `mhsb/granolacowboy-dev` (static `dist/`, auto-deploy from GitHub `main`). No server adapter is required.
 - Production domain target: `https://granolacowboy.dev`.
 - Identity format: use `Rich Berman | granolacowboy` in human-facing identity copy and exact lowercase `granolacowboy` in the domain, GitHub handle, repository URLs, package name, and Vercel identifiers.
@@ -24,7 +24,8 @@ This repo is an Astro 6 static portfolio site for `granolacowboy.dev`, deployed 
   - `caseStudies` render at `/work/<id>/`.
   - `draft: true` entries are filtered out.
   - `_TEMPLATE.mdx` files are intentionally excluded by the glob.
-- The hero, About, Projects, and three launch posts were approved and deployed from commit `9be68f5` on 2026-07-08. Preserve their forward-deployed/applied-AI positioning and exact identity unless Rich requests another content pass.
+- Positioning baseline (updated 2026-09-25, business-dev-hub pass, approved by Rich): the site is an MHSB Solutions business-development hub. Do NOT reintroduce the retired `[FDE / APPLIED AI]` label, the "forward-deployed" self-description, or a specific tenure/year count ("ten years", "2016-2026"). Lead with what Rich builds; let MHSB and applied AI emerge from the work. This deliberately supersedes the prior 2026-07-08 baseline (commit `9be68f5`).
+- Writing (hybrid, 2026-09-25): the published posts are `post-2-intake-anatomy` and `post-4-deterministic-ai`. `post-1-thesis` and `post-3-regulated-buyers` were retired; their operator signal survives as homepage **Field Notes** (`FIELD_NOTES` in `src/site.config.ts`, mirrored into `llms.txt`/`llms-full.txt`). The homepage surfaces all three projects (intake-triage-mcp, intake-safety, session-benchmark). `verify-build.mjs` `expectedPostTitles` drives the published-post count; update it and the docs together when posts change.
 - Metric tokens remain in the three case studies. They are `draft: true` and produce no routes; keep them unpublished until Rich supplies and approves the narrative facts, anonymization treatment, and directional metrics.
 - Blog dates are intentionally hidden through `SHOW_DATES = false`; do not change this unless the user asks.
 - `NdaNote.astro` copy is fixed. Do not reword it without user sign-off.
@@ -79,7 +80,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
 
 3. Maintain the portfolio surface.
    - Keep the three metric-incomplete case studies as `draft: true` until the user supplies and approves every number.
-   - Keep exactly three published launch posts until the verification script and docs are deliberately updated together.
+   - Keep the published post set in sync with `expectedPostTitles` in `scripts/verify-build.mjs` (currently two: post-2-intake-anatomy, post-4-deterministic-ai); update the script and the docs together when it changes.
    - Preserve About/contact links, default meta description, project copy, and `ARTIFACT_WRITEUP_PATH`.
    - Add a resume PDF and project screenshot only when the user supplies or approves them.
 

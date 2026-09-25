@@ -1,9 +1,10 @@
 # granolacowboy.dev
 
 Source for **[granolacowboy.dev](https://granolacowboy.dev)**, the personal site of
-[Rich Berman](https://github.com/granolacowboy): posts and case studies authored in MDX.
+[Rich Berman](https://github.com/granolacowboy): an MHSB Solutions business-development hub for his
+legal-technology projects, the Session Benchmark research artifact, and field notes.
 
-**Stack:** [Astro 6](https://astro.build) with static output (no client-side framework, no
+**Stack:** [Astro 7](https://astro.build) with static output (no client-side framework, no
 adapter), deployed on [Vercel](https://vercel.com/): a static `dist/`, auto-deployed from the
 GitHub `main` branch.
 
