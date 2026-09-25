@@ -31,7 +31,7 @@ const pad = (value: number) => String(value).padStart(2, '0');
 
   <section class="home-section" aria-labelledby="featured-heading">
     <article class="card">
-      <p class="eyebrow">PROJECT · 01 / 02 <span class="accent">[OPEN SOURCE]</span></p>
+      <p class="eyebrow">PROJECT · 01 / 03 <span class="accent">[OPEN SOURCE]</span></p>
       <h2 id="featured-heading">{ARTIFACT_NAME}</h2>
       <p>I built this as a reference implementation of what secure legal intake automation can look like using the Model Context Protocol. The server is fully deterministic (no LLM calls, no network calls) and handles conflict screening, matter validation, follow-up templating, and triage logging. The idea is that the language model does the language work, and the server does the record work, with a clean boundary between them.</p>
       <ul class="tag-row" aria-label="Tags">
@@ -42,6 +42,7 @@ const pad = (value: number) => String(value).padStart(2, '0');
       <p>
         <a href={ARTIFACT_REPO_URL}>Repository</a>
         {ARTIFACT_WRITEUP_PATH && <> · <a href={ARTIFACT_WRITEUP_PATH}>Write-up</a></>}
+        {' · '}<a href="/projects/intake-safety/">System proof</a>
       </p>
     </article>
   </section>
