@@ -43,6 +43,7 @@ jobs:
         run: |
           python - <<'PY'
           import asyncio
+          import sys
           from mcp import ClientSession, StdioServerParameters
           from mcp.client.stdio import stdio_client
 
@@ -55,7 +56,7 @@ jobs:
           }
 
           async def main():
-              params = StdioServerParameters(command="python", args=["server.py"])
+              params = StdioServerParameters(command=sys.executable, args=["server.py"])
               async with stdio_client(params) as (read, write):
                   async with ClientSession(read, write) as session:
                       await session.initialize()
