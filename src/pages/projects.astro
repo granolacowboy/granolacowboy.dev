@@ -29,7 +29,7 @@ const screenshot = screenshots[screenshotPath];
   </header>
   <section class="home-section" aria-labelledby="artifact-heading">
     <article class="card">
-      <p class="eyebrow">PROJECT · 01 / 02 <span class="accent">[OPEN SOURCE]</span></p>
+      <p class="eyebrow">PROJECT · 01 / 03 <span class="accent">[OPEN SOURCE]</span></p>
       <h2 id="artifact-heading">{ARTIFACT_NAME}</h2>
       <p>I built this as a reference implementation of what secure legal intake automation can look like using the Model Context Protocol. The server is fully deterministic (no LLM calls, no network calls) and handles conflict screening, matter validation, follow-up templating, and triage logging. The idea is that the language model does the language work, and the server does the record work, with a clean boundary between them.</p>
       {
@@ -59,9 +59,23 @@ const screenshot = screenshots[screenshotPath];
     </article>
   </section>
 
+  <section class="home-section" aria-labelledby="intake-safety-heading">
+    <article class="card">
+      <p class="eyebrow">PROJECT · 02 / 03 <span class="accent">[SYSTEM PROOF]</span></p>
+      <h2 id="intake-safety-heading">Deterministic legal intake safety proof</h2>
+      <p>A reproducible walk-through showing why a correct final answer is not enough: conflicts provenance, write refusal, adversarial inputs, trace assertions, and release evidence all sit outside the model.</p>
+      <ul class="tag-row" aria-label="Tags">
+        <li class="tag">evals</li>
+        <li class="tag">safety</li>
+        <li class="tag">provenance</li>
+      </ul>
+      <p><a href="/projects/intake-safety/">Explore the system proof</a></p>
+    </article>
+  </section>
+
   <section class="home-section" aria-labelledby="session-benchmark-heading">
     <article class="card">
-      <p class="eyebrow">PROJECT · 02 / 02 <span class="accent">[RESEARCH]</span></p>
+      <p class="eyebrow">PROJECT · 03 / 03 <span class="accent">[RESEARCH]</span></p>
       <h2 id="session-benchmark-heading">Session Benchmark v0</h2>
       <p>A public, client-scrubbed research artifact built from aggregate patterns across 1,299 agent sessions. It tests whether an agent can preserve constraints, privacy boundaries, evidence, and executable next steps when the source context is messy.</p>
       <ul class="tag-row" aria-label="Tags">
