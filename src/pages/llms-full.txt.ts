@@ -21,6 +21,17 @@ I focus on forward-deployed work where discovery, evaluation, integration, and p
 
 This site documents the systems I can share publicly while keeping client details and confidential work protected.`;
 
+const INTAKE_SAFETY = `# Deterministic legal intake safety proof
+
+A fictional legal inquiry moves through a model-driven intake flow, but consequential rules live outside the model. The MCP server owns validated schemas, deterministic conflicts matching with provenance, and a hard write gate. An unaddressed conflicts status is refused unless a named human supplies an explicit rationale.
+
+The separate evaluation harness tests the final answer and execution behavior, including required and forbidden tools, consequential call arguments, tool-result assertions, and call or latency budgets.
+
+Public implementation:
+- https://github.com/granolacowboy/intake-triage-mcp
+- https://github.com/granolacowboy/intake-eval-harness
+- ${SITE_URL}/projects/intake-safety/`;
+
 const SESSION_BENCHMARK = `# Session Benchmark v0
 
 A benchmark shell built from aggregate patterns across 1,299 agent sessions. It tests whether an agent can keep evidence, constraints, privacy boundaries, and useful next actions intact when the source context is messy.
@@ -59,6 +70,8 @@ ${ABOUT}
 # Writing
 
 ${writing}
+
+${INTAKE_SAFETY}
 
 ${SESSION_BENCHMARK}
 `;

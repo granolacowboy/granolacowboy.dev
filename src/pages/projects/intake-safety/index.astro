@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import '../../../styles/session-benchmark.css';
+---
+
+<BaseLayout
+  title="Deterministic legal intake safety proof"
+  description="A reproducible walk-through of a tool-using legal intake system where conflicts, writes, provenance, and evaluation are enforced outside the model."
+  wide
+>
+  <article class="benchmark-page">
+    <header>
+      <p class="benchmark-kicker">System demonstration</p>
+      <h1>Deterministic legal intake safety proof</h1>
+      <p class="benchmark-lede">A fictional inquiry moves through a model-driven intake flow, but the consequential rules live outside the model: validated schemas, deterministic conflict screening, a hard write gate, append-only records, and trace-aware evaluation.</p>
+      <div class="benchmark-notice">
+        <p><strong>Public boundary:</strong> every party, matter, and record shown here is fictional. This page demonstrates architecture and verification, not a production conflicts process or legal advice.</p>
+      </div>
+    </header>
+
+    <section class="benchmark-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">The boundary</h2>
+      <p>The language model can interpret prose and choose a tool. It cannot redefine the write rule. The MCP server makes no LLM calls and no network calls.</p>
+      <ol class="theme-list">
+        <li><strong>1. Extract</strong><span>The model reads an inquiry and identifies the parties and known intake fields.</span></li>
+        <li><strong>2. Screen</strong><span><code>intake_check_conflicts</code> deterministically compares party names against a fictional fixture and returns provenance.</span></li>
+        <li><strong>3. Normalize</strong><span><code>intake_validate_matter</code> validates enums and dates, derives a fixed risk label, and reports missing fields.</span></li>
+        <li><strong>4. Gate</strong><span><code>intake_log_triage</code> refuses an unaddressed conflicts state unless a named human supplies an explicit rationale.</span></li>
+        <li><strong>5. Evaluate</strong><span>The separate evaluation harness checks the answer and the execution path, including required and forbidden tools.</span></li>
+      </ol>
+    </section>
+
+    <section class="benchmark-section" aria-labelledby="inquiry-heading">
+      <h2 id="inquiry-heading">Fictional inquiry</h2>
+      <blockquote>
+        <p>I was rear-ended three weeks ago. Northgate Assurance Co keeps calling me. My shoulder still hurts. Can your firm help?</p>
+      </blockquote>
+      <p>The model can extract <code>Northgate Assurance Co</code>. The server then owns the screen.</p>
+      <pre><code>intake_check_conflicts(&#123;
+  "party_names": ["Northgate Assurance Co"]
+&#125;)</code></pre>
+      <p>The fictional fixture returns a potential adverse-party match, record <code>P-0003</code>, so the screen status is <code>pending</code>. The result includes the fixture version and as-of date instead of asking the model to remember where the match came from.</p>
+    </section>
+
+    <section class="benchmark-section" aria-labelledby="refusal-heading">
+      <h2 id="refusal-heading">The important result is a refusal</h2>
+      <p>Now assume a user tells the agent to skip conflicts and write the intake anyway.</p>
+      <pre><code>intake_log_triage(&#123;
+  "matter_name": "Walk-in inquiry",
+  "conflicts_status": "not-run"
+&#125;)</code></pre>
+      <p>The tool returns an error beginning <code>Error: conflicts gate</code>. No row is written. A prompt can suggest safe behavior; this boundary enforces it.</p>
+      <p>A genuine emergency override requires both a named human and a rationale. If used, those values are stored permanently with the row.</p>
+    </section>
+
+    <section class="benchmark-section benchmark-section-wide" aria-labelledby="evidence-heading">
+      <h2 id="evidence-heading">What is actually tested</h2>
+      <div class="table-region" role="region" tabindex="0" aria-label="Legal intake evidence layers">
+        <table class="benchmark-table">
+          <caption>Evidence layers for the public reference implementation</caption>
+          <thead><tr><th scope="col">Layer</th><th scope="col">Failure it addresses</th><th scope="col">Public evidence</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Schema</th><td>Malformed or unexpected values enter the workflow</td><td>Pydantic validation, bounded strings, enum/date tests</td></tr>
+            <tr><th scope="row">Conflicts</th><td>A model invents or forgets a screen result</td><td>Deterministic fixture matching with record and dataset provenance</td></tr>
+            <tr><th scope="row">Write gate</th><td>An agent writes before conflicts are addressed</td><td>Hard refusal plus negative regression tests</td></tr>
+            <tr><th scope="row">Trace evaluation</th><td>The final answer is right but the agent used the wrong path</td><td>Required/forbidden tools, call arguments, result assertions, call and latency budgets</td></tr>
+            <tr><th scope="row">Release</th><td>Published artifact differs from the reviewed source</td><td>Non-root container, digest, SBOM, vulnerability evidence, signature and attestation pipeline</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="benchmark-section" aria-labelledby="reproduce-heading">
+      <h2 id="reproduce-heading">Reproduce it</h2>
+      <p>The server and harness are separate by design. The MCP repository owns deterministic behavior and the golden suite. The harness owns scoring and evidence generation.</p>
+      <ul class="download-list">
+        <li><a href="https://github.com/granolacowboy/intake-triage-mcp">intake-triage-mcp repository</a></li>
+        <li><a href="https://github.com/granolacowboy/intake-triage-mcp/blob/main/docs/demo.md">repository safety demo</a></li>
+        <li><a href="https://github.com/granolacowboy/intake-triage-mcp/blob/main/evals/evaluation.xml">golden evaluation suite</a></li>
+        <li><a href="https://github.com/granolacowboy/intake-eval-harness">intake-eval-harness repository</a></li>
+        <li><a href="/writing/post-4-deterministic-ai/">engineering methodology</a></li>
+      </ul>
+      <p>A model-driven score is not displayed here until a reviewed run can be published with the exact server revision, harness revision, suite hash, model identifier, timestamp, and evidence files together.</p>
+    </section>
+  </article>
+</BaseLayout>
