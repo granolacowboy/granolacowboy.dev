@@ -13,9 +13,8 @@ import {
 
 // Curated llms.txt index for answer engines. Links ONLY pages that resolve to
 // indexable content: draft case studies at /work/* are excluded (they 404 and
-// are absent from the sitemap). Family links are plain URLs with NO UTM params
-// (entity-canon.json familyLinkList). Descriptions are sourced from post
-// frontmatter and the canon, never paraphrased.
+// are absent from the sitemap). Descriptions come from post frontmatter and
+// the live site copy.
 
 export const GET: APIRoute = async () => {
   const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
@@ -47,7 +46,6 @@ ${writing}
 ## Profiles
 - [GitHub](${GITHUB_URL})
 - [Hugging Face](${HUGGINGFACE_URL})
-
 
 ## Full text
 - [llms-full.txt](${SITE_URL}/llms-full.txt)
