@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { ARTIFACT_NAME, ARTIFACT_REPO_URL, ARTIFACT_WRITEUP_PATH, FIELD_NOTES, SHOW_DATES } from '../site.config';
+import { ARTIFACT_NAME, ARTIFACT_REPO_URL, ARTIFACT_WRITEUP_PATH, SHOW_DATES } from '../site.config';
 
 // Newest first; drafts excluded. pubDate orders the list but never
 // renders (SHOW_DATES stays false); rows carry a mono position readout.
@@ -18,9 +18,7 @@ const pad = (value: number) => String(value).padStart(2, '0');
       Systems for legal <span class="accent">operations</span>, automation, and applied AI.
     </h1>
     <p class="lede">
-      I build and ship automation inside law firms: intake, conflicts, drafting pipelines. I
-      bring a security researcher's habits to AI adoption. The client work here is anonymized;
-      the patterns are real.
+      I build these systems for law firms through MHSB Solutions. Client work shown here is anonymized.
     </p>
   </section>
 
@@ -67,21 +65,6 @@ const pad = (value: number) => String(value).padStart(2, '0');
       </ul>
       <p><a href="/projects/session-benchmark/">Explore the benchmark</a></p>
     </article>
-  </section>
-
-  <section class="home-section" aria-labelledby="notes-heading">
-    <p class="eyebrow">INDEX · FIELD NOTES</p>
-    <h2 id="notes-heading" class="display-l">Field notes</h2>
-    <ol class="writing-index">
-      {
-        FIELD_NOTES.map((note, i) => (
-          <li class="writing-row">
-            <p class="metadata">{pad(i + 1)} / {pad(FIELD_NOTES.length)} · FIELD NOTES</p>
-            <p class="writing-row-desc">{note}</p>
-          </li>
-        ))
-      }
-    </ol>
   </section>
 
   <section class="home-section" aria-labelledby="writing-heading">
