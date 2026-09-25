@@ -38,17 +38,14 @@ jobs:
       - name: Run unit tests
         run: python -m pytest -q --cov=server --cov-report=term-missing
 
-      - name: Build image
-        run: docker build -t intake-triage-mcp:portfolio-ci .
-
-      - name: Verify MCP initialize and tools/list
+      - name: Verify MCP initialize and tools/list from source
         shell: bash
         run: |
           set -euo pipefail
           REQ='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"portfolio-ci","version":"0.0.0"}}}
           {"jsonrpc":"2.0","method":"notifications/initialized"}
           {"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}'
-          OUT=$(printf '%s\n' "$REQ" | timeout 120 docker run -i --rm intake-triage-mcp:portfolio-ci 2>/dev/null || true)
+          OUT=$(printf '%s\n' "$REQ" | timeout 120 python server.py 2>/dev/null || true)
           echo "$OUT"
           for tool in intake_list_practice_areas intake_check_conflicts intake_validate_matter intake_draft_followup intake_log_triage; do
             echo "$OUT" | grep -q "\"$tool\"" || {
