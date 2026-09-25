@@ -17,6 +17,6 @@ see the [README](../README.md) for that.
 
 ## Content
 
-- Case studies remain `draft: true` and produce no public routes. Do not publish them until every
-  claim has been attested, the anonymization treatment approved, and defensible directional
-  metrics supplied.
+- There are no case studies. The unattested draft archetypes were deleted (2026-09-25); only
+  `_TEMPLATE.mdx` remains. Recreate one only from a real engagement, with every claim attested, the
+  anonymization treatment approved, and defensible directional metrics supplied.

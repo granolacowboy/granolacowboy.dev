@@ -27,7 +27,7 @@ This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed 
 - Positioning baseline (updated 2026-09-25, business-dev-hub pass, approved by Rich): the site is an MHSB Solutions business-development hub. Do NOT reintroduce the retired `[FDE / APPLIED AI]` label, the "forward-deployed" self-description, or a specific tenure/year count ("ten years", "2016-2026"). Lead with what Rich builds; let MHSB and applied AI emerge from the work. This deliberately supersedes the prior 2026-07-08 baseline (commit `9be68f5`).
 - Writing (hybrid, 2026-09-25): the published posts are `post-2-intake-anatomy` and `post-4-deterministic-ai`. `post-1-thesis` and `post-3-regulated-buyers` were retired (their URLs redirect to `/writing/`). The homepage surfaces all three projects (intake-triage-mcp, intake-safety, session-benchmark). `verify-build.mjs` `expectedPostTitles` drives the published-post count; update it and the docs together when posts change.
 - Copy is a deliberately minimal, academic placeholder (2026-09-25) until Rich writes his own: tight factual hero + a two-paragraph About, no editorial Field Notes. An earlier BLUF Field Notes section was removed at his request; do not re-add speculative/aphoristic copy in his voice.
-- Metric tokens remain in the three case studies. They are `draft: true` and produce no routes; keep them unpublished until Rich supplies and approves the narrative facts, anonymization treatment, and directional metrics.
+- There are no case studies. The three unattested draft archetypes were deleted (2026-09-25); only `_TEMPLATE.mdx` remains. Recreate case studies ONLY from real, anonymized engagements once Rich supplies and approves the narrative facts, anonymization treatment, and directional metrics.
 - Blog dates are intentionally hidden through `SHOW_DATES = false`; do not change this unless the user asks.
 - `NdaNote.astro` copy is fixed. Do not reword it without user sign-off.
 
@@ -80,7 +80,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
    - Site copy should avoid em dashes.
 
 3. Maintain the portfolio surface.
-   - Keep the three metric-incomplete case studies as `draft: true` until the user supplies and approves every number.
+   - There are no case studies (the draft archetypes were deleted). Create one only from a real engagement with Rich-supplied, approved facts and metrics.
    - Keep the published post set in sync with `expectedPostTitles` in `scripts/verify-build.mjs` (currently two: post-2-intake-anatomy, post-4-deterministic-ai); update the script and the docs together when it changes.
    - Preserve About/contact links, default meta description, project copy, and `ARTIFACT_WRITEUP_PATH`.
    - Add a resume PDF and project screenshot only when the user supplies or approves them.
