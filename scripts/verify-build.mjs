@@ -297,6 +297,16 @@ for (const sitemapFile of sitemapFiles) {
   assertWellFormedXml(await readFile(sitemapFile, 'utf8'), path.basename(sitemapFile));
 }
 
+const intakeSafetyRoute = '/projects/intake-safety/';
+const intakeSafetyFile = path.join(dist, intakeSafetyRoute.replace(/^\\//, ''), 'index.html');
+check(await exists(intakeSafetyFile), `${intakeSafetyRoute} route exists`);
+check(sitemapContents.includes(new URL(intakeSafetyRoute, siteOrigin).href), `${intakeSafetyRoute} appears in the sitemap`);
+if (await exists(intakeSafetyFile)) {
+  const intakeSafetyHtml = await readFile(intakeSafetyFile, 'utf8');
+  check(intakeSafetyHtml.includes('Error: conflicts gate'), 'intake safety proof renders the refusal evidence');
+  check(intakeSafetyHtml.includes('intake-eval-harness'), 'intake safety proof links the reusable eval harness');
+}
+
 const benchmarkRoutes = [
   '/projects/session-benchmark/',
   '/projects/session-benchmark/cases/',
