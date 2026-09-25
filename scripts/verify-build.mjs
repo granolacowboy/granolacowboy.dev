@@ -293,13 +293,12 @@ check(
   'published post titles match the approved published titles'
 );
 
-// Homepage regression guards for the positioning pass: Field Notes present and
-// no residual FDE / forward-deployed self-label.
+// Homepage regression guard for the positioning pass: no residual FDE /
+// forward-deployed self-label. (Field Notes were removed pending Rich's writing.)
 const homeHtmlPath = path.join(dist, 'index.html');
 check(await exists(homeHtmlPath), 'homepage index.html exists');
 if (await exists(homeHtmlPath)) {
   const homeHtml = await readFile(homeHtmlPath, 'utf8');
-  check(/Field notes/i.test(homeHtml), 'homepage renders the Field Notes section');
   check(!/\bFDE\b|forward-deployed/i.test(homeHtml), 'homepage carries no FDE or forward-deployed self-label');
 }
 

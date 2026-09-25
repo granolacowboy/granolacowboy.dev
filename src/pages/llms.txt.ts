@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import {
   ARTIFACT_NAME,
   ARTIFACT_REPO_URL,
-  FIELD_NOTES,
   GITHUB_URL,
   HANDLE,
   HUGGINGFACE_URL,
@@ -29,16 +28,12 @@ export const GET: APIRoute = async () => {
         `- [${post.data.title}](${SITE_URL}/writing/${post.id}/): ${post.data.description}`
     )
     .join('\n');
-  const fieldNotes = FIELD_NOTES.map((note) => `- ${note}`).join('\n');
 
   const body = `# ${PERSON_NAME} (${HANDLE})
 > ${SITE_DESCRIPTION}
 
 ## About
-- [About](${SITE_URL}/about/): Who Rich Berman is and the legal-technology, automation, and applied-AI work he does with law firms through MHSB Solutions.
-
-## Field Notes
-${fieldNotes}
+- [About](${SITE_URL}/about/): Rich Berman and the systems he builds for law firms through MHSB Solutions.
 
 ## Writing
 ${writing}
