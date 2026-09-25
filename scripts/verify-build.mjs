@@ -222,10 +222,12 @@ check(
   `public source and docs contain no spaced or title-cased handle variants${identityVariantFiles.length ? ` (${identityVariantFiles.join(', ')})` : ''}`
 );
 
+// Hybrid writing pass (2026-09-25): post-1-thesis and post-3-regulated-buyers
+// were retired; their operator signal survives as homepage Field Notes. The two
+// kept posts are the technical companion (post-2) and the deterministic-agents
+// methodology (post-4).
 const expectedPostTitles = new Set([
-  'Deploying AI in a change-resistant vertical: field notes from a decade in law firms',
   'Anatomy of a legal intake automation',
-  "What regulated-industry buyers actually need before they'll adopt AI",
   'How I use AI agents to build deterministic systems without trusting the agents to be deterministic',
 ]);
 const expectedPublishedPostCount = expectedPostTitles.size;
@@ -284,6 +286,16 @@ check(
   publishedPostSources.every(({ title }) => expectedPostTitles.has(title)),
   'published post titles match the approved published titles'
 );
+
+// Homepage regression guards for the positioning pass: Field Notes present and
+// no residual FDE / forward-deployed self-label.
+const homeHtmlPath = path.join(dist, 'index.html');
+check(await exists(homeHtmlPath), 'homepage index.html exists');
+if (await exists(homeHtmlPath)) {
+  const homeHtml = await readFile(homeHtmlPath, 'utf8');
+  check(/Field notes/i.test(homeHtml), 'homepage renders the Field Notes section');
+  check(!/\bFDE\b|forward-deployed/i.test(homeHtml), 'homepage carries no FDE or forward-deployed self-label');
+}
 
 const emDashHtmlFiles = textEntries
   .filter(([file, contents]) => path.extname(file).toLowerCase() === '.html' && contents.includes('—'))
