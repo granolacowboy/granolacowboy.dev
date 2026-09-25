@@ -18,6 +18,9 @@ on:
 permissions:
   contents: read
 
+# Paid model evaluation remains operator-controlled; this workflow verifies only
+# the harness's offline deterministic contract and CLI surface.
+
 concurrency:
   group: verify-intake-eval-harness
   cancel-in-progress: true
