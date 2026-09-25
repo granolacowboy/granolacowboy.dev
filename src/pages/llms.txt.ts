@@ -33,7 +33,7 @@ export const GET: APIRoute = async () => {
 > ${SITE_DESCRIPTION}
 
 ## About
-- [About](${SITE_URL}/about/): Rich Berman and the systems he builds for law firms through MHSB Solutions.
+- [About](${SITE_URL}/about/): Rich Berman's personal technical notebook: systems, security, automation, legal technology, and failure modes.
 
 ## Writing
 ${writing}
@@ -48,13 +48,6 @@ ${writing}
 - [GitHub](${GITHUB_URL})
 - [Hugging Face](${HUGGINGFACE_URL})
 
-## Family
-- [MHSB Solutions](https://www.mhsbsolutions.com/): Applied AI and forward-deployed engineering for the legal profession. Security-first.
-- [EfficientEsq](https://efficient.esq): The operations layer for the modern firm.
-- [LexLab Systems](https://lexlabsystems.com)
-- [legalai.help](https://legalai.help): AI and legal technology glossary.
-- [legalaicompliance.help](https://legalaicompliance.help): 50-state AI rules and guidance tracker for lawyers.
-- [LLM Security for Law Firms](https://mhsbai.github.io/llm-security-for-law-firms/)
 
 ## Full text
 - [llms-full.txt](${SITE_URL}/llms-full.txt)
