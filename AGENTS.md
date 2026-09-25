@@ -2,7 +2,7 @@
 
 ## granolacowboy.dev agent handoff
 
-This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed on Vercel (static `dist/`, auto-deploy from GitHub `main`). The project is intentionally small: no client framework, no adapter, no site chatbot, no Tailwind unless the user explicitly asks for it. Keep the site fast, static, professional, and focused on legal-technology systems, automation, and applied AI for law firms (an MHSB Solutions business-development hub).
+This repo is the Astro 7 static personal technical site for `granolacowboy.dev`, deployed on Vercel (static `dist/`, auto-deploy from GitHub `main`). The project is intentionally small: no client framework, no adapter, no site chatbot, no Tailwind unless the user explicitly asks for it. Keep the site fast, static, quiet, and technical. It is a working notebook and project surface for Rich Berman, not an MHSB Solutions business-development hub.
 
 ### First read
 
@@ -24,9 +24,9 @@ This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed 
   - `caseStudies` render at `/work/<id>/`.
   - `draft: true` entries are filtered out.
   - `_TEMPLATE.mdx` files are intentionally excluded by the glob.
-- Positioning baseline (updated 2026-09-25, business-dev-hub pass, approved by Rich): the site is an MHSB Solutions business-development hub. Do NOT reintroduce the retired `[FDE / APPLIED AI]` label, the "forward-deployed" self-description, or a specific tenure/year count ("ten years", "2016-2026"). Lead with what Rich builds; let MHSB and applied AI emerge from the work. This deliberately supersedes the prior 2026-07-08 baseline (commit `9be68f5`).
+- Positioning baseline (updated 2026-09-25, personal-site reset, approved by Rich): `granolacowboy.dev` is Rich's personal technical notebook and project surface, not a consulting funnel. Lead with systems, experiments, failure modes, security, automation, protocols, old software, legal technology, and whatever the work itself demonstrates. MHSB may appear as factual context on About/contact surfaces, but never as the site's framing device or portfolio footer. Do NOT reintroduce the retired `[FDE / APPLIED AI]` label, "forward-deployed" self-description, tenure marketing, personal-branding superlatives, cyberpunk/hacker cosplay, or AI thought-leadership filler. Competence should be inferred from the artifacts.
 - Writing (hybrid, 2026-09-25): the published posts are `post-2-intake-anatomy` and `post-4-deterministic-ai`. `post-1-thesis` and `post-3-regulated-buyers` were retired (their URLs redirect to `/writing/`). The homepage surfaces all three projects (intake-triage-mcp, intake-safety, session-benchmark). `verify-build.mjs` `expectedPostTitles` drives the published-post count; update it and the docs together when posts change.
-- Copy is a deliberately minimal, academic placeholder (2026-09-25) until Rich writes his own: tight factual hero + a two-paragraph About, no editorial Field Notes. An earlier BLUF Field Notes section was removed at his request; do not re-add speculative/aphoristic copy in his voice.
+- Copy is deliberately sparse. The homepage identity is personal and technical, with no services pitch. About can mention MHSB only to distinguish consulting work from this site. Do not add calls to action, lead-gen language, capability boasting, startup jargon, cyberpunk affectation, or speculative/aphoristic copy in Rich's voice.
 - There are no case studies. The three unattested draft archetypes were deleted (2026-09-25); only `_TEMPLATE.mdx` remains. Recreate case studies ONLY from real, anonymized engagements once Rich supplies and approves the narrative facts, anonymization treatment, and directional metrics.
 - Blog dates are intentionally hidden through `SHOW_DATES = false`; do not change this unless the user asks.
 - `NdaNote.astro` copy is fixed. Do not reword it without user sign-off.
@@ -82,7 +82,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
 3. Maintain the portfolio surface.
    - There are no case studies (the draft archetypes were deleted). Create one only from a real engagement with Rich-supplied, approved facts and metrics.
    - Keep the published post set in sync with `expectedPostTitles` in `scripts/verify-build.mjs` (currently two: post-2-intake-anatomy, post-4-deterministic-ai); update the script and the docs together when it changes.
-   - Preserve About/contact links, default meta description, project copy, and `ARTIFACT_WRITEUP_PATH`.
+   - Preserve the personal-site framing, About/contact links, default meta description, project copy, and `ARTIFACT_WRITEUP_PATH`.
    - Add a resume PDF and project screenshot only when the user supplies or approves them.
 
 4. Optimize honestly.
