@@ -9,7 +9,7 @@ export const SITE_TITLE = `${PERSON_NAME} | ${HANDLE}`;
 
 /** Default meta description; pages override via BaseLayout's `description` prop. */
 export const SITE_DESCRIPTION =
-  'Rich Berman builds legal-technology systems, automation, and applied AI for law firms through MHSB Solutions.';
+  'Personal notes and projects by Rich Berman on systems, automation, security, legal technology, and failure modes.';
 
 /**
  * Blog posts render WITHOUT visible dates (PLAN Open Item #3, resolved 2026-06-10).
