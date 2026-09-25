@@ -12,6 +12,9 @@ on:
 permissions:
   contents: read
 
+# Release publication is intentionally separate and uses the target repository's
+# dedicated `triage-release` runner; this workflow remains offline verification.
+
 concurrency:
   group: verify-intake-triage-mcp
   cancel-in-progress: true
