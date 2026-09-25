@@ -13,9 +13,9 @@ const DATA_BASE = `${SITE_URL}/projects/session-benchmark/data`;
 
 const ABOUT = `# About
 
-I am Rich Berman (granolacowboy). Through MHSB Solutions, I build systems for law firms: intake, CRM, reporting, document workflows, integration, automation, and applied AI.
+I build and dissect systems. Most of my professional work is legal technology. The rest of my attention tends to land on automation, security, protocols, agents, observability, old software, and the ugly boundaries where systems stop behaving as advertised.
 
-The work spans both the operating environment and the underlying technology. This site documents what I can share publicly; client details are omitted.`;
+granolacowboy.dev is a working notebook, not a services site. Projects are here because I wanted to build or test them; client details stay out of it. MHSB Solutions is where the consulting work lives.`;
 
 const INTAKE_SAFETY = `# Deterministic legal intake safety proof
 
