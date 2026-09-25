@@ -298,7 +298,7 @@ for (const sitemapFile of sitemapFiles) {
 }
 
 const intakeSafetyRoute = '/projects/intake-safety/';
-const intakeSafetyFile = path.join(dist, intakeSafetyRoute.replace(/^\\//, ''), 'index.html');
+const intakeSafetyFile = path.join(dist, intakeSafetyRoute.replace(/^[/]/, ''), 'index.html');
 check(await exists(intakeSafetyFile), `${intakeSafetyRoute} route exists`);
 check(sitemapContents.includes(new URL(intakeSafetyRoute, siteOrigin).href), `${intakeSafetyRoute} appears in the sitemap`);
 if (await exists(intakeSafetyFile)) {
