@@ -5,9 +5,11 @@ see the [README](../README.md) for that.
 
 ## Release / deploy
 
-- The Vercel project `mhsb/granolacowboy-dev` deploys GitHub `main` to production.
-- A push or production deployment is an external change and requires explicit approval after
-  `npm run verify` passes.
+- The Vercel project `mhsb/granolacowboy-dev` deploys GitHub `main` to production automatically.
+- `main` is protected and PR-only: direct pushes are rejected (branch protection requires the
+  "Vercel" status check). Ship by opening a pull request, letting the required Vercel check and the
+  GitHub Actions `verify` go green, then squash-merging. A production release is an external change
+  and requires explicit approval; the local release gate expects the exact head SHA before any push.
 - `vercel.json` contains security headers only and must **not** contain a global `noindex` header.
 - If a production build must be hidden before launch, prepare that temporary change on a separate
   `codex/noindex-hotfix` branch. Do not merge or deploy the hotfix without explicit production
