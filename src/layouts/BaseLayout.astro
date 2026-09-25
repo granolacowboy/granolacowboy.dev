@@ -65,8 +65,8 @@ const { pathname } = Astro.url;
 const isCurrent = (href: string) =>
   pathname === href || pathname === href.slice(0, -1) || pathname.startsWith(href);
 
-// Portfolio identity spine: the canonical Person (defined authoritatively on the
-// apex, mhsbsolutions.com, and reused here by @id) plus this site's own WebSite.
+// Identity spine: the canonical Person (defined authoritatively on the apex,
+// mhsbsolutions.com, and reused here by @id) plus this site's own WebSite.
 const identityGraph = {
   '@context': 'https://schema.org',
   '@graph': [
