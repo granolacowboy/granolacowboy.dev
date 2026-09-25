@@ -231,11 +231,17 @@ const expectedPostTitles = new Set([
   'How I use AI agents to build deterministic systems without trusting the agents to be deterministic',
 ]);
 const expectedPublishedPostCount = expectedPostTitles.size;
+// Astro static redirects (astro.config.mjs) emit a noindex meta-refresh stub at
+// each retired post path (e.g. /writing/post-1-thesis/). Those are NOT published
+// posts, so exclude any writing/ dir whose index.html is a redirect stub.
+const isRedirectStub = (html) => /http-equiv=["']?refresh/i.test(html);
 const writingDirectory = path.join(dist, 'writing');
 const writingEntries = await readdir(writingDirectory, { withFileTypes: true });
 const publishedPostIds = [];
 for (const entry of writingEntries) {
-  if (entry.isDirectory() && await exists(path.join(writingDirectory, entry.name, 'index.html'))) {
+  const indexFile = path.join(writingDirectory, entry.name, 'index.html');
+  if (entry.isDirectory() && await exists(indexFile)) {
+    if (isRedirectStub(await readFile(indexFile, 'utf8'))) continue;
     publishedPostIds.push(entry.name);
   }
 }
@@ -554,6 +560,9 @@ for (const file of htmlFiles) {
   const route = routeForHtml(file);
   if (!route) continue;
   const html = await readFile(file, 'utf8');
+  // Redirect stubs point canonical/OG at their target, not their own path; they
+  // are noindex and not real content pages, so skip them here.
+  if (isRedirectStub(html)) continue;
   const canonicalTags = tags(html, 'link').filter((tag) => attribute(tag, 'rel')?.toLowerCase() === 'canonical');
   const expectedCanonical = new URL(route, siteOrigin).href;
   check(canonicalTags.length === 1 && attribute(canonicalTags[0], 'href') === expectedCanonical, `${route} has one correct canonical URL`);
