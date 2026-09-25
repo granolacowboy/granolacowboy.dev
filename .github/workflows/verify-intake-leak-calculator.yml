@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: granolacowboy/mhsb-intake-leak-calculator
-          ref: security/astro7-20260925
+          ref: main
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
