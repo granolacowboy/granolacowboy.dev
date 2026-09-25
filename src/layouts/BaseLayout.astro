@@ -61,20 +61,6 @@ const navItems = [
   { href: '/about/', label: 'About' },
 ];
 
-// MHSB Solutions portfolio. Plain URLs, NO UTM params (entity-canon.json
-// familyLinkList). This site (granolacowboy.dev) is excluded as the current
-// origin. Rendered in this site's OWN dark tokens, never MHSB cream.
-const familyLinks = [
-  { href: 'https://www.mhsbsolutions.com/', label: 'MHSB Solutions' },
-  { href: 'https://efficient.esq', label: 'EfficientEsq' },
-  { href: 'https://lexlabsystems.com', label: 'LexLab Systems' },
-  { href: 'https://legalai.help', label: 'legalai.help' },
-  { href: 'https://legalaicompliance.help', label: 'legalaicompliance.help' },
-  {
-    href: 'https://mhsbai.github.io/llm-security-for-law-firms/',
-    label: 'LLM Security for Law Firms',
-  },
-];
 const { pathname } = Astro.url;
 const isCurrent = (href: string) =>
   pathname === href || pathname === href.slice(0, -1) || pathname.startsWith(href);
@@ -171,18 +157,6 @@ const identityGraph = {
       <slot />
     </main>
     <footer class="site-footer">
-      <nav class="container footer-family" aria-label="MHSB Solutions portfolio">
-        <span class="footer-family-label">Portfolio</span>
-        <ul>
-          {
-            familyLinks.map((item) => (
-              <li>
-                <a href={item.href}>{item.label}</a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
       <div class="container footer-meta">
         {/* Uppercase presentation comes from CSS text-transform; markup
             keeps the handle in its exact lowercase form. */}
