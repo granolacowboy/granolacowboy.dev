@@ -41,6 +41,7 @@ ${writing}
 ## Projects
 - [Projects](${SITE_URL}/projects/): Open-source and research work.
 - [${ARTIFACT_NAME}](${ARTIFACT_REPO_URL}): Open-source, fully deterministic legal intake triage server built on the Model Context Protocol.
+- [Deterministic legal intake safety proof](${SITE_URL}/projects/intake-safety/): End-to-end demonstration of conflicts provenance, a hard write gate, adversarial inputs, trace-aware evaluation, and release evidence around the intake MCP.
 - [Session Benchmark v0](${SITE_URL}/projects/session-benchmark/): A public, client-scrubbed benchmark that tests whether an agent preserves constraints, privacy boundaries, evidence, and next steps across messy, long-running context.
 
 ## Profiles
