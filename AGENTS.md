@@ -86,7 +86,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
    - Add a resume PDF and project screenshot only when the user supplies or approves them.
 
 4. Optimize honestly.
-   - Keep the only JavaScript as the inline theme script unless there is a clear need.
+   - The layout ships zero client JavaScript (the theme toggle was removed); keep it that way unless there is a clear need. The Session Benchmark registry page is the one intentional script.
    - Audit semantic headings, focus states, color contrast, skip link, and mobile wrapping.
    - Verify canonical URL, OG tags, Twitter card, favicon, robots, and sitemap output.
    - Optimize images with Astro assets where possible; avoid remote or decorative assets that do not help the portfolio.
@@ -95,7 +95,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
 
 5. Deployment and cutover.
    - Follow `planning/PHASE7-DEPLOY-RUNBOOK.md`.
-- A push to GitHub `main` or any Vercel production deployment is an external change and requires explicit approval after `npm.cmd run verify` passes. Approval for the 2026-07-08 launch was granted and consumed; future releases require a new explicit instruction.
+- `main` is protected and PR-only: direct pushes are rejected (branch protection requires the "Vercel" status check). Ship via a pull request -> required Vercel check + GitHub Actions `verify` green -> squash-merge. A production release is an external change requiring explicit approval, and the local release gate expects the exact head SHA before any push. (The 2026-07-08 launch approval was consumed; each release needs a fresh explicit instruction.)
    - The launch `vercel.json` must contain security headers only, with no global `noindex`.
    - The Vercel project build command is `npm run verify` (platform setting; `vercel.json` stays headers-only). Every preview and production build therefore runs `astro check`, `astro build`, and `scripts/verify-build.mjs`. GitHub Actions independently runs the same verification on the self-hosted `gcd` runner; either red signal should be investigated before promotion.
    - If the old production build must be hidden first, prepare the temporary header on `codex/noindex-hotfix`; do not merge or deploy it without explicit production approval, and remove it before launch.
@@ -110,6 +110,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
 - Do not add a React island, analytics script, webfont, CSS framework, or third-party widget without a clear reason and user approval.
 - Preserve the anonymization strategy: category plus problem framing, no identifying client combinations.
 - Never publish placeholder copy, unaudited claims, or metrics not stated by the user.
+- Keep `AGENTS.md`, `README.md`, and `docs/ops.md` in sync with the live state. When a change alters the framework, the published post set, the projects, the deploy flow, or the copy model, update these docs in the SAME PR. Prefer code as the source of truth (`package.json`, `verify-build.mjs` `expectedPostTitles`) over restating facts in prose; `verify-build.mjs` enforces the framework version the docs state.
 
 ### Done checks
 
@@ -119,4 +120,4 @@ Before claiming a pass is complete:
 npm.cmd run verify
 ```
 
-The verification script checks built placeholders, published post and RSS counts, draft case-study exclusion, XML, canonical and OG metadata, exact lowercase handle casing, Vercel launch headers, and the no-adapter rule. Also inspect the built site or local preview on desktop and mobile. For launch-readiness, run Lighthouse/PageSpeed and record any residual risks rather than hand-waving them away.
+The verification script checks built placeholders; published post and RSS counts (driven by `expectedPostTitles`, with retired-post redirect stubs excluded from the post/canonical checks); the homepage no-FDE guard; draft case-study exclusion; XML; canonical and OG metadata; exact lowercase handle casing; the framework-version doc check (every `Astro <N>` in README/AGENTS must match the `astro` major in `package.json`); Vercel launch headers; and the no-adapter rule. Also inspect the built site or local preview on desktop and mobile. For launch-readiness, run Lighthouse/PageSpeed and record any residual risks rather than hand-waving them away.
