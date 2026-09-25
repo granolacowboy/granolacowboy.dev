@@ -2,7 +2,7 @@
 
 Source for **[granolacowboy.dev](https://granolacowboy.dev)**, the personal site of
 [Rich Berman](https://github.com/granolacowboy): an MHSB Solutions business-development hub for his
-legal-technology projects, the Session Benchmark research artifact, and field notes.
+legal-technology projects and the Session Benchmark research artifact.
 
 **Stack:** [Astro 7](https://astro.build) with static output (no client-side framework, no
 adapter), deployed on [Vercel](https://vercel.com/): a static `dist/`, auto-deployed from the
@@ -26,11 +26,12 @@ On Windows PowerShell, use `npm.cmd` if the `npm.ps1` execution-policy shim is b
 ## Deployment
 
 The Vercel project deploys the GitHub `main` branch to production automatically; `vercel.json`
-carries security headers only. The Vercel project's platform build command is `npm run verify`,
-so every preview and production deployment must pass Astro checks, the static build, and the
-`scripts/verify-build.mjs` dist gate. GitHub Actions runs the same verification on the
-self-hosted `gcd` runner as an independent source-control gate. Release and content-gating notes live in
-[`docs/ops.md`](docs/ops.md).
+carries security headers only. `main` is protected: changes land through a pull request once the
+required **Vercel** check is green, then squash-merged (direct pushes to `main` are rejected). The
+Vercel project's platform build command is `npm run verify`, so every preview and production
+deployment must pass Astro checks, the static build, and the `scripts/verify-build.mjs` dist gate.
+GitHub Actions runs the same verification on the self-hosted `gcd` runner as an independent
+source-control gate. Release and content-gating notes live in [`docs/ops.md`](docs/ops.md).
 
 ## License
 

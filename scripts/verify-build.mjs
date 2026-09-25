@@ -636,6 +636,21 @@ check(!JSON.stringify(vercelConfig).toLowerCase().includes('noindex'), 'vercel.j
 const packageJson = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 check(!Object.keys({ ...packageJson.dependencies, ...packageJson.devDependencies }).some((name) => name === '@astrojs/vercel'), 'static Astro build has no Vercel server adapter');
 
+// Documentation freshness: every "Astro <N>" mention in README.md and AGENTS.md must match
+// the astro major in package.json, so a framework upgrade cannot leave the docs stale (the
+// drift that caused the 2026-09-25 stale-base incident). Narrow on purpose (framework major
+// only) to avoid false positives; broader doc/reality sync is a convention (see AGENTS.md).
+const astroSpec = packageJson.dependencies?.astro ?? packageJson.devDependencies?.astro ?? '';
+const astroMajor = astroSpec.match(/(\d+)/)?.[1];
+check(Boolean(astroMajor), `package.json declares an astro version (found "${astroSpec}")`);
+if (astroMajor) {
+  for (const docName of ['README.md', 'AGENTS.md']) {
+    const doc = await readFile(path.join(root, docName), 'utf8');
+    const stale = [...new Set([...doc.matchAll(/\bAstro\s+(\d+)\b/g)].map((m) => m[1]).filter((v) => v !== astroMajor))];
+    check(stale.length === 0, `${docName} states Astro ${astroMajor} to match package.json${stale.length ? ` (stale: Astro ${stale.join(', ')})` : ''}`);
+  }
+}
+
 if (failures.length) {
   console.error(`\nBuild verification failed with ${failures.length} issue(s).`);
   process.exit(1);
