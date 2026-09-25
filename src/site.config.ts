@@ -27,7 +27,7 @@ export const HUGGINGFACE_URL = 'https://huggingface.co/granolacowboy';
 export const RESUME_URL = '/resume.pdf';
 
 /**
- * Canonical portfolio identity, defined authoritatively on mhsbsolutions.com and
+ * Canonical person identity, defined authoritatively on mhsbsolutions.com and
  * referenced here by @id. PERSON_CANONICAL_NAME is the single flippable constant
  * for the JSON-LD Person name (PERSON_ALT_NAME holds the other published form).
  * PROFILE_SAME_AS lists only verified profiles (HTTP 200, confirmed MHSB / Rich
