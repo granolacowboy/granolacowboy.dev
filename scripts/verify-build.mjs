@@ -222,18 +222,26 @@ check(
   `public source and docs contain no spaced or title-cased handle variants${identityVariantFiles.length ? ` (${identityVariantFiles.join(', ')})` : ''}`
 );
 
+// Hybrid writing pass (2026-09-25): post-1-thesis and post-3-regulated-buyers
+// were retired; their operator signal survives as homepage Field Notes. The two
+// kept posts are the technical companion (post-2) and the deterministic-agents
+// methodology (post-4).
 const expectedPostTitles = new Set([
-  'Deploying AI in a change-resistant vertical: field notes from a decade in law firms',
   'Anatomy of a legal intake automation',
-  "What regulated-industry buyers actually need before they'll adopt AI",
   'How I use AI agents to build deterministic systems without trusting the agents to be deterministic',
 ]);
 const expectedPublishedPostCount = expectedPostTitles.size;
+// Astro static redirects (astro.config.mjs) emit a noindex meta-refresh stub at
+// each retired post path (e.g. /writing/post-1-thesis/). Those are NOT published
+// posts, so exclude any writing/ dir whose index.html is a redirect stub.
+const isRedirectStub = (html) => /http-equiv=["']?refresh/i.test(html);
 const writingDirectory = path.join(dist, 'writing');
 const writingEntries = await readdir(writingDirectory, { withFileTypes: true });
 const publishedPostIds = [];
 for (const entry of writingEntries) {
-  if (entry.isDirectory() && await exists(path.join(writingDirectory, entry.name, 'index.html'))) {
+  const indexFile = path.join(writingDirectory, entry.name, 'index.html');
+  if (entry.isDirectory() && await exists(indexFile)) {
+    if (isRedirectStub(await readFile(indexFile, 'utf8'))) continue;
     publishedPostIds.push(entry.name);
   }
 }
@@ -284,6 +292,16 @@ check(
   publishedPostSources.every(({ title }) => expectedPostTitles.has(title)),
   'published post titles match the approved published titles'
 );
+
+// Homepage regression guards for the positioning pass: Field Notes present and
+// no residual FDE / forward-deployed self-label.
+const homeHtmlPath = path.join(dist, 'index.html');
+check(await exists(homeHtmlPath), 'homepage index.html exists');
+if (await exists(homeHtmlPath)) {
+  const homeHtml = await readFile(homeHtmlPath, 'utf8');
+  check(/Field notes/i.test(homeHtml), 'homepage renders the Field Notes section');
+  check(!/\bFDE\b|forward-deployed/i.test(homeHtml), 'homepage carries no FDE or forward-deployed self-label');
+}
 
 const emDashHtmlFiles = textEntries
   .filter(([file, contents]) => path.extname(file).toLowerCase() === '.html' && contents.includes('—'))
@@ -542,6 +560,9 @@ for (const file of htmlFiles) {
   const route = routeForHtml(file);
   if (!route) continue;
   const html = await readFile(file, 'utf8');
+  // Redirect stubs point canonical/OG at their target, not their own path; they
+  // are noindex and not real content pages, so skip them here.
+  if (isRedirectStub(html)) continue;
   const canonicalTags = tags(html, 'link').filter((tag) => attribute(tag, 'rel')?.toLowerCase() === 'canonical');
   const expectedCanonical = new URL(route, siteOrigin).href;
   check(canonicalTags.length === 1 && attribute(canonicalTags[0], 'href') === expectedCanonical, `${route} has one correct canonical URL`);
