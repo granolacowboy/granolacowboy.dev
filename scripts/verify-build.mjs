@@ -507,8 +507,24 @@ if (await exists(registryHtmlPath)) {
   check(countDataMarkers(registryHtml, 'data-registry-asset') === 30, 'registry page server-renders all 30 synthetic assets');
   check(/<(?:input|select)\b/i.test(registryHtml), 'registry exposes a native filter control');
   check(/\baria-live=["']polite["']/i.test(registryHtml), 'registry announces filter results politely');
-  check(/<script\b/i.test(registryHtml) && /\.textContent\b/.test(registryHtml), 'registry enhancement renders dynamic text with textContent');
-  check(!/\.innerHTML\b/.test(registryHtml), 'registry enhancement does not render dynamic content with innerHTML');
+  // The enforced CSP (script-src 'self', no 'unsafe-inline') forbids inline executable
+  // scripts, so build.assetsInlineLimit: 0 externalizes the registry enhancement to /_astro.
+  // Follow the module <script> to its bundle (and capture any inline body, in case a future
+  // change re-inlines) and assert the DOM-write discipline on the actual client code.
+  const registryScriptTags = tags(registryHtml, 'script').filter((tag) => /\bmodule\b/i.test(attribute(tag, 'type') ?? ''));
+  check(registryScriptTags.length > 0, 'registry ships a module enhancement script');
+  let registryScript = '';
+  for (const tag of registryScriptTags) {
+    const src = attribute(tag, 'src');
+    if (!src) continue;
+    const scriptFile = path.join(dist, decodeURIComponent(src).replace(/^\/+/, ''));
+    if (await exists(scriptFile)) registryScript += `\n${await readFile(scriptFile, 'utf8')}`;
+  }
+  for (const match of registryHtml.matchAll(/<script\b[^>]*\btype=["']module["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    registryScript += `\n${match[1]}`;
+  }
+  check(/\.textContent\b/.test(registryScript), 'registry enhancement renders dynamic text with textContent');
+  check(!/\.innerHTML\b/.test(registryScript), 'registry enhancement does not render dynamic content with innerHTML');
 }
 
 const benchmarkOverviewPath = path.join(dist, 'projects', 'session-benchmark', 'index.html');
@@ -609,10 +625,12 @@ const expectedHeaders = new Map([
   ['permissions-policy', 'camera=(), microphone=(), geolocation=()'],
   ['cross-origin-opener-policy', 'same-origin'],
   ['cross-origin-resource-policy', 'same-origin'],
-  // Placeholder report sink from 8233c0f, kept until a real reporting endpoint exists.
-  // Asserted exactly, so wiring a real endpoint must update this allowlist deliberately.
-  ['reporting-endpoints', 'csp-endpoint="https://REPORT_ENDPOINT/csp"'],
-  ['content-security-policy-report-only', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; report-to csp-endpoint"],
+  // Enforced CSP (SF-0006). script-src is 'self' with no 'unsafe-inline': the one client
+  // script is externalized to /_astro via build.assetsInlineLimit: 0, and JSON-LD blocks are
+  // non-executable data. The prior Report-Only header and placeholder Reporting-Endpoints
+  // were dropped; the enforced policy supersedes them. Wiring a real report sink later must
+  // update this allowlist deliberately.
+  ['content-security-policy', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'"],
 ]);
 check(configuredHeaders.length === expectedHeaders.size, 'vercel.json contains only the expected security headers');
 const headerKeys = new Set(configuredHeaders.map((header) => header.key.toLowerCase()));
@@ -620,17 +638,13 @@ check(headerKeys.size === configuredHeaders.length, 'vercel.json security header
 for (const header of configuredHeaders) {
   check(expectedHeaders.get(header.key.toLowerCase()) === header.value, `Vercel header ${header.key} has the expected value`);
 }
-const reportToHeader = configuredHeaders.find((header) => header.key.toLowerCase() === 'reporting-endpoints');
-if (reportToHeader) {
-  const cspHeader = configuredHeaders.find((header) => header.key.toLowerCase() === 'content-security-policy-report-only');
-  const declaredEndpoints = new Set((reportToHeader.value.match(/(?:^|,\s*)([^=;]+)=/g) ?? []).map((token) => token.replace(/(?:^|,\s*)([^=;]+)=/, '$1').trim()));
-  const csp = cspHeader?.value ?? '';
-  const reportToNames = new Set((csp.match(/(?:^|;\s*)report-to\s+([^;]+)/g) ?? []).flatMap((directive) => directive.replace(/(?:^|;\s*)report-to\s+/, '').split(/\s+/).filter(Boolean)));
-  check(csp.includes('report-to '), 'CSP-Report-Only still references a report-to endpoint group');
-  for (const name of reportToNames) {
-    check(declaredEndpoints.has(name), `CSP report-to group "${name}" is declared in Reporting-Endpoints`);
-  }
-}
+// SF-0006: the placeholder Reporting-Endpoints header and the Report-Only CSP were removed
+// in favor of an enforced policy. Guard against reintroducing a dangling report-to group with
+// no declaring endpoint, and confirm the placeholder sink is gone.
+const enforcedCsp = configuredHeaders.find((header) => header.key.toLowerCase() === 'content-security-policy')?.value ?? '';
+check(enforcedCsp.length > 0, 'vercel.json ships an enforced Content-Security-Policy');
+check(!headerKeys.has('reporting-endpoints'), 'placeholder Reporting-Endpoints header is removed');
+check(!/\breport-to\b/i.test(enforcedCsp), 'enforced CSP declares no dangling report-to group');
 check(!JSON.stringify(vercelConfig).toLowerCase().includes('noindex'), 'vercel.json has no launch-blocking noindex header');
 
 const packageJson = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
