@@ -24,6 +24,11 @@ export const EMAIL_URL = `mailto:${EMAIL}`;
 export const LINKEDIN_URL = 'https://linkedin.com/in/mhsb';
 export const GITHUB_URL = 'https://github.com/granolacowboy';
 export const HUGGINGFACE_URL = 'https://huggingface.co/granolacowboy';
+// GITLAB_URL (+ a future KAGGLE_URL) are STAGED for the identity-graph finalize. Wire them into
+// PROFILE_SAME_AS + about.astro + llms.txt ONLY after each returns HTTP 200 (the account exists),
+// per the "verified profiles only" rule below. As of 2026-09-25 the GitLab/Kaggle accounts are not
+// created yet, so this constant is intentionally unreferenced (documents the intended URL).
+export const GITLAB_URL = 'https://gitlab.com/granolacowboy';
 export const RESUME_URL = '/resume.pdf';
 
 /**
