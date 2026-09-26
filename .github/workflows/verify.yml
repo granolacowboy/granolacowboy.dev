@@ -18,7 +18,11 @@ jobs:
     # Self-hosted homelab runner (gcd-runner-pop-os) — zero Actions minutes.
     # Guard: never execute fork PR code on the self-hosted box.
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: [self-hosted, gcd]
+    # SF-0024/SF-2026-0002: Dependabot pushes its branches to THIS repo, so the fork-guard above
+    # passes for them and npm ci would run untrusted dependency lifecycle scripts on the trusted box.
+    # Route Dependabot verification to a GitHub-hosted runner (repo is public -> free minutes);
+    # human PRs and pushes stay on the self-hosted runner.
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]') && 'ubuntu-latest' || fromJSON('["self-hosted","gcd"]') }}
     timeout-minutes: 15
 
     steps:

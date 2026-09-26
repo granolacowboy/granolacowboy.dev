@@ -17,5 +17,11 @@ export default defineConfig({
     '/writing/post-1-thesis/': '/writing/',
     '/writing/post-3-regulated-buyers/': '/writing/',
   },
+  // The enforced CSP uses script-src 'self' (no 'unsafe-inline'), so no executable
+  // script may be inlined into the HTML. Astro's script-hoisting inline decision reads
+  // Vite's build.assetsInlineLimit (see astro/core/build/plugins/plugin-scripts.js);
+  // setting it to 0 forces Astro to externalize its one processed client script (the
+  // Session Benchmark registry enhancement) to /_astro, loaded from a same-origin URL.
+  vite: { build: { assetsInlineLimit: 0 } },
   integrations: [mdx(), sitemap()],
 });
