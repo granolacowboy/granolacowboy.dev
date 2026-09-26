@@ -1,0 +1,55 @@
+---
+// /projects/notebooks/ - curated Kaggle kernels + Colab notebooks (the identity-graph "content
+// linking" surface). Data-driven, mirroring the session-benchmark pattern: entries live in
+// src/data/notebooks.json and are rendered at build time. Each entry:
+//   { "title": string, "blurb": string, "platform": "kaggle" | "colab",
+//     "url": string, "tags"?: string[] }
+// where url is a public link (kaggle.com/<handle>/<kernel> or
+// colab.research.google.com/github/granolacowboy/<repo>/blob/main/<notebook>.ipynb).
+// Plain anchors only - the site CSP (img-src 'self', default-src 'self') forbids third-party
+// badges/iframes. While the list is empty this route redirects to /projects/ (ships nothing;
+// the redirect stub is excluded from the verify-build canonical/placeholder checks). Populate
+// notebooks.json when Rich supplies the Kaggle handle + which notebooks to feature, then add the
+// route to scripts/verify-build.mjs and surface it from projects.astro in the same PR.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import notebooksData from '../../data/notebooks.json';
+
+interface Notebook {
+  title: string;
+  blurb: string;
+  platform: 'kaggle' | 'colab';
+  url: string;
+  tags?: string[];
+}
+
+const notebooks = notebooksData as Notebook[];
+
+if (notebooks.length === 0) {
+  return Astro.redirect('/projects/');
+}
+---
+
+<BaseLayout
+  title="Notebooks"
+  description="Selected public Kaggle kernels and Colab notebooks from applied AI and legal-technology experiments."
+>
+  <article class="notebooks-page">
+    <header>
+      <p class="kicker">Notebooks</p>
+      <h1>Notebooks</h1>
+      <p class="lede">Selected public Kaggle kernels and Colab notebooks from applied AI and legal-technology experiments.</p>
+    </header>
+    <ul class="notebook-list">
+      {notebooks.map((nb) => (
+        <li class="notebook-card">
+          <h2><a href={nb.url}>{nb.title}</a></h2>
+          <p>{nb.blurb}</p>
+          <p class="notebook-meta">
+            <span class="notebook-platform">{nb.platform === 'kaggle' ? 'Kaggle' : 'Colab'}</span>
+            {nb.tags && nb.tags.length > 0 && <span class="notebook-tags">{nb.tags.join(', ')}</span>}
+          </p>
+        </li>
+      ))}
+    </ul>
+  </article>
+</BaseLayout>
