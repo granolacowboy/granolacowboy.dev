@@ -30,7 +30,6 @@ export const HUGGINGFACE_URL = 'https://huggingface.co/granolacowboy';
 // per the "verified profiles only" rule below.
 export const GITLAB_URL = 'https://gitlab.com/granolacowboy';
 export const KAGGLE_URL = 'https://www.kaggle.com/granolacowboy';
-export const RESUME_URL = '/resume.pdf';
 
 /**
  * Canonical portfolio identity, defined authoritatively on mhsbsolutions.com and
