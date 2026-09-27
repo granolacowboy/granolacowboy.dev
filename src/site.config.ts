@@ -9,14 +9,15 @@ export const SITE_TITLE = `${PERSON_NAME} | ${HANDLE}`;
 
 /** Default meta description; pages override via BaseLayout's `description` prop. */
 export const SITE_DESCRIPTION =
-  'Richard Berman builds legal-technology systems, automation, and applied AI for law firms through MHSB Solutions.';
+  'Personal site and weblog of Richard Berman (granolacowboy): the projects I build and notes on building them.';
 
 /**
- * Blog posts render WITHOUT visible dates (PLAN Open Item #3, resolved 2026-06-10).
- * `pubDate` stays in the schema for sitemap/ordering only.
- * Any date rendered anywhere in the UI must key off this const.
+ * Personal weblog: posts render WITH visible dates (2026-09-27 personal-weblog
+ * repositioning; supersedes the prior "dates hidden" decision). `pubDate` also
+ * drives sitemap and ordering. The full weblog engine (river + short-form types)
+ * may later retire this flag; until then every UI date render keys off this const.
  */
-export const SHOW_DATES: boolean = false;
+export const SHOW_DATES: boolean = true;
 
 /** Public contact and profile links. */
 export const EMAIL = 'info@mhsbsolutions.com';

@@ -3,8 +3,8 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { ARTIFACT_NAME, ARTIFACT_REPO_URL, ARTIFACT_WRITEUP_PATH, SHOW_DATES } from '../site.config';
 
-// Newest first; drafts excluded. pubDate orders the list but never
-// renders (SHOW_DATES stays false); rows carry a mono position readout.
+// Newest first; drafts excluded. pubDate orders the list and now renders
+// (SHOW_DATES=true, 2026-09-27 personal-weblog repositioning); rows also carry a mono position readout.
 const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
@@ -13,12 +13,14 @@ const pad = (value: number) => String(value).padStart(2, '0');
 
 <BaseLayout>
   <section class="hero" aria-labelledby="hero-heading">
-    <p class="eyebrow">MHSB SOLUTIONS · LEGAL TECHNOLOGY</p>
+    {/* Positioning stub (2026-09-27): factual hero for the personal weblog. Rich to
+        replace the headline and lede with his own voice; keep it non-BD, no MHSB eyebrow. */}
+    <p class="eyebrow">RICH BERMAN · WRITING, PROJECTS, NOTES</p>
     <h1 id="hero-heading" class="display-xl">
-      Systems for legal <span class="accent">operations</span>, automation, and applied AI.
+      Rich <span class="accent">Berman</span>
     </h1>
     <p class="lede">
-      I build these systems for law firms through MHSB Solutions. Client work shown here is anonymized.
+      My personal site: the things I build, and notes on building them. I work mostly with law firms through MHSB Solutions.
     </p>
   </section>
 
@@ -83,7 +85,7 @@ const pad = (value: number) => String(value).padStart(2, '0');
                 <>
                   {' · '}
                   <time datetime={post.data.pubDate.toISOString()}>
-                    {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium' })}
+                    {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' })}
                   </time>
                 </>
               )}

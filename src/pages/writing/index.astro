@@ -3,16 +3,15 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SHOW_DATES } from '../../site.config';
 
-// Drafts excluded. pubDate orders the list; it renders only if
-// SHOW_DATES is ever flipped to true (PLAN Open Item #3: dates stay
-// hidden), so rows carry a mono position readout instead.
+// Drafts excluded. pubDate orders the list and now renders (SHOW_DATES=true,
+// 2026-09-27 personal-weblog repositioning); rows also carry a mono position readout.
 const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 const pad = (value: number) => String(value).padStart(2, '0');
 ---
 
-<BaseLayout title="Writing" description="Notes on legal technology, automation, and building AI systems for law firms.">
+<BaseLayout title="Writing" description="Writing and notes by Rich Berman.">
   <header class="page-header">
     <p class="eyebrow">INDEX · WRITING</p>
     <h1>Writing</h1>
@@ -31,7 +30,7 @@ const pad = (value: number) => String(value).padStart(2, '0');
                 <>
                   {' · '}
                   <time datetime={post.data.pubDate.toISOString()}>
-                    {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium' })}
+                    {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' })}
                   </time>
                 </>
               )}

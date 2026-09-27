@@ -27,9 +27,8 @@ const { post, position, total } = Astro.props;
 const { Content } = await render(post);
 const pad = (value: number) => String(value).padStart(2, '0');
 
-// Reading time is derived from the actual body (words / 220 wpm);
-// with dates hidden it is the one honest data point the metadata row
-// can carry alongside the position index.
+// Reading time is derived from the actual body (words / 220 wpm) and
+// renders alongside the position index and (SHOW_DATES=true) the post date.
 const words = (post.body ?? '').match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu)?.length ?? 0;
 const minutes = Math.max(1, Math.round(words / 220));
 ---
@@ -46,7 +45,7 @@ const minutes = Math.max(1, Math.round(words / 220));
             <>
               {' · '}
               <time datetime={post.data.pubDate.toISOString()}>
-                {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium' })}
+                {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' })}
               </time>
             </>
           )
