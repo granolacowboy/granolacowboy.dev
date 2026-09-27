@@ -19,6 +19,13 @@ see the [README](../README.md) for that.
 
 ## Content
 
+- Positioning (2026-09-27): granolacowboy.dev is Rich Berman's personal site and weblog, not an
+  MHSB business-development hub. MHSB is context (About + footer Portfolio nav), not the frame. See
+  `AGENTS.md` for the full baseline.
+- Post dates are shown (`SHOW_DATES = true`, 2026-09-27); `pubDate` also drives ordering and the sitemap.
+- No purely-AI-generated posts, ever: every published post must be genuinely authored or owned by
+  Rich (AI may edit his notes, never originate). This is doctrine today; the mechanical provenance
+  gate + authorship write-fence are planned follow-ons. Until they land it is a human gate at author time.
 - There are no case studies. The unattested draft archetypes were deleted (2026-09-25); only
   `_TEMPLATE.mdx` remains. Recreate one only from a real engagement, with every claim attested, the
   anonymization treatment approved, and defensible directional metrics supplied.
