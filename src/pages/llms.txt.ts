@@ -53,7 +53,7 @@ ${writing}
 - [Kaggle](${KAGGLE_URL})
 
 ## Family
-- [MHSB Solutions](https://www.mhsbsolutions.com/): Applied AI and forward-deployed engineering for the legal profession. Security-first.
+- [MHSB Solutions](https://www.mhsbsolutions.com/): Implementation, automation, and support for the systems law firms run on, with partner depth in Clio, MyCase, and Lawmatics.
 - [EfficientEsq](https://efficient.esq): The operations layer for the modern firm.
 - [LexLab Systems](https://lexlabsystems.com)
 - [legalai.help](https://legalai.help): AI and legal technology glossary.
