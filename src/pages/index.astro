@@ -1,14 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { ARTIFACT_NAME, ARTIFACT_REPO_URL, ARTIFACT_WRITEUP_PATH, SHOW_DATES } from '../site.config';
+import RiverList from '../components/RiverList.astro';
+import { getRiver } from '../lib/river';
+import { ARTIFACT_NAME, ARTIFACT_REPO_URL, ARTIFACT_WRITEUP_PATH } from '../site.config';
 
-// Newest first; drafts excluded. pubDate orders the list and now renders
-// (SHOW_DATES=true, 2026-09-27 personal-weblog repositioning); rows also carry a mono position readout.
-const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-const pad = (value: number) => String(value).padStart(2, '0');
+// The river: the merged, reverse-chronological stream across every entry type.
+const recent = (await getRiver()).slice(0, 20);
 ---
 
 <BaseLayout>
@@ -24,9 +21,20 @@ const pad = (value: number) => String(value).padStart(2, '0');
     </p>
   </section>
 
+  <section class="home-section" aria-labelledby="river-heading">
+    <p class="eyebrow">INDEX · RECENT</p>
+    <h2 id="river-heading" class="display-l">Recent</h2>
+    <RiverList items={recent} empty="Nothing posted yet. Writing, links, and notes will appear here." />
+    <p class="metadata">
+      <a href="/writing/">All writing</a>
+      {' · '}<a href="/tags/">Tags</a>
+      {' · '}<a href="/rss.xml">RSS</a>
+    </p>
+  </section>
+
   <section class="home-section" aria-labelledby="work-heading">
-    <p class="eyebrow">INDEX · SELECTED WORK</p>
-    <h2 id="work-heading" class="display-l">Selected work</h2>
+    <p class="eyebrow">INDEX · PROJECTS</p>
+    <h2 id="work-heading" class="display-l">Projects</h2>
 
     <article class="card">
       <p class="eyebrow">PROJECT · 01 / 03 <span class="accent">[OPEN SOURCE]</span></p>
@@ -67,32 +75,5 @@ const pad = (value: number) => String(value).padStart(2, '0');
       </ul>
       <p><a href="/projects/session-benchmark/">Explore the benchmark</a></p>
     </article>
-  </section>
-
-  <section class="home-section" aria-labelledby="writing-heading">
-    <p class="eyebrow">INDEX · WRITING</p>
-    <h2 id="writing-heading" class="display-l">Writing</h2>
-    <ol class="writing-index">
-      {
-        posts.map((post, i) => (
-          <li class="writing-row">
-            <p class="writing-row-title">
-              <a href={`/writing/${post.id}/`}>{post.data.title}</a>
-            </p>
-            <p class="metadata">
-              {pad(i + 1)} / {pad(posts.length)} · WRITING
-              {SHOW_DATES && (
-                <>
-                  {' · '}
-                  <time datetime={post.data.pubDate.toISOString()}>
-                    {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' })}
-                  </time>
-                </>
-              )}
-            </p>
-          </li>
-        ))
-      }
-    </ol>
   </section>
 </BaseLayout>

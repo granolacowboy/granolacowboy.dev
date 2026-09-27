@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
 import { PERSON_NAME, HANDLE, SITE_DESCRIPTION, SITE_URL } from '../site.config';
+import { getRiver, TYPE_LABEL } from '../lib/river';
 
 // Full-text corpus for answer engines: the clean body of the indexable pages,
 // with no nav/footer chrome. About prose and the Session Benchmark overview are
@@ -49,12 +49,10 @@ Data and eval downloads:
 - ${DATA_BASE}/synthetic_asset_registry.csv`;
 
 export const GET: APIRoute = async () => {
-  const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-  );
+  const river = await getRiver();
 
-  const writing = posts
-    .map((post) => `## ${post.data.title}\n\n${(post.body ?? '').trim()}`)
+  const writing = river
+    .map((item) => `## ${item.title} [${TYPE_LABEL[item.type]}]\n\n${(item.entry.body ?? '').trim()}`)
     .join('\n\n');
 
   const body = `# ${PERSON_NAME} (${HANDLE}) | ${SITE_URL}

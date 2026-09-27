@@ -1,0 +1,49 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/river';
+
+export async function getStaticPaths() {
+  const links = await getCollection('links', ({ data }) => !data.draft);
+  return links.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description ?? entry.data.title} ogType="article">
+  <article class="prose">
+    <header class="page-header">
+      <p class="eyebrow">LINK</p>
+      <h1>{entry.data.title}</h1>
+      <p class="metadata">
+        <time datetime={entry.data.pubDate.toISOString()}>{formatDate(entry.data.pubDate)}</time>
+        {entry.data.tags.length > 0 && (
+          <>
+            {' · '}
+            {entry.data.tags.map((tag, j) => (
+              <>
+                {j > 0 && ' '}
+                <a class="tag" href={`/tags/${tag}/`}>{tag}</a>
+              </>
+            ))}
+          </>
+        )}
+      </p>
+      <p>
+        <a href={entry.data.url}>{entry.data.url}</a>
+        {entry.data.via && (
+          <>
+            {' · via '}
+            {entry.data.viaUrl ? <a href={entry.data.viaUrl}>{entry.data.via}</a> : entry.data.via}
+          </>
+        )}
+      </p>
+    </header>
+    <Content />
+    {entry.data.provenance === 'human-ai-edited' && (
+      <p class="metadata">Edited with AI assistance; the ideas and words are mine.</p>
+    )}
+  </article>
+</BaseLayout>

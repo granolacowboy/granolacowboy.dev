@@ -742,6 +742,101 @@ pre code {
   }
 }
 
+/* ---------- Weblog river (mixed, dated, tagged stream) ----------
+   Reuses the instrument-readout vocabulary: hairline-divided rows, a mono
+   .metadata readout (type, date, tags), and the serif/mono body. Short-form
+   entries render their full body inline; long-form links out. */
+
+.river {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: 1px solid var(--border-subtle);
+}
+
+.river-row {
+  padding-block: var(--space-5);
+  border-block-end: 1px solid var(--border-subtle);
+}
+
+.river-row .metadata {
+  margin-block: 0 var(--space-1);
+}
+
+.river-row-title {
+  margin: 0;
+  font-family: var(--font-prose);
+  font-size: var(--title-s-size);
+  line-height: var(--title-s-lh);
+}
+
+.river-row-title a {
+  color: var(--ink-050);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.river-row-title a:hover {
+  color: var(--amber-400);
+}
+
+.river-row-desc {
+  max-width: var(--measure);
+  margin: var(--space-1) 0 0;
+  color: var(--ink-300);
+  font-size: var(--body-s-size);
+  line-height: var(--body-s-lh);
+}
+
+/* Short-form bodies render inline; keep them within the reading measure. */
+.river-body {
+  max-width: var(--measure);
+  margin-block-start: var(--space-2);
+}
+
+.river-body > :first-child {
+  margin-block-start: 0;
+}
+
+.river-body > :last-child {
+  margin-block-end: 0;
+}
+
+/* Tag rows/inline tags rendered as links pick up the accent on hover/focus. */
+a.tag {
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+
+a.tag:hover,
+a.tag:focus-visible {
+  color: var(--amber-400);
+  border-color: var(--amber-500);
+}
+
+/* Tag index: tag + count, laid out as a wrapping cloud. */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag-cloud .count {
+  color: var(--ink-400);
+}
+
+/* Authorship colophon (footer). Its exact text is enforced by verify-build. */
+.colophon {
+  margin-block: var(--space-4) 0;
+  color: var(--ink-400);
+  font-family: var(--font-mono);
+  font-size: var(--data-size);
+  line-height: var(--data-lh);
+}
+
 /* ---------- Prose (article bodies) ---------- */
 
 .prose {
@@ -770,83 +865,6 @@ pre code {
 
 .page-header {
   margin-block-end: var(--space-7);
-}
-
-/* ---------- Case-study prose ----------
-   The case-study shell runs full width so the scrolly module can
-   spread to two columns; running text still holds the 34rem measure.
-   The MDX body's h2 sections (Context, Complication, What I built,
-   Outcome) render as mono uppercase section labels, the case-study
-   page treatment from the design spec. */
-
-.prose--case {
-  max-width: none;
-}
-
-.prose--case p,
-.prose--case ul,
-.prose--case ol,
-.prose--case blockquote,
-.prose--case .outcomes {
-  max-width: var(--measure);
-}
-
-.prose--case h2 {
-  max-width: var(--measure);
-  margin-block: var(--space-9) var(--space-3);
-  color: var(--ink-300);
-  font-family: var(--font-mono);
-  font-size: var(--label-size);
-  font-weight: var(--label-weight);
-  line-height: var(--label-lh);
-  letter-spacing: var(--label-ls);
-  text-transform: uppercase;
-}
-
-/* Keep the outcomes panel heading on the same label treatment; the
-   later .outcomes h2 rule would otherwise restore title sizing. */
-.prose--case .outcomes h2 {
-  margin-block: 0 var(--space-3);
-  font-size: var(--label-size);
-  letter-spacing: var(--label-ls);
-}
-
-/* ---------- NDA note (copy is fixed in NdaNote.astro) ---------- */
-
-.nda-note {
-  margin-block: var(--space-5) 0;
-  padding-inline-start: var(--space-3);
-  border-inline-start: 1px solid var(--border-strong);
-  color: var(--ink-300);
-  font-size: var(--body-s-size);
-  line-height: var(--body-s-lh);
-}
-
-.nda-note p {
-  margin-block: 0 var(--space-1);
-}
-
-.nda-note p:last-child {
-  margin-block-end: 0;
-}
-
-/* ---------- Case-study outcomes (metric-led list from frontmatter) ---------- */
-
-.outcomes {
-  margin-block-start: var(--space-8);
-  padding: var(--space-5);
-  background-color: var(--ink-800);
-  border: 1px solid var(--border-subtle);
-}
-
-.outcomes h2 {
-  margin-block: 0 var(--space-3);
-  font-size: var(--title-s-size);
-  letter-spacing: var(--title-s-ls);
-}
-
-.outcomes ul {
-  margin: 0;
 }
 
 /* ---------- Project screenshot slot ---------- */

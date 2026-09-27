@@ -50,9 +50,23 @@ const minutes = Math.max(1, Math.round(words / 220));
             </>
           )
         }
+        {post.data.tags.length > 0 && (
+          <>
+            {' · '}
+            {post.data.tags.map((tag, j) => (
+              <>
+                {j > 0 && ' '}
+                <a class="tag" href={`/tags/${tag}/`}>{tag}</a>
+              </>
+            ))}
+          </>
+        )}
       </p>
     </header>
     <Content />
+    {post.data.provenance === 'human-ai-edited' && (
+      <p class="metadata">Edited with AI assistance; the ideas and words are mine.</p>
+    )}
     <div class="divider--labeled">END · {pad(position)}</div>
   </article>
 </BaseLayout>

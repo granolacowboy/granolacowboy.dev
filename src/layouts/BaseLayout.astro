@@ -57,6 +57,11 @@ const ogImageAlt = `${SITE_TITLE} wordmark on a dark background`;
 
 const navItems = [
   { href: '/writing/', label: 'Writing' },
+  { href: '/links/', label: 'Links' },
+  { href: '/tils/', label: 'TILs' },
+  { href: '/notes/', label: 'Notes' },
+  { href: '/quotes/', label: 'Quotes' },
+  { href: '/tags/', label: 'Tags' },
   { href: '/projects/', label: 'Projects' },
   { href: '/about/', label: 'About' },
 ];
@@ -187,8 +192,12 @@ const identityGraph = {
         {/* Uppercase presentation comes from CSS text-transform; markup
             keeps the handle in its exact lowercase form. */}
         <p>© {new Date().getFullYear()} · {HANDLE}.dev</p>
-        <p><a href={GITHUB_URL}>GitHub</a></p>
+        <p><a href={GITHUB_URL}>GitHub</a> · <a href="/rss.xml">RSS</a></p>
       </div>
+      {/* Site-wide authorship colophon. Its presence is enforced by
+          scripts/verify-build.mjs (the no-purely-AI-posts policy); posts edited
+          with AI assistance additionally carry a per-post marker. */}
+      <p class="container colophon">Everything here is written by Rich Berman. Posts edited with AI assistance are marked.</p>
     </footer>
   </body>
 </html>

@@ -34,6 +34,17 @@ const pad = (value: number) => String(value).padStart(2, '0');
                   </time>
                 </>
               )}
+              {post.data.tags.length > 0 && (
+                <>
+                  {' · '}
+                  {post.data.tags.map((tag, j) => (
+                    <>
+                      {j > 0 && ' '}
+                      <a class="tag" href={`/tags/${tag}/`}>{tag}</a>
+                    </>
+                  ))}
+                </>
+              )}
             </p>
             <p class="writing-row-desc">{post.data.description}</p>
           </li>
@@ -41,4 +52,10 @@ const pad = (value: number) => String(value).padStart(2, '0');
       </ol>
     )
   }
+  {posts.length === 0 && <p class="lede">No long-form writing yet.</p>}
+  <p class="metadata">
+    <a href="/tags/">Tags</a>
+    {' · '}<a href="/archive/">Archive</a>
+    {' · '}<a href="/rss.xml">RSS</a>
+  </p>
 </BaseLayout>

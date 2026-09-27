@@ -7,15 +7,16 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://granolacowboy.dev',
-  // Retired-post redirects (2026-09-25 hybrid-writing pass): post-1-thesis and
-  // post-3-regulated-buyers were removed; their operator signal now lives in the
-  // homepage Field Notes. Point their previously-live URLs at the writing index
-  // so inbound and indexed links keep resolving instead of 404ing. Static build
-  // emits a noindex meta-refresh stub per path; verify-build excludes those stubs
-  // from the published-post and canonical checks.
+  // Retired-post redirects. post-1-thesis and post-3-regulated-buyers were removed
+  // in the 2026-09-25 pass; post-4-deterministic-ai was retired in the 2026-09-27
+  // personal-weblog pass (its URL had already been syndicated to the GitHub profile
+  // README, so it must keep resolving). Point the previously-live URLs at the writing
+  // index instead of 404ing. The static build emits a noindex meta-refresh stub per
+  // path; verify-build excludes those stubs from the published-entry and canonical checks.
   redirects: {
     '/writing/post-1-thesis/': '/writing/',
     '/writing/post-3-regulated-buyers/': '/writing/',
+    '/writing/post-4-deterministic-ai/': '/writing/',
   },
   // The enforced CSP uses script-src 'self' (no 'unsafe-inline'), so no executable
   // script may be inlined into the HTML. Astro's script-hoisting inline decision reads

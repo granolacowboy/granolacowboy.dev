@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RiverList from '../../components/RiverList.astro';
+import { getRiver } from '../../lib/river';
+
+const items = (await getRiver()).filter((i) => i.type === 'link');
+---
+
+<BaseLayout title="Links" description="Link blog by Rich Berman: things worth reading, with a note on why.">
+  <header class="page-header">
+    <p class="eyebrow">INDEX · LINKS</p>
+    <h1>Links</h1>
+  </header>
+  <RiverList items={items} empty="No links yet." />
+</BaseLayout>

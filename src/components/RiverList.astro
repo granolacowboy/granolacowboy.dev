@@ -1,0 +1,59 @@
+---
+// Shared renderer for a river of mixed entries. Short-form items (link/til/note/
+// quote) render their full body inline; long-form entries show title + description
+// and link to their permalink. Build-time only; ships no client JS.
+import { render } from 'astro:content';
+import { formatDate, TYPE_LABEL, SHORT_FORM, type RiverItem } from '../lib/river';
+
+interface Props {
+  items: RiverItem[];
+  empty?: string;
+}
+
+const { items, empty = 'Nothing here yet.' } = Astro.props;
+const bodies = await Promise.all(
+  items.map(async (item) => (SHORT_FORM.has(item.type) ? (await render(item.entry)).Content : null))
+);
+---
+
+{items.length === 0 && <p class="lede">{empty}</p>}
+{
+  items.length > 0 && (
+    <ol class="river">
+      {items.map((item, i) => {
+        const Body = bodies[i];
+        return (
+          <li class="river-row">
+            <p class="metadata">
+              {TYPE_LABEL[item.type]}
+              {' · '}
+              <time datetime={item.pubDate.toISOString()}>{formatDate(item.pubDate)}</time>
+              {item.tags.length > 0 && (
+                <>
+                  {' · '}
+                  {item.tags.map((tag, j) => (
+                    <>
+                      {j > 0 && ' '}
+                      <a class="tag" href={`/tags/${tag}/`}>{tag}</a>
+                    </>
+                  ))}
+                </>
+              )}
+            </p>
+            <h3 class="river-row-title">
+              <a href={item.href}>{item.title}</a>
+            </h3>
+            {Body && (
+              <div class="river-body">
+                <Body />
+              </div>
+            )}
+            {item.type === 'entry' && item.entry.data.description && (
+              <p class="river-row-desc">{item.entry.data.description}</p>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  )
+}

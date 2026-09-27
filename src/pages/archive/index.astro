@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getYears } from '../../lib/river';
+
+const years = await getYears();
+---
+
+<BaseLayout title="Archive" description="Browse everything by year.">
+  <header class="page-header">
+    <p class="eyebrow">INDEX · ARCHIVE</p>
+    <h1>Archive</h1>
+  </header>
+  {years.length === 0 && <p class="lede">Nothing yet.</p>}
+  {
+    years.length > 0 && (
+      <ul class="tag-cloud">
+        {years.map((year) => (
+          <li>
+            <a class="tag" href={`/archive/${year}/`}>{year}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  <p class="metadata"><a href="/tags/">Browse by tag</a></p>
+</BaseLayout>

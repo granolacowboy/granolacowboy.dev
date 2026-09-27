@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RiverList from '../../components/RiverList.astro';
+import { getRiver, getTagCounts } from '../../lib/river';
+
+export async function getStaticPaths() {
+  const tags = await getTagCounts();
+  return tags.map(({ tag }) => ({ params: { tag } }));
+}
+
+// Re-fetch the river in the page scope so render() operates on live collection
+// entries (not props-serialized copies).
+const { tag } = Astro.params;
+const items = (await getRiver()).filter((i) => i.tags.includes(tag));
+---
+
+<BaseLayout title={`Tag: ${tag}`} description={`Entries tagged ${tag}.`}>
+  <header class="page-header">
+    <p class="eyebrow">TAG</p>
+    <h1>{tag}</h1>
+  </header>
+  <RiverList items={items} empty="Nothing tagged here." />
+  <p class="metadata"><a href="/tags/">All tags</a></p>
+</BaseLayout>
