@@ -4,7 +4,10 @@ import {
   EMAIL,
   EMAIL_URL,
   GITHUB_URL,
+  GITLAB_URL,
   HANDLE,
+  HUGGINGFACE_URL,
+  KAGGLE_URL,
   LINKEDIN_URL,
   PERSON_NAME,
 } from '../site.config';
@@ -30,6 +33,18 @@ import {
       <li>
         <span class="label">GitHub</span>
         <a class="data" href={GITHUB_URL}>github.com/{HANDLE}</a>
+      </li>
+      <li>
+        <span class="label">Hugging Face</span>
+        <a class="data" href={HUGGINGFACE_URL}>huggingface.co/{HANDLE}</a>
+      </li>
+      <li>
+        <span class="label">GitLab</span>
+        <a class="data" href={GITLAB_URL}>gitlab.com/{HANDLE}</a>
+      </li>
+      <li>
+        <span class="label">Kaggle</span>
+        <a class="data" href={KAGGLE_URL}>kaggle.com/{HANDLE}</a>
       </li>
       <li>
         <span class="label">LinkedIn</span>
