@@ -24,11 +24,12 @@ export const EMAIL_URL = `mailto:${EMAIL}`;
 export const LINKEDIN_URL = 'https://linkedin.com/in/mhsb';
 export const GITHUB_URL = 'https://github.com/granolacowboy';
 export const HUGGINGFACE_URL = 'https://huggingface.co/granolacowboy';
-// GITLAB_URL (+ a future KAGGLE_URL) are STAGED for the identity-graph finalize. Wire them into
-// PROFILE_SAME_AS + about.astro + llms.txt ONLY after each returns HTTP 200 (the account exists),
-// per the "verified profiles only" rule below. As of 2026-09-25 the GitLab/Kaggle accounts are not
-// created yet, so this constant is intentionally unreferenced (documents the intended URL).
+// GitLab + Kaggle profiles, wired into PROFILE_SAME_AS + about.astro + llms.txt (2026-09-26) after
+// each was verified live: gitlab.com/granolacowboy (200, "Rich Berman") and kaggle.com/granolacowboy
+// (a real profile; note Kaggle returns 404 to a bare HEAD request but the account exists on GET),
+// per the "verified profiles only" rule below.
 export const GITLAB_URL = 'https://gitlab.com/granolacowboy';
+export const KAGGLE_URL = 'https://www.kaggle.com/granolacowboy';
 export const RESUME_URL = '/resume.pdf';
 
 /**
@@ -46,7 +47,7 @@ export const CANONICAL_PERSON_ID = 'https://www.mhsbsolutions.com/#person';
 // the apex's own inversion; canon flips both).
 export const PERSON_CANONICAL_NAME = 'Rich Berman';
 export const PERSON_ALT_NAME = 'Richard Berman';
-export const PROFILE_SAME_AS = [GITHUB_URL, HUGGINGFACE_URL];
+export const PROFILE_SAME_AS = [GITHUB_URL, HUGGINGFACE_URL, GITLAB_URL, KAGGLE_URL];
 
 /** The Phase 5 open-source artifact (repo is created in Phase 5). */
 export const ARTIFACT_NAME = 'intake-triage-mcp';
