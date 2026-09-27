@@ -104,6 +104,14 @@ const identityGraph = {
     },
   ],
 };
+
+// Cookieless, self-hosted Umami analytics. Env-gated: renders nothing unless
+// PUBLIC_UMAMI_WEBSITE_ID is set (the per-domain website id from the Umami
+// instance). No cookies, no personal data collected. Set the env var in the
+// Vercel project to activate; unset to disable.
+const umamiWebsiteId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
+const umamiScriptUrl =
+  import.meta.env.PUBLIC_UMAMI_SCRIPT_URL || 'https://umami.mhsbsolutions.com/script.js';
 ---
 
 <!doctype html>
@@ -143,9 +151,11 @@ const identityGraph = {
     <link rel="icon" href="/favicon.ico" />
     <title>{pageTitle}</title>
     <script type="application/ld+json" set:html={JSON.stringify(identityGraph)} />
-    {/* Dark is the only theme (design-system spec), so the former
-        theme-toggle script is gone and the site ships zero JavaScript
-        from this layout. */}
+    {/* Dark is the only theme (design-system spec), so there is no theme-toggle
+        script. The only runtime script this layout can emit is the cookieless,
+        self-hosted Umami beacon below, and only when PUBLIC_UMAMI_WEBSITE_ID is
+        set (env-gated; no cookies, no personal data). */}
+    {umamiWebsiteId && <script defer src={umamiScriptUrl} data-website-id={umamiWebsiteId}></script>}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>

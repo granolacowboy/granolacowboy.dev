@@ -625,12 +625,13 @@ const expectedHeaders = new Map([
   ['permissions-policy', 'camera=(), microphone=(), geolocation=()'],
   ['cross-origin-opener-policy', 'same-origin'],
   ['cross-origin-resource-policy', 'same-origin'],
-  // Enforced CSP (SF-0006). script-src is 'self' with no 'unsafe-inline': the one client
+  // Enforced CSP (SF-0006). script-src is 'self' plus the self-hosted, cookieless Umami
+  // analytics host (no cookies, no PII); no 'unsafe-inline'. The one first-party client
   // script is externalized to /_astro via build.assetsInlineLimit: 0, and JSON-LD blocks are
-  // non-executable data. The prior Report-Only header and placeholder Reporting-Endpoints
-  // were dropped; the enforced policy supersedes them. Wiring a real report sink later must
-  // update this allowlist deliberately.
-  ['content-security-policy', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'"],
+  // non-executable data. connect-src also allows the Umami host for the analytics beacon.
+  // The prior Report-Only header and placeholder Reporting-Endpoints were dropped; the
+  // enforced policy supersedes them. Adding an origin to this allowlist must be deliberate.
+  ['content-security-policy', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://umami.mhsbsolutions.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://umami.mhsbsolutions.com"],
 ]);
 check(configuredHeaders.length === expectedHeaders.size, 'vercel.json contains only the expected security headers');
 const headerKeys = new Set(configuredHeaders.map((header) => header.key.toLowerCase()));
