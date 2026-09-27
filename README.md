@@ -41,6 +41,6 @@ MIT, see [LICENSE](LICENSE).
 
 <sub>© Richard Berman / [MHSB Solutions](https://github.com/MHSBai) · [granolacowboy.dev](https://granolacowboy.dev)</sub>
 
-## Featured engineering note
+## Featured writing
 
-- [How I use AI agents to build deterministic systems without trusting the agents to be deterministic](https://granolacowboy.dev/writing/post-4-deterministic-ai)
+- [Anatomy of a legal intake automation](https://granolacowboy.dev/writing/post-2-intake-anatomy/)
