@@ -4,8 +4,10 @@ import {
   ARTIFACT_NAME,
   ARTIFACT_REPO_URL,
   GITHUB_URL,
+  GITLAB_URL,
   HANDLE,
   HUGGINGFACE_URL,
+  KAGGLE_URL,
   PERSON_NAME,
   SITE_DESCRIPTION,
   SITE_URL,
@@ -47,6 +49,8 @@ ${writing}
 ## Profiles
 - [GitHub](${GITHUB_URL})
 - [Hugging Face](${HUGGINGFACE_URL})
+- [GitLab](${GITLAB_URL})
+- [Kaggle](${KAGGLE_URL})
 
 ## Family
 - [MHSB Solutions](https://www.mhsbsolutions.com/): Applied AI and forward-deployed engineering for the legal profession. Security-first.
