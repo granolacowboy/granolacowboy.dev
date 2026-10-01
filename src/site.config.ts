@@ -3,13 +3,13 @@
  */
 
 export const SITE_URL = 'https://granolacowboy.dev';
-export const PERSON_NAME = 'Rich Berman';
+export const PERSON_NAME = 'Richard Berman';
 export const HANDLE = 'granolacowboy';
 export const SITE_TITLE = `${PERSON_NAME} | ${HANDLE}`;
 
 /** Default meta description; pages override via BaseLayout's `description` prop. */
 export const SITE_DESCRIPTION =
-  'Rich Berman builds legal-technology systems, automation, and applied AI for law firms through MHSB Solutions.';
+  'Richard Berman builds legal-technology systems, automation, and applied AI for law firms through MHSB Solutions.';
 
 /**
  * Blog posts render WITHOUT visible dates (PLAN Open Item #3, resolved 2026-06-10).
@@ -41,11 +41,11 @@ export const KAGGLE_URL = 'https://www.kaggle.com/granolacowboy';
  */
 export const CANONICAL_ORG_ID = 'https://www.mhsbsolutions.com/#organization';
 export const CANONICAL_PERSON_ID = 'https://www.mhsbsolutions.com/#person';
-// Aligned to entity-canon.json richBerman.nameRule: name 'Rich Berman',
-// alternateName 'Richard Berman' (these were previously inverted here, matching
-// the apex's own inversion; canon flips both).
-export const PERSON_CANONICAL_NAME = 'Rich Berman';
-export const PERSON_ALT_NAME = 'Richard Berman';
+// Aligned to entity-canon.json v1.3.0 richBerman.nameRule: name 'Richard Berman',
+// alternateName 'Rich Berman' (operator decision 2026-09-25; the apex already
+// ships this order, card N1 propagates it here).
+export const PERSON_CANONICAL_NAME = 'Richard Berman';
+export const PERSON_ALT_NAME = 'Rich Berman';
 export const PROFILE_SAME_AS = [GITHUB_URL, HUGGINGFACE_URL, GITLAB_URL, KAGGLE_URL];
 
 /** The Phase 5 open-source artifact (repo is created in Phase 5). */
