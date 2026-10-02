@@ -35,7 +35,7 @@ export const GET: APIRoute = async () => {
 > ${SITE_DESCRIPTION}
 
 ## About
-- [About](${SITE_URL}/about/): Rich Berman and the systems he builds for law firms through MHSB Solutions.
+- [About](${SITE_URL}/about/): Richard Berman and the systems he builds for law firms through MHSB Solutions.
 
 ## Writing
 ${writing}

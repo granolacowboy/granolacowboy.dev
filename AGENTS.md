@@ -18,7 +18,7 @@ This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed 
 - Framework: Astro 7 static output, MDX content, sitemap integration.
 - Hosting: Vercel project `mhsb/granolacowboy-dev` (static `dist/`, auto-deploy from GitHub `main`). No server adapter is required.
 - Production domain target: `https://granolacowboy.dev`.
-- Identity format: use `Rich Berman | granolacowboy` in human-facing identity copy and exact lowercase `granolacowboy` in the domain, GitHub handle, repository URLs, package name, and Vercel identifiers.
+- Identity format: use `Richard Berman | granolacowboy` in human-facing identity copy (entity canon v1.3.0, 2026-09-30: `Richard Berman` is the primary Person name everywhere, `Rich Berman` only as the structured-data `alternateName`), and exact lowercase `granolacowboy` in the domain, GitHub handle, repository URLs, package name, and Vercel identifiers.
 - Content collections:
   - `posts` render at `/writing/<id>/`.
   - `caseStudies` render at `/work/<id>/`.
