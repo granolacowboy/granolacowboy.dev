@@ -13,7 +13,7 @@ const DATA_BASE = `${SITE_URL}/projects/session-benchmark/data`;
 
 const ABOUT = `# About
 
-I am Rich Berman (granolacowboy). Through MHSB Solutions, I build systems for law firms: intake, CRM, reporting, document workflows, integration, automation, and applied AI.
+I am Richard Berman (granolacowboy). Through MHSB Solutions, I build systems for law firms: intake, CRM, reporting, document workflows, integration, automation, and applied AI.
 
 The work spans both the operating environment and the underlying technology. This site documents what I can share publicly; client details are omitted.`;
 
