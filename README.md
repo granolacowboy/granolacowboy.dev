@@ -1,7 +1,7 @@
 # granolacowboy.dev
 
 Source for **[granolacowboy.dev](https://granolacowboy.dev)**, the personal site of
-[Rich Berman](https://github.com/granolacowboy): an MHSB Solutions business-development hub for his
+[Richard Berman](https://github.com/granolacowboy): an MHSB Solutions business-development hub for his
 legal-technology projects and the Session Benchmark research artifact.
 
 **Stack:** [Astro 7](https://astro.build) with static output (no client-side framework, no
@@ -39,7 +39,7 @@ MIT, see [LICENSE](LICENSE).
 
 ---
 
-<sub>© Rich Berman / [MHSB Solutions](https://github.com/MHSBai) · [granolacowboy.dev](https://granolacowboy.dev)</sub>
+<sub>© Richard Berman / [MHSB Solutions](https://github.com/MHSBai) · [granolacowboy.dev](https://granolacowboy.dev)</sub>
 
 ## Featured engineering note
 
