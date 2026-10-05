@@ -33,6 +33,16 @@ deployment must pass Astro checks, the static build, and the `scripts/verify-bui
 GitHub Actions runs the same verification on the self-hosted `gcd` runner as an independent
 source-control gate. Release and content-gating notes live in [`docs/ops.md`](docs/ops.md).
 
+## Chat assistant
+
+`/projects/assistant/` is a third-person AI assistant finetuned on Richard's public writing and
+served from a Hugging Face Space. The site stays static: the page is a small progressive-enhancement
+script that calls the Space over `fetch`/SSE, so no server adapter is added. `vercel.json` therefore
+allows that single Space origin in the Content-Security-Policy `connect-src` (pinned byte-identically
+in `scripts/verify-build.mjs`); everything else stays locked to `'self'`. A feature flag
+(`ASSISTANT_ENABLED` in `src/site.config.ts`) keeps the UI offline and request-free until the Space
+is confirmed live.
+
 ## License
 
 MIT, see [LICENSE](LICENSE).

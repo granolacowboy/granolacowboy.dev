@@ -59,3 +59,18 @@ export const ARTIFACT_REPO_URL = 'https://github.com/granolacowboy/intake-triage
  * instead of a link while this is empty.
  */
 export const ARTIFACT_WRITEUP_PATH: string = '/writing/post-2-intake-anatomy/';
+
+/**
+ * Chat assistant (/projects/assistant/). Lane B publishes the finetuned, quantized third-person
+ * model and serves it on a free Hugging Face Space with a streaming HTTP API.
+ * ASSISTANT_API_ORIGIN is the SINGLE application source of truth for the widget's fetch target;
+ * the SAME origin is pinned into the CSP connect-src in BOTH vercel.json AND
+ * scripts/verify-build.mjs (the gate asserts the built page's data-endpoint origin is allowed by
+ * that CSP). Update all three together if the Space name changes.
+ * ASSISTANT_ENABLED gates the live UI: while false the page ships an offline state and issues no
+ * network requests, so it is safe to ship before the Space exists. Flip to true once the Space is
+ * confirmed live (and its CORS allows https://granolacowboy.dev).
+ */
+export const ASSISTANT_API_ORIGIN = 'https://granolacowboy-gc-guide.hf.space';
+export const ASSISTANT_CHAT_ENDPOINT = `${ASSISTANT_API_ORIGIN}/api/chat`;
+export const ASSISTANT_ENABLED = false;

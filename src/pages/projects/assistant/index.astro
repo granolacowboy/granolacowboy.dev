@@ -1,0 +1,327 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import {
+  ASSISTANT_CHAT_ENDPOINT,
+  ASSISTANT_ENABLED,
+  EMAIL,
+  EMAIL_URL,
+  PERSON_NAME,
+} from '../../../site.config';
+---
+
+<BaseLayout
+  title="Ask the assistant"
+  description="A third-person AI assistant finetuned on the public writing of Richard Berman. It describes his work and views; it is not him, and it is not legal advice."
+>
+  <header class="page-header">
+    <p class="eyebrow">PROJECT · AI ASSISTANT</p>
+    <h1>Ask the assistant</h1>
+  </header>
+
+  <section class="home-section">
+    <p>
+      This is a small open model that {PERSON_NAME} quantized and finetuned on a curated set of his
+      own answers, then deployed to run as a lightweight API. It answers questions about his work in
+      the third person. The point of the project is the pipeline behind it: build a private knowledge
+      corpus, derive a public, reviewed training set, finetune a compact model with Unsloth, and serve
+      it from a static site with one narrow network allowance. A longer write-up on how it was built
+      will follow.
+    </p>
+
+    <p class="assistant-disclosure" role="note">
+      This is a third-person AI assistant, finetuned on the public writing of {PERSON_NAME}. It speaks
+      about him, it does not speak as him, it can be wrong, and nothing it says is legal advice. Do not
+      enter confidential information.
+    </p>
+
+    <section
+      class="chat"
+      data-chat
+      data-endpoint={ASSISTANT_CHAT_ENDPOINT}
+      data-enabled={String(ASSISTANT_ENABLED)}
+      aria-label="Assistant conversation"
+    >
+      <div class="chat-fallback">
+        <p>
+          This assistant needs JavaScript to run in your browser. You can read the writing and
+          projects linked across this site, or reach {PERSON_NAME} at
+          <a href={EMAIL_URL}>{EMAIL}</a>.
+        </p>
+      </div>
+
+      <div class="chat-live">
+        <p class="chat-status data" role="status" aria-live="polite" data-chat-status></p>
+        <ol class="chat-log" data-chat-log aria-label="Conversation transcript"></ol>
+        <form class="chat-form" data-chat-form>
+          <label class="lbl" for="chat-input">Your message</label>
+          <textarea
+            id="chat-input"
+            data-chat-input
+            rows="3"
+            placeholder="Ask about the systems Richard builds"
+            autocomplete="off"></textarea>
+          <div class="chat-actions">
+            <button class="btn" type="submit" data-chat-send>Send</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </section>
+</BaseLayout>
+
+<style>
+  .assistant-disclosure {
+    margin-block: var(--space-5) var(--space-7);
+    padding: var(--space-4);
+    border: 1px solid var(--border-strong, var(--border-subtle));
+    background: var(--ink-800);
+    font-family: var(--font-mono);
+    font-size: var(--step--1, 0.9rem);
+    line-height: 1.5;
+    color: var(--ink-050);
+  }
+
+  /* Progressive-enhancement gate, mirroring ScrollyGrid's [data-enhanced]. */
+  .chat-live {
+    display: none;
+  }
+  .chat[data-enhanced] .chat-live {
+    display: block;
+  }
+  .chat[data-enhanced] .chat-fallback {
+    display: none;
+  }
+
+  .chat-log {
+    list-style: none;
+    margin: 0 0 var(--space-5);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .chat-msg {
+    max-width: var(--measure);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border-subtle);
+    font-family: var(--font-prose);
+    white-space: pre-wrap;
+  }
+  .chat-msg--user {
+    align-self: flex-end;
+    background: var(--ink-800);
+  }
+  .chat-msg--assistant {
+    align-self: flex-start;
+    background: var(--ink-900);
+  }
+  .chat-status {
+    min-height: 1.3em;
+    margin-block: 0 var(--space-3);
+    color: var(--ink-300);
+  }
+  .chat-form {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .chat-form textarea {
+    width: 100%;
+    font: inherit;
+    padding: var(--space-3);
+    background: var(--ink-900);
+    color: var(--ink-050);
+    border: 1px solid var(--border-strong, var(--border-subtle));
+    border-radius: var(--radius-2, 6px);
+  }
+  .chat-form textarea[disabled] {
+    opacity: 0.6;
+  }
+  .chat-actions {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+  }
+  .chat-waking::after {
+    content: '';
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    margin-inline-start: 0.5em;
+    border: 2px solid var(--amber-500);
+    border-top-color: transparent;
+    border-radius: 999px;
+    animation: chat-spin 700ms linear infinite;
+    vertical-align: middle;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chat-waking::after {
+      animation: none;
+    }
+  }
+  @keyframes chat-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+<script>
+  // Plain processed script: Astro externalizes it to /_astro (build.assetsInlineLimit: 0), so it
+  // loads from a same-origin URL under script-src 'self'. Never is:inline, never define:vars.
+  // Config flows through data-* attributes (same pattern as the Session Benchmark registry page).
+  const root = document.querySelector<HTMLElement>('[data-chat]');
+  const log = root?.querySelector<HTMLOListElement>('[data-chat-log]');
+  const form = root?.querySelector<HTMLFormElement>('[data-chat-form]');
+  const input = root?.querySelector<HTMLTextAreaElement>('[data-chat-input]');
+  const send = root?.querySelector<HTMLButtonElement>('[data-chat-send]');
+  const statusEl = root?.querySelector<HTMLElement>('[data-chat-status]');
+
+  const supported =
+    'fetch' in window && 'ReadableStream' in window && 'TextDecoder' in window && 'AbortController' in window;
+
+  if (root && log && form && input && send && statusEl && supported) {
+    root.setAttribute('data-enhanced', '');
+    const endpoint = root.dataset.endpoint ?? '';
+    const enabled = root.dataset.enabled === 'true';
+    const history: Array<{ role: 'user' | 'assistant'; content: string }> = [];
+
+    const setStatus = (text: string, waking = false) => {
+      statusEl.textContent = text;
+      statusEl.classList.toggle('chat-waking', waking);
+    };
+    const addMessage = (role: 'user' | 'assistant', text: string) => {
+      const li = document.createElement('li');
+      li.className = `chat-msg chat-msg--${role}`;
+      li.textContent = text; // textContent only: model output is untrusted; no innerHTML
+      log.appendChild(li);
+      return li;
+    };
+
+    if (!enabled) {
+      input.disabled = true;
+      send.disabled = true;
+      setStatus('This assistant is not live yet. Check back soon.');
+    } else {
+      // Tolerant SSE / NDJSON reader. Lane B serves text/event-stream with `event: token` +
+      // `data: {"text": "..."}` lines, a final `event: done`, and `event: error`. We also accept
+      // bare `data:` token lines so a framing change does not silently break rendering.
+      const extractToken = (payload: string): string => {
+        try {
+          const obj = JSON.parse(payload);
+          return obj.text ?? obj.token ?? obj.delta ?? obj.content ?? '';
+        } catch {
+          return payload;
+        }
+      };
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage('user', text);
+        history.push({ role: 'user', content: text });
+        input.value = '';
+        input.disabled = true;
+        send.disabled = true;
+
+        const bubble = addMessage('assistant', '');
+        const controller = new AbortController();
+        const wakeTimer = window.setTimeout(
+          () => setStatus('Waking the model. A free Space can take up to a minute to start.', true),
+          2500
+        );
+        const hardTimeout = window.setTimeout(() => controller.abort(), 90_000);
+
+        try {
+          if (navigator.onLine === false) throw new Error('offline');
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ message: text, history, stream: true }),
+            signal: controller.signal,
+          });
+          if (!res.ok || !res.body) throw new Error(`status ${res.status}`);
+          window.clearTimeout(wakeTimer);
+          setStatus('Assistant is responding.');
+
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = '';
+          let full = '';
+          let currentEvent = 'token';
+          let errored = '';
+
+          for (;;) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() ?? '';
+            for (const raw of lines) {
+              const line = raw.replace(/\r$/, '');
+              if (line === '') {
+                currentEvent = 'token';
+                continue;
+              }
+              if (line.startsWith('event:')) {
+                currentEvent = line.slice(6).trim();
+                continue;
+              }
+              if (!line.startsWith('data:')) continue;
+              const payload = line.slice(5).trim();
+              if (!payload || payload === '[DONE]') continue;
+              if (currentEvent === 'error') {
+                errored = extractToken(payload) || 'the assistant returned an error';
+                continue;
+              }
+              if (currentEvent === 'done') continue;
+              full += extractToken(payload);
+              bubble.textContent = full;
+            }
+          }
+
+          if (errored) {
+            bubble.textContent = `Sorry, ${errored}.`;
+            setStatus('Request failed.');
+          } else {
+            history.push({ role: 'assistant', content: full });
+            setStatus(full ? 'Response complete.' : 'The assistant returned nothing. Try rephrasing.');
+          }
+        } catch (err) {
+          const offline = err instanceof Error && err.message === 'offline';
+          bubble.textContent = offline
+            ? 'You appear to be offline.'
+            : 'Something went wrong reaching the assistant.';
+          const retry = document.createElement('button');
+          retry.className = 'btn';
+          retry.type = 'button';
+          retry.textContent = 'Retry';
+          retry.addEventListener('click', () => {
+            input.value = text;
+            history.pop();
+            bubble.remove();
+            retry.remove();
+            form.requestSubmit();
+          });
+          bubble.after(retry);
+          setStatus('Request failed.');
+        } finally {
+          window.clearTimeout(wakeTimer);
+          window.clearTimeout(hardTimeout);
+          input.disabled = false;
+          send.disabled = false;
+          input.focus();
+        }
+      });
+
+      // Enter submits; Shift+Enter inserts a newline.
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+          form.requestSubmit();
+        }
+      });
+    }
+  }
+</script>

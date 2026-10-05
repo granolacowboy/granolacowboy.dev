@@ -1,0 +1,47 @@
+---
+title: "Putting a third-person AI assistant on my site"
+description: "Why the assistant talks about me instead of as me, and how a static site streams from a small model I finetuned and self-host."
+pubDate: 2026-10-04
+draft: true
+---
+
+{/* SCAFFOLD. The prose is mine to write (no AI-authored posts). Keep draft: true until the
+    narrative is written and approved: target 800 to 1,500 words, first person, no em dashes.
+    The headings and the fenced blocks below are the structure; the paragraphs between them
+    are placeholders for me to fill. */}
+
+{/* Open with the concrete moment: someone asked me a question my public writing already answered. */}
+
+## Why third person
+
+{/* The assistant describes my work and views; it does not pretend to be me, and it says it is an
+    AI if asked. Why that honesty line matters, especially in legal technology. */}
+
+## How it is wired
+
+The site stays static. The page ships one small client script that streams tokens from a model I
+finetuned, served on a free Hugging Face Space. No server, no adapter, no framework.
+
+```
+browser ---- fetch + SSE ----> granolacowboy-gc-guide.hf.space   (finetuned model, streaming API)
+   |                                   |
+ static page                     free Space sleeps when idle; the first call wakes it
+```
+
+The only security change was one line. The Content-Security-Policy `connect-src` moved from
+`'self'` to `'self' https://granolacowboy-gc-guide.hf.space`, and that exact string is pinned in
+both `vercel.json` and the build gate so the two can never drift.
+
+{/* Say a little about the pipeline that produced the model: a private knowledge corpus I filled
+    at my own pace, a reviewed public subset, and a compact finetune with Unsloth. Point at the
+    projects page, not a live-model claim. */}
+
+## Cold starts, failure, and honesty
+
+{/* The free Space sleeps, so the first message can take up to a minute. The widget shows a waking
+    state, times out, and offers a retry. Tie this back to the disclosure: it can be wrong, it is
+    not legal advice, and it only speaks to public work. */}
+
+## Takeaways
+
+{/* Three to five concrete takeaways a reader can reuse. */}

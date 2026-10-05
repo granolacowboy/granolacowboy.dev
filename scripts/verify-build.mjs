@@ -630,7 +630,10 @@ const expectedHeaders = new Map([
   // non-executable data. The prior Report-Only header and placeholder Reporting-Endpoints
   // were dropped; the enforced policy supersedes them. Wiring a real report sink later must
   // update this allowlist deliberately.
-  ['content-security-policy', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'"],
+  // Assistant widget (2026-10): connect-src additionally allows the finetuned-model HF Space
+  // (ASSISTANT_API_ORIGIN in src/site.config.ts). This literal is pinned here AND in vercel.json;
+  // both must stay byte-identical (asserted below) and equal the origin Lane B serves.
+  ['content-security-policy', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://granolacowboy-gc-guide.hf.space"],
 ]);
 check(configuredHeaders.length === expectedHeaders.size, 'vercel.json contains only the expected security headers');
 const headerKeys = new Set(configuredHeaders.map((header) => header.key.toLowerCase()));
@@ -646,6 +649,24 @@ check(enforcedCsp.length > 0, 'vercel.json ships an enforced Content-Security-Po
 check(!headerKeys.has('reporting-endpoints'), 'placeholder Reporting-Endpoints header is removed');
 check(!/\breport-to\b/i.test(enforcedCsp), 'enforced CSP declares no dangling report-to group');
 check(!JSON.stringify(vercelConfig).toLowerCase().includes('noindex'), 'vercel.json has no launch-blocking noindex header');
+
+// Assistant widget: the chat fetch origin is declared once in src/site.config.ts and rendered
+// into the built page as data-endpoint. Assert that origin is actually allowed by the enforced
+// CSP connect-src, so site.config.ts / vercel.json / this map can never silently drift apart.
+// Runs regardless of ASSISTANT_ENABLED (the attribute renders either way).
+const assistantHtmlPath = path.join(dist, 'projects', 'assistant', 'index.html');
+if (await exists(assistantHtmlPath)) {
+  const assistantHtml = await readFile(assistantHtmlPath, 'utf8');
+  const endpoint = assistantHtml.match(/data-endpoint=["']([^"']+)["']/i)?.[1];
+  check(Boolean(endpoint), 'assistant page renders a data-endpoint for the chat widget');
+  let endpointOrigin = '';
+  try { endpointOrigin = new URL(endpoint ?? '').origin; } catch { /* reported below */ }
+  const connectSrc = enforcedCsp.match(/connect-src([^;]*)/i)?.[1] ?? '';
+  check(
+    endpointOrigin.length > 0 && connectSrc.includes(endpointOrigin),
+    `assistant chat endpoint origin (${endpointOrigin || 'unparseable'}) is allowed by the CSP connect-src`
+  );
+}
 
 const packageJson = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 check(!Object.keys({ ...packageJson.dependencies, ...packageJson.devDependencies }).some((name) => name === '@astrojs/vercel'), 'static Astro build has no Vercel server adapter');

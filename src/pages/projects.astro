@@ -6,9 +6,15 @@ import {
   ARTIFACT_NAME,
   ARTIFACT_REPO_URL,
   ARTIFACT_WRITEUP_PATH,
+  ASSISTANT_ENABLED,
   HANDLE,
   PERSON_NAME,
 } from '../site.config';
+
+// The assistant card is surfaced only once the widget is live, so with ASSISTANT_ENABLED
+// off this page is byte-identical to before (no advertising an offline feature). Flipping
+// the one flag adds the card and bumps the "/ NN" count.
+const projectsTotal = ASSISTANT_ENABLED ? '04' : '03';
 
 // Screenshot slot (PLAN Phase 3 task 4). Drop a screenshot at
 // src/assets/projects/<ARTIFACT_NAME>.png and it renders; while absent, the
@@ -29,7 +35,7 @@ const screenshot = screenshots[screenshotPath];
   </header>
   <section class="home-section" aria-labelledby="artifact-heading">
     <article class="card">
-      <p class="eyebrow">PROJECT · 01 / 03 <span class="accent">[OPEN SOURCE]</span></p>
+      <p class="eyebrow">PROJECT · 01 / {projectsTotal} <span class="accent">[OPEN SOURCE]</span></p>
       <h2 id="artifact-heading">{ARTIFACT_NAME}</h2>
       <p>I built this as a reference implementation of what secure legal intake automation can look like using the Model Context Protocol. The server is fully deterministic (no LLM calls, no network calls) and handles conflict screening, matter validation, follow-up templating, and triage logging. The idea is that the language model does the language work, and the server does the record work, with a clean boundary between them.</p>
       {
@@ -61,7 +67,7 @@ const screenshot = screenshots[screenshotPath];
 
   <section class="home-section" aria-labelledby="intake-safety-heading">
     <article class="card">
-      <p class="eyebrow">PROJECT · 02 / 03 <span class="accent">[SYSTEM PROOF]</span></p>
+      <p class="eyebrow">PROJECT · 02 / {projectsTotal} <span class="accent">[SYSTEM PROOF]</span></p>
       <h2 id="intake-safety-heading">Deterministic legal intake safety proof</h2>
       <p>A reproducible walk-through showing why a correct final answer is not enough: conflicts provenance, write refusal, adversarial inputs, trace assertions, and release evidence all sit outside the model.</p>
       <ul class="tag-row" aria-label="Tags">
@@ -75,7 +81,7 @@ const screenshot = screenshots[screenshotPath];
 
   <section class="home-section" aria-labelledby="session-benchmark-heading">
     <article class="card">
-      <p class="eyebrow">PROJECT · 03 / 03 <span class="accent">[RESEARCH]</span></p>
+      <p class="eyebrow">PROJECT · 03 / {projectsTotal} <span class="accent">[RESEARCH]</span></p>
       <h2 id="session-benchmark-heading">Session Benchmark v0</h2>
       <p>A public, client-scrubbed research artifact built from aggregate patterns across 1,299 agent sessions. It tests whether an agent can preserve constraints, privacy boundaries, evidence, and executable next steps when the source context is messy.</p>
       <ul class="tag-row" aria-label="Tags">
@@ -88,4 +94,20 @@ const screenshot = screenshots[screenshotPath];
       </p>
     </article>
   </section>
+
+  {ASSISTANT_ENABLED && (
+    <section class="home-section" aria-labelledby="assistant-heading">
+      <article class="card">
+        <p class="eyebrow">PROJECT · 04 / {projectsTotal} <span class="accent">[FINETUNING]</span></p>
+        <h2 id="assistant-heading">Finetuned site assistant</h2>
+        <p>A small open model I quantized and finetuned on a curated set of my own answers, then served as a lightweight API and embedded on this site. It answers questions about my work in the third person. The interesting part is the pipeline behind it: a private knowledge corpus, a reviewed public training subset, a compact Unsloth finetune, and a static page that reaches it through one narrow network allowance.</p>
+        <ul class="tag-row" aria-label="Tags">
+          <li class="tag">finetuning</li>
+          <li class="tag">unsloth</li>
+          <li class="tag">applied-ai</li>
+        </ul>
+        <p><a href="/projects/assistant/">Ask the assistant</a></p>
+      </article>
+    </section>
+  )}
 </BaseLayout>
