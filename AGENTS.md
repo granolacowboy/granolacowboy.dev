@@ -2,7 +2,7 @@
 
 ## granolacowboy.dev agent handoff
 
-This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed on Vercel (static `dist/`, auto-deploy from GitHub `main`). The project is intentionally small: no client framework, no adapter, no site chatbot, no Tailwind unless the user explicitly asks for it. Keep the site fast, static, professional, and focused on legal-technology systems, automation, and applied AI for law firms (an MHSB Solutions business-development hub).
+This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed on Vercel (static `dist/`, auto-deploy from GitHub `main`). The project is intentionally small: no client framework, no adapter, no Tailwind unless the user explicitly asks for it. The one approved exception to the no-JavaScript default is the third-person AI assistant at `/projects/assistant/` (see Current known state and Guardrails). Keep the site fast, static, professional, and focused on legal-technology systems, automation, and applied AI for law firms (an MHSB Solutions business-development hub).
 
 ### First read
 
@@ -26,6 +26,7 @@ This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed 
   - `_TEMPLATE.mdx` files are intentionally excluded by the glob.
 - Positioning baseline (updated 2026-09-25, business-dev-hub pass, approved by Rich): the site is an MHSB Solutions business-development hub. Do NOT reintroduce the retired `[FDE / APPLIED AI]` label, the "forward-deployed" self-description, or a specific tenure/year count ("ten years", "2016-2026"). Lead with what Rich builds; let MHSB and applied AI emerge from the work. This deliberately supersedes the prior 2026-07-08 baseline (commit `9be68f5`).
 - Writing (hybrid, 2026-09-25): the published posts are `post-2-intake-anatomy` and `post-4-deterministic-ai`. `post-1-thesis` and `post-3-regulated-buyers` were retired (their URLs redirect to `/writing/`). The homepage surfaces all three projects (intake-triage-mcp, intake-safety, session-benchmark). `verify-build.mjs` `expectedPostTitles` drives the published-post count; update it and the docs together when posts change.
+- Chat assistant (approved by Rich, 2026-10): `/projects/assistant/` is a third-person AI assistant finetuned on Rich's public writing and served from a Hugging Face Space. The page is a dependency-free progressive-enhancement `<script>` (mirrors `ScrollyGrid.astro` and the registry page) doing `fetch`/SSE to the Space; no server adapter is added. The Space origin lives once in `src/site.config.ts` (`ASSISTANT_API_ORIGIN`) and is pinned into the CSP `connect-src` in BOTH `vercel.json` and `scripts/verify-build.mjs` (byte-identical; the gate also asserts the built page's `data-endpoint` origin is CSP-allowed). `ASSISTANT_ENABLED` gates the live UI and the projects-index card; while false the page is offline and request-free, so it ships safely before the Space exists. A draft `src/content/posts/third-person-assistant.mdx` scaffold is parked for Rich to write; publishing it later adds its title to `expectedPostTitles`.
 - Copy is a deliberately minimal, academic placeholder (2026-09-25) until Rich writes his own: tight factual hero + a two-paragraph About, no editorial Field Notes. An earlier BLUF Field Notes section was removed at his request; do not re-add speculative/aphoristic copy in his voice.
 - There are no case studies. The three unattested draft archetypes were deleted (2026-09-25); only `_TEMPLATE.mdx` remains. Recreate case studies ONLY from real, anonymized engagements once Rich supplies and approves the narrative facts, anonymization treatment, and directional metrics.
 - Blog dates are intentionally hidden through `SHOW_DATES = false`; do not change this unless the user asks.
@@ -86,7 +87,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
    - Add a resume PDF and project screenshot only when the user supplies or approves them.
 
 4. Optimize honestly.
-   - The layout ships zero client JavaScript (the theme toggle was removed); keep it that way unless there is a clear need. The Session Benchmark registry page is the one intentional script.
+   - The layout ships almost no client JavaScript (the theme toggle was removed); keep it that way unless there is a clear need. The Session Benchmark registry page and the `/projects/assistant/` chat widget are the two intentional client scripts.
    - Audit semantic headings, focus states, color contrast, skip link, and mobile wrapping.
    - Verify canonical URL, OG tags, Twitter card, favicon, robots, and sitemap output.
    - Optimize images with Astro assets where possible; avoid remote or decorative assets that do not help the portfolio.
@@ -108,7 +109,7 @@ When spawning workers, tell them they are not alone in the codebase, must not re
 - Prefer existing patterns over new abstractions.
 - Use `apply_patch` for manual edits.
 - Keep comments concise and remove stale phase comments when they stop helping.
-- Do not add a React island, analytics script, webfont, CSS framework, or third-party widget without a clear reason and user approval.
+- Do not add a React island, analytics script, webfont, CSS framework, or third-party widget without a clear reason and user approval. The approved exception is the first-party `/projects/assistant/` chat widget (a progressive-enhancement script that calls the finetuned-model Hugging Face Space); any further widgets still need approval.
 - Preserve the anonymization strategy: category plus problem framing, no identifying client combinations.
 - Never publish placeholder copy, unaudited claims, or metrics not stated by the user.
 - Keep `AGENTS.md`, `README.md`, and `docs/ops.md` in sync with the live state. When a change alters the framework, the published post set, the projects, the deploy flow, or the copy model, update these docs in the SAME PR. Prefer code as the source of truth (`package.json`, `verify-build.mjs` `expectedPostTitles`) over restating facts in prose; `verify-build.mjs` enforces the framework version the docs state.
