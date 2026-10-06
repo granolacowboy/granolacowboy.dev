@@ -2,15 +2,22 @@
 // Shared renderer for a river of mixed entries. Short-form items (link/til/note/
 // quote) render their full body inline; long-form entries show title + description
 // and link to their permalink. Build-time only; ships no client JS.
+//
+// `heading` sets the entry-title level so the document outline stays correct: the
+// homepage lists the river under an <h2>, so titles are <h3> (default); standalone
+// list pages (a type index, a tag page, a year archive) list it under the page's
+// <h1>, so they pass heading="h2".
 import { render } from 'astro:content';
-import { formatDate, TYPE_LABEL, SHORT_FORM, type RiverItem } from '../lib/river';
+import { formatDate, TYPE_LABEL, SHORT_FORM, AI_DISCLOSURE, type RiverItem } from '../lib/river';
 
 interface Props {
   items: RiverItem[];
   empty?: string;
+  heading?: 'h2' | 'h3';
 }
 
-const { items, empty = 'Nothing here yet.' } = Astro.props;
+const { items, empty = 'Nothing here yet.', heading = 'h3' } = Astro.props;
+const Title = heading;
 const bodies = await Promise.all(
   items.map(async (item) => (SHORT_FORM.has(item.type) ? (await render(item.entry)).Content : null))
 );
@@ -40,13 +47,16 @@ const bodies = await Promise.all(
                 </>
               )}
             </p>
-            <h3 class="river-row-title">
+            <Title class="river-row-title">
               <a href={item.href}>{item.title}</a>
-            </h3>
+            </Title>
             {Body && (
               <div class="river-body">
                 <Body />
               </div>
+            )}
+            {Body && item.provenance === 'human-ai-edited' && (
+              <p class="metadata">{AI_DISCLOSURE}</p>
             )}
             {item.type === 'entry' && item.entry.data.description && (
               <p class="river-row-desc">{item.entry.data.description}</p>

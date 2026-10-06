@@ -97,3 +97,9 @@ export async function getYears(): Promise<number[]> {
 export function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' });
 }
+
+// The per-entry AI-assistance disclosure, rendered verbatim wherever a
+// `human-ai-edited` entry's body is shown in full (permalink, river inline, RSS
+// content, llms-full). Kept as one constant so the string never drifts and the
+// build gate can match it. Distinct from the site-wide footer colophon.
+export const AI_DISCLOSURE = 'Edited with AI assistance; the ideas and words are mine.';

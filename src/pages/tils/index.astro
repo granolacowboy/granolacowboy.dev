@@ -11,5 +11,5 @@ const items = (await getRiver()).filter((i) => i.type === 'til');
     <p class="eyebrow">INDEX · TIL</p>
     <h1>Today I Learned</h1>
   </header>
-  <RiverList items={items} empty="No TILs yet." />
+  <RiverList items={items} empty="No TILs yet." heading="h2" />
 </BaseLayout>

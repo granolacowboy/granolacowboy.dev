@@ -3,7 +3,7 @@ import { render } from 'astro:content';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { loadRenderers } from 'astro:container';
 import { getContainerRenderer as mdxRenderer } from '@astrojs/mdx';
-import { getRiver, TYPE_LABEL } from '../lib/river';
+import { getRiver, TYPE_LABEL, AI_DISCLOSURE } from '../lib/river';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../site.config';
 
 // Full-text feed across every entry type (entries, links, tils, notes, quotes).
@@ -19,7 +19,10 @@ export async function GET(context) {
   const items = [];
   for (const item of river) {
     const { Content } = await render(item.entry);
-    const content = await container.renderToString(Content);
+    let content = await container.renderToString(Content);
+    // The AI-assistance disclosure must ride with the full body wherever it is
+    // republished, not only on the permalink.
+    if (item.provenance === 'human-ai-edited') content += `<p>${AI_DISCLOSURE}</p>`;
     items.push({
       title: item.title,
       link: item.href,

@@ -11,5 +11,5 @@ const items = (await getRiver()).filter((i) => i.type === 'note');
     <p class="eyebrow">INDEX · NOTES</p>
     <h1>Notes</h1>
   </header>
-  <RiverList items={items} empty="No notes yet." />
+  <RiverList items={items} empty="No notes yet." heading="h2" />
 </BaseLayout>

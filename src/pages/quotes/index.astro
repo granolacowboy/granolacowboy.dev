@@ -11,5 +11,5 @@ const items = (await getRiver()).filter((i) => i.type === 'quote');
     <p class="eyebrow">INDEX · QUOTES</p>
     <h1>Quotes</h1>
   </header>
-  <RiverList items={items} empty="No quotes yet." />
+  <RiverList items={items} empty="No quotes yet." heading="h2" />
 </BaseLayout>

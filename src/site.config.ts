@@ -11,14 +11,6 @@ export const SITE_TITLE = `${PERSON_NAME} | ${HANDLE}`;
 export const SITE_DESCRIPTION =
   'Personal site and weblog of Richard Berman (granolacowboy): the projects I build and notes on building them.';
 
-/**
- * Personal weblog: posts render WITH visible dates (2026-09-27 personal-weblog
- * repositioning; supersedes the prior "dates hidden" decision). `pubDate` also
- * drives sitemap and ordering. The full weblog engine (river + short-form types)
- * may later retire this flag; until then every UI date render keys off this const.
- */
-export const SHOW_DATES: boolean = true;
-
 /** Public contact and profile links. */
 export const EMAIL = 'info@mhsbsolutions.com';
 export const EMAIL_URL = `mailto:${EMAIL}`;

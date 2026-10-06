@@ -2,7 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { SHOW_DATES } from '../../site.config';
+import { formatDate, AI_DISCLOSURE } from '../../lib/river';
 
 export async function getStaticPaths() {
   // Draft posts get no routes (PLAN Phase 2). Slug semantics: post.id.
@@ -27,8 +27,8 @@ const { post, position, total } = Astro.props;
 const { Content } = await render(post);
 const pad = (value: number) => String(value).padStart(2, '0');
 
-// Reading time is derived from the actual body (words / 220 wpm) and
-// renders alongside the position index and (SHOW_DATES=true) the post date.
+// Reading time is derived from the actual body (words / 220 wpm) and renders
+// alongside the position index and the post date.
 const words = (post.body ?? '').match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu)?.length ?? 0;
 const minutes = Math.max(1, Math.round(words / 220));
 ---
@@ -40,16 +40,8 @@ const minutes = Math.max(1, Math.round(words / 220));
       <h1>{post.data.title}</h1>
       <p class="metadata">
         {pad(position)} / {pad(total)} · {minutes} MIN
-        {
-          SHOW_DATES && (
-            <>
-              {' · '}
-              <time datetime={post.data.pubDate.toISOString()}>
-                {post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' })}
-              </time>
-            </>
-          )
-        }
+        {' · '}
+        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
         {post.data.tags.length > 0 && (
           <>
             {' · '}
@@ -64,9 +56,7 @@ const minutes = Math.max(1, Math.round(words / 220));
       </p>
     </header>
     <Content />
-    {post.data.provenance === 'human-ai-edited' && (
-      <p class="metadata">Edited with AI assistance; the ideas and words are mine.</p>
-    )}
+    {post.data.provenance === 'human-ai-edited' && <p class="metadata">{AI_DISCLOSURE}</p>}
     <div class="divider--labeled">END · {pad(position)}</div>
   </article>
 </BaseLayout>

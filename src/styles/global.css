@@ -679,10 +679,9 @@ pre code {
   margin-block-start: var(--space-9);
 }
 
-/* ---------- Writing index (home and /writing/) ----------
-   Hairline-divided rows: serif title, mono metadata readout. Dates
-   never render (SHOW_DATES stays false); rows carry a mono position
-   index instead. */
+/* ---------- Writing index (/writing/) ----------
+   Hairline-divided rows: serif title, mono metadata readout with the UTC date,
+   tags, and a mono position index. */
 
 .writing-index {
   margin: 0;

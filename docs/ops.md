@@ -22,7 +22,7 @@ see the [README](../README.md) for that.
 - Positioning (2026-09-27): granolacowboy.dev is Rich Berman's personal site and weblog, not an
   MHSB business-development hub. MHSB is context (About + footer Portfolio nav), not the frame. See
   `AGENTS.md` for the full baseline.
-- Post dates are shown (`SHOW_DATES = true`, 2026-09-27); `pubDate` also drives ordering and the sitemap.
+- Post dates always render (the `SHOW_DATES` flag was retired); `pubDate` also drives ordering and the sitemap.
 - Entry types: long-form `posts` at `/writing/`, plus short-form `links`, `tils`, `notes`, `quotes`.
   The mixed river, tags, and year archives are assembled in `src/lib/river.ts`. Scaffold a new entry
   with `node scripts/new.mjs <type> ...` (writes to `drafts/`), then promote it into `src/content/<type>/`

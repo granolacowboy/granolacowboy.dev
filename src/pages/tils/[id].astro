@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDate } from '../../lib/river';
+import { formatDate, AI_DISCLOSURE } from '../../lib/river';
 
 export async function getStaticPaths() {
   const tils = await getCollection('tils', ({ data }) => !data.draft);
@@ -33,8 +33,6 @@ const { Content } = await render(entry);
       </p>
     </header>
     <Content />
-    {entry.data.provenance === 'human-ai-edited' && (
-      <p class="metadata">Edited with AI assistance; the ideas and words are mine.</p>
-    )}
+    {entry.data.provenance === 'human-ai-edited' && <p class="metadata">{AI_DISCLOSURE}</p>}
   </article>
 </BaseLayout>

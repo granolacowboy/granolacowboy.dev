@@ -33,7 +33,7 @@ This repo is an Astro 7 static personal site for `granolacowboy.dev`, deployed o
 - Copy model (2026-09-27): personal voice, short-form notes, Field Notes, TILs, and link-blog entries are WELCOME because they are genuinely Rich's writing. The homepage hero and About currently ship as honest, sparse, factual stubs (marked for Rich only in stripped `{/* */}` comments). Agents must NOT ghost-write his bio or personal prose, and must never put "Rich to replace"-style markers in visible text or in HTML `<!-- -->` comments (Astro preserves those into `dist`), only in stripped `{/* */}` comments, or they will trip the placeholder gate.
 - Case studies were removed entirely in the 2026-09-27 pass (the `caseStudies` collection, the `/work/[id]` route, and the `NdaNote`/`ScrollyGrid` components are gone). Reintroduce them only if Rich asks, and only from real, anonymized, Rich-attested engagements.
 - New entries: run `node scripts/new.mjs <type> ...` to scaffold a dated file into `drafts/`, then promote it into `src/content/<type>/` by hand (a `!` shell move). Agents cannot write `src/content/**` once the authorship fence is armed; that move is the human authorship act.
-- Blog dates are shown through `SHOW_DATES = true` (2026-09-27 personal-weblog repositioning; a personal weblog is dated). `pubDate` also drives ordering and the sitemap.
+- Blog dates always render (the `SHOW_DATES` flag was retired; a personal weblog is dated). `pubDate` also drives ordering and the sitemap.
 
 ### Local command caveat on Windows
 

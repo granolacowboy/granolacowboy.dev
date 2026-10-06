@@ -19,6 +19,6 @@ const items = (await getRiver()).filter((i) => i.tags.includes(tag));
     <p class="eyebrow">TAG</p>
     <h1>{tag}</h1>
   </header>
-  <RiverList items={items} empty="Nothing tagged here." />
+  <RiverList items={items} empty="Nothing tagged here." heading="h2" />
   <p class="metadata"><a href="/tags/">All tags</a></p>
 </BaseLayout>

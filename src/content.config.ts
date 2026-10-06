@@ -16,15 +16,22 @@ import { z } from 'astro/zod'; // v6: NOT from 'astro:content'
 // See AGENTS.md and the no-ai-authored-posts policy.
 const provenance = z.enum(['human', 'human-ai-edited']);
 
-// Free-form tags, normalized to lowercase-kebab and de-duplicated so /tags/<tag>/
-// derivation is lossless and "AI" vs "ai" never split into two tags.
+// Free-form tags, normalized to a URL-safe lowercase slug and de-duplicated so
+// /tags/<tag>/ derivation is lossless ("AI" vs "ai" never split; "c#", ".net",
+// "a/b", "50%" never break the route). Empty/whitespace tags are dropped; the
+// 1-10 bound is enforced AFTER normalization.
 const tags = z
   .array(z.string())
-  .min(1)
-  .max(10)
   .transform((list) => [
-    ...new Set(list.map((t) => t.trim().toLowerCase().replace(/\s+/g, '-'))),
-  ]);
+    ...new Set(
+      list
+        .map((t) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''))
+        .filter(Boolean)
+    ),
+  ])
+  .refine((list) => list.length >= 1 && list.length <= 10, {
+    message: 'each entry needs 1 to 10 tags that contain at least one letter or digit',
+  });
 
 const base = z.object({
   title: z.string(),
@@ -36,12 +43,14 @@ const base = z.object({
 });
 
 // The glob loader has no default underscore exclusion (Astro v5 upgrade guide),
-// so `**/[^_]*` keeps _TEMPLATE files out of the built collection. Short-form is
-// .md only (no JSX in a two-sentence link; keeps the full-text feed clean).
-const mdOnly = (dir: string) => glob({ base: `./src/content/${dir}`, pattern: '**/[^_]*.md' });
+// so `[^_]*` keeps _TEMPLATE files out of the built collection. Non-recursive on
+// purpose: entries are flat, date-prefixed files (see scripts/new.mjs), which keeps
+// the loader set identical to verify-build.mjs's flat scan. Short-form is .md only
+// (no JSX in a two-sentence link; keeps the full-text feed clean).
+const mdOnly = (dir: string) => glob({ base: `./src/content/${dir}`, pattern: '[^_]*.md' });
 
 const posts = defineCollection({
-  loader: glob({ base: './src/content/posts', pattern: '**/[^_]*.{md,mdx}' }),
+  loader: glob({ base: './src/content/posts', pattern: '[^_]*.{md,mdx}' }),
   schema: base.extend({ description: z.string() }),
 });
 

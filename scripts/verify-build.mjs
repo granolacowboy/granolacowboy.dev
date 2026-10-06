@@ -102,6 +102,16 @@ async function resolveLocalLink(href, sourceRoute) {
   }
   if (!resolvedTarget) return { valid: false, reason: 'does not resolve to a built file' };
 
+  // A same-origin link that lands on a retired-post redirect stub is a dead end for
+  // a real reader (it bounces to the redirect target), so treat it as broken. This
+  // is what catches an internal link to a retired /writing/<id>/ path.
+  if (path.extname(resolvedTarget).toLowerCase() === '.html') {
+    const targetHtml = await readFile(resolvedTarget, 'utf8');
+    if (/http-equiv=["']?refresh/i.test(targetHtml)) {
+      return { valid: false, reason: 'resolves to a retired-post redirect stub' };
+    }
+  }
+
   if (url.hash && path.extname(resolvedTarget).toLowerCase() === '.html') {
     const fragment = decodeURIComponent(url.hash.slice(1));
     const targetHtml = await readFile(resolvedTarget, 'utf8');
@@ -257,7 +267,7 @@ const PUBLISHING_COLLECTIONS = new Map([
   ['notes', '/notes/'],
   ['quotes', '/quotes/'],
 ]);
-const AI_MARKER = 'Edited with AI assistance'; // rendered on human-ai-edited routes
+const AI_MARKER = 'Edited with AI assistance; the ideas and words are mine.'; // full sentence, rendered verbatim on human-ai-edited surfaces (distinct from the colophon so a whole-page includes() can't collide with it)
 const COLOPHON = 'written by Rich Berman'; // site-wide footer colophon substring
 const ENTRY_COUNT_RANGE = { min: 1, max: 1000 };
 const ADVISORY_WORD_RANGE = { min: 20, max: 4000 };
@@ -318,7 +328,8 @@ for (const entry of publishedEntries) {
 const homeHtmlPath = path.join(dist, 'index.html');
 check(await exists(homeHtmlPath), 'homepage index.html exists');
 const homeHtml = (await exists(homeHtmlPath)) ? await readFile(homeHtmlPath, 'utf8') : '';
-check(homeHtml.includes(COLOPHON), `pages render the authorship colophon ("${COLOPHON}")`);
+// The colophon is asserted on EVERY content page below (after htmlFiles is built),
+// not just here; homeHtml is retained for the FDE guard.
 
 // Homepage regression guard: no residual FDE / forward-deployed self-label.
 check(!/\bFDE\b|forward-deployed/i.test(homeHtml), 'homepage carries no FDE or forward-deployed self-label');
@@ -342,6 +353,21 @@ const rssPaths = rssItems
   .sort();
 const entryRoutes = publishedEntries.map((entry) => entry.route).sort();
 check(JSON.stringify(rssPaths) === JSON.stringify(entryRoutes), 'RSS item links exactly match the published entry routes');
+
+// A human-ai-edited entry must carry the disclosure in the feed too (the body is
+// republished there in full), not only on its permalink.
+for (const entry of publishedEntries) {
+  if (entry.provenance !== 'human-ai-edited') continue;
+  const item = rssItems.find((raw) => {
+    const link = raw.match(/<link>([\s\S]*?)<\/link>/i)?.[1] ?? '';
+    try {
+      return new URL(decodeXml(link)).pathname === entry.route;
+    } catch {
+      return false;
+    }
+  });
+  check(Boolean(item) && item.includes(AI_MARKER), `${entry.route} carries the AI-assistance disclosure in rss.xml`);
+}
 
 // Em dashes: advisory only (a faithful quotation may contain one).
 const emDashHtmlFiles = textEntries
@@ -496,6 +522,21 @@ for (const file of htmlFiles) {
 check(
   brokenLocalLinks.length === 0,
   `all built local links and fragments resolve${brokenLocalLinks.length ? ` (${brokenLocalLinks.join('; ')})` : ''}`
+);
+
+// Authorship colophon must render on every content page (it lives in the shared
+// BaseLayout footer). Redirect stubs are noindex and exempt.
+const missingColophon = [];
+for (const file of htmlFiles) {
+  const route = routeForHtml(file);
+  if (!route) continue;
+  const html = await readFile(file, 'utf8');
+  if (isRedirectStub(html)) continue;
+  if (!html.includes(COLOPHON)) missingColophon.push(route);
+}
+check(
+  missingColophon.length === 0,
+  `every content page renders the authorship colophon${missingColophon.length ? ` (missing: ${missingColophon.join(', ')})` : ''}`
 );
 
 function countDataMarkers(html, name) {

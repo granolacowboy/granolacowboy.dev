@@ -17,6 +17,6 @@ const items = (await getRiver()).filter((i) => i.pubDate.getUTCFullYear() === ye
     <p class="eyebrow">ARCHIVE</p>
     <h1>{year}</h1>
   </header>
-  <RiverList items={items} empty="Nothing from this year." />
+  <RiverList items={items} empty="Nothing from this year." heading="h2" />
   <p class="metadata"><a href="/archive/">All years</a></p>
 </BaseLayout>
