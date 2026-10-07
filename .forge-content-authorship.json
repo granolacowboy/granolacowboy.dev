@@ -1,0 +1,5 @@
+{
+  "content_base": "src/content",
+  "collections": ["posts", "links", "tils", "notes", "quotes"],
+  "drafts_dir": "drafts"
+}

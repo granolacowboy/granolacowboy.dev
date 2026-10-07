@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RiverList from '../../components/RiverList.astro';
+import { getRiver } from '../../lib/river';
+
+const items = (await getRiver()).filter((i) => i.type === 'quote');
+---
+
+<BaseLayout title="Quotes" description="Quotations worth keeping, collected by Rich Berman.">
+  <header class="page-header">
+    <h1>Quotes</h1>
+  </header>
+  <RiverList items={items} empty="No quotes yet." heading="h2" />
+</BaseLayout>

@@ -16,6 +16,13 @@ function check(condition, message) {
   }
 }
 
+// Advisory: prints WARN but never fails the build. Used for style heuristics that
+// were AI-output sanitizers (word range, first-person voice, em dashes); under
+// Rich-only authorship they must not block his own writing.
+function warn(condition, message) {
+  console.log(`${condition ? 'PASS' : 'WARN'} ${message}`);
+}
+
 async function exists(file) {
   try {
     await stat(file);
@@ -95,6 +102,16 @@ async function resolveLocalLink(href, sourceRoute) {
   }
   if (!resolvedTarget) return { valid: false, reason: 'does not resolve to a built file' };
 
+  // A same-origin link that lands on a retired-post redirect stub is a dead end for
+  // a real reader (it bounces to the redirect target), so treat it as broken. This
+  // is what catches an internal link to a retired /writing/<id>/ path.
+  if (path.extname(resolvedTarget).toLowerCase() === '.html') {
+    const targetHtml = await readFile(resolvedTarget, 'utf8');
+    if (/http-equiv=["']?refresh/i.test(targetHtml)) {
+      return { valid: false, reason: 'resolves to a retired-post redirect stub' };
+    }
+  }
+
   if (url.hash && path.extname(resolvedTarget).toLowerCase() === '.html') {
     const fragment = decodeURIComponent(url.hash.slice(1));
     const targetHtml = await readFile(resolvedTarget, 'utf8');
@@ -106,12 +123,15 @@ async function resolveLocalLink(href, sourceRoute) {
 }
 
 function assertWellFormedXml(xml, label) {
-  const invalidAmpersand = /&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[\da-f]+;)/i.test(xml);
   const scrubbed = xml
     .replace(/<\?xml[\s\S]*?\?>/gi, '')
     .replace(/<!--([\s\S]*?)-->/g, '')
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '')
     .replace(/<!DOCTYPE([\s\S]*?)>/gi, '');
+  // Check ampersands only OUTSIDE CDATA and comments: the full-text feed carries
+  // rendered HTML inside <![CDATA[...]]>, which legitimately contains raw & in
+  // prose and URLs. Testing the raw xml here would false-fail a valid feed.
+  const invalidAmpersand = /&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[\da-f]+;)/i.test(scrubbed);
   const stack = [];
   const tagPattern = /<([^>]+)>/g;
   let match;
@@ -222,90 +242,138 @@ check(
   `public source and docs contain no spaced or title-cased handle variants${identityVariantFiles.length ? ` (${identityVariantFiles.join(', ')})` : ''}`
 );
 
-// Hybrid writing pass (2026-09-25): post-1-thesis and post-3-regulated-buyers
-// were retired; their operator signal survives as homepage Field Notes. The two
-// kept posts are the technical companion (post-2) and the deterministic-agents
-// methodology (post-4).
-const expectedPostTitles = new Set([
-  'Anatomy of a legal intake automation',
-  'How I use AI agents to build deterministic systems without trusting the agents to be deterministic',
+// ---------------------------------------------------------------------------
+// Weblog entries: authorship provenance + structural checks.
+//
+// Replaces the old expectedPostTitles allowlist and the fixed post counts (a title
+// allowlist an agent can edit is theater, and a word floor is nonsensical for a
+// two-sentence link). ENFORCED (hard fail): every published entry declares an
+// allowed provenance value; every human-ai-edited entry renders its disclosure;
+// the site-wide colophon is present; the full-text feed's links match the published
+// entry routes by SET. ADVISORY (warn only): word range, first-person voice, em
+// dashes -- those were AI-output sanitizers and must not block Rich's own writing.
+//
+// The real, agent-unforgeable authorship control is the guardrails write-fence
+// (agents cannot write src/content/**; Rich promotes from drafts/ by hand). This
+// gate is the durable off-box backstop that keeps an undisclosed or wrongly-marked
+// entry from ever reaching dist -> rss.xml -> syndication.
+// ---------------------------------------------------------------------------
+const ALLOWED_PROVENANCE = new Set(['human', 'human-ai-edited']);
+// collection dir under src/content -> public route prefix
+const PUBLISHING_COLLECTIONS = new Map([
+  ['posts', '/writing/'],
+  ['links', '/links/'],
+  ['tils', '/tils/'],
+  ['notes', '/notes/'],
+  ['quotes', '/quotes/'],
 ]);
-const expectedPublishedPostCount = expectedPostTitles.size;
+const AI_MARKER = 'Edited with AI assistance; the ideas and words are mine.'; // full sentence, rendered verbatim on human-ai-edited surfaces (distinct from the colophon so a whole-page includes() can't collide with it)
+const COLOPHON = 'written by Richard Berman'; // site-wide footer colophon substring
+const ENTRY_COUNT_RANGE = { min: 1, max: 1000 };
+const ADVISORY_WORD_RANGE = { min: 20, max: 4000 };
+
 // Astro static redirects (astro.config.mjs) emit a noindex meta-refresh stub at
-// each retired post path (e.g. /writing/post-1-thesis/). Those are NOT published
-// posts, so exclude any writing/ dir whose index.html is a redirect stub.
+// each retired path. Those are excluded from OG/canonical checks below.
 const isRedirectStub = (html) => /http-equiv=["']?refresh/i.test(html);
-const writingDirectory = path.join(dist, 'writing');
-const writingEntries = await readdir(writingDirectory, { withFileTypes: true });
-const publishedPostIds = [];
-for (const entry of writingEntries) {
-  const indexFile = path.join(writingDirectory, entry.name, 'index.html');
-  if (entry.isDirectory() && await exists(indexFile)) {
-    if (isRedirectStub(await readFile(indexFile, 'utf8'))) continue;
-    publishedPostIds.push(entry.name);
+
+const publishedEntries = []; // { collection, id, route, provenance, wordCount }
+for (const [collection, routePrefix] of PUBLISHING_COLLECTIONS) {
+  const dir = path.join(root, 'src', 'content', collection);
+  if (!(await exists(dir))) continue; // a collection may have no directory yet
+  const entryFiles = (await readdir(dir)).filter((name) => !name.startsWith('_') && /\.mdx?$/.test(name));
+  for (const name of entryFiles) {
+    const source = await readFile(path.join(dir, name), 'utf8');
+    // Robust frontmatter capture (a body '---' must not split it).
+    const frontmatter = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? '';
+    if (/^draft:\s*true\s*$/im.test(frontmatter)) continue;
+    const id = path.basename(name, path.extname(name));
+    const provenance = frontmatter.match(/^provenance:\s*["']?([\w-]+)["']?/im)?.[1];
+    const bodyStart = source.indexOf('\n---', 3);
+    const body = bodyStart === -1 ? '' : source.slice(bodyStart + 4);
+    const wordCount = [...body.matchAll(/\b[\p{L}\p{N}][\p{L}\p{N}'-]*\b/gu)].length;
+    const route = `${routePrefix}${id}/`;
+    publishedEntries.push({ collection, id, route, provenance, wordCount });
+
+    check(provenance !== undefined, `${collection}/${id} declares a provenance field`);
+    check(
+      provenance === undefined || ALLOWED_PROVENANCE.has(provenance),
+      `${collection}/${id} provenance "${provenance ?? '(missing)'}" is an allowed value (${[...ALLOWED_PROVENANCE].join(' | ')})`
+    );
+    warn(
+      wordCount >= ADVISORY_WORD_RANGE.min && wordCount <= ADVISORY_WORD_RANGE.max,
+      `${collection}/${id} word count ${wordCount} within advisory range [${ADVISORY_WORD_RANGE.min}, ${ADVISORY_WORD_RANGE.max}]`
+    );
+    warn(/\bI\b|\bmy\b/i.test(body), `${collection}/${id} uses a first-person voice (advisory)`);
   }
 }
-publishedPostIds.sort();
-check(publishedPostIds.length === expectedPublishedPostCount, `exactly ${expectedPublishedPostCount} published post routes exist (found ${publishedPostIds.length})`);
+check(
+  publishedEntries.length >= ENTRY_COUNT_RANGE.min && publishedEntries.length <= ENTRY_COUNT_RANGE.max,
+  `published entry count ${publishedEntries.length} within [${ENTRY_COUNT_RANGE.min}, ${ENTRY_COUNT_RANGE.max}]`
+);
 
+// Rendered side: each published entry route is built; human-ai-edited routes render
+// the disclosure marker.
+for (const entry of publishedEntries) {
+  if (!ALLOWED_PROVENANCE.has(entry.provenance)) continue; // already failed above
+  const routeFile = path.join(dist, entry.route.replace(/^\//, ''), 'index.html');
+  const built = await exists(routeFile);
+  check(built, `${entry.route} route is built`);
+  if (built && entry.provenance === 'human-ai-edited') {
+    const html = await readFile(routeFile, 'utf8');
+    check(html.includes(AI_MARKER), `${entry.route} renders the AI-assistance disclosure`);
+  }
+}
+
+// Site-wide authorship colophon (documentation layer; in the footer on every page).
+const homeHtmlPath = path.join(dist, 'index.html');
+check(await exists(homeHtmlPath), 'homepage index.html exists');
+const homeHtml = (await exists(homeHtmlPath)) ? await readFile(homeHtmlPath, 'utf8') : '';
+// The colophon is asserted on EVERY content page below (after htmlFiles is built),
+// not just here; homeHtml is retained for the FDE guard.
+
+// Homepage regression guard: no residual FDE / forward-deployed self-label.
+check(!/\bFDE\b|forward-deployed/i.test(homeHtml), 'homepage carries no FDE or forward-deployed self-label');
+
+// Full-text feed: exists, well-formed, and its item links match the published entry
+// routes by SET (not count).
 const rssPath = path.join(dist, 'rss.xml');
 check(await exists(rssPath), 'rss.xml exists');
 const rss = await readFile(rssPath, 'utf8');
 assertWellFormedXml(rss, 'rss.xml');
 const rssItems = [...rss.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)].map((match) => match[1]);
-check(rssItems.length === expectedPublishedPostCount, `RSS contains exactly ${expectedPublishedPostCount} items (found ${rssItems.length})`);
-const rssPaths = rssItems.map((item) => {
-  const link = item.match(/<link>([\s\S]*?)<\/link>/i)?.[1] ?? '';
-  try {
-    return new URL(decodeXml(link)).pathname;
-  } catch {
-    return '';
-  }
-}).sort();
-const postPaths = publishedPostIds.map((id) => `/writing/${id}/`).sort();
-check(JSON.stringify(rssPaths) === JSON.stringify(postPaths), 'RSS item links exactly match published post routes');
+const rssPaths = rssItems
+  .map((item) => {
+    const link = item.match(/<link>([\s\S]*?)<\/link>/i)?.[1] ?? '';
+    try {
+      return new URL(decodeXml(link)).pathname;
+    } catch {
+      return '';
+    }
+  })
+  .sort();
+const entryRoutes = publishedEntries.map((entry) => entry.route).sort();
+check(JSON.stringify(rssPaths) === JSON.stringify(entryRoutes), 'RSS item links exactly match the published entry routes');
 
-const postSourceDirectory = path.join(root, 'src', 'content', 'posts');
-const postSourceFiles = (await readdir(postSourceDirectory))
-  .filter((name) => !name.startsWith('_') && /\.mdx?$/.test(name));
-const publishedPostSources = [];
-for (const file of postSourceFiles) {
-  const source = await readFile(path.join(postSourceDirectory, file), 'utf8');
-  const parts = source.split(/^---\s*$/m);
-  const frontmatter = parts[1] ?? '';
-  const body = parts.slice(2).join('---');
-  if (/^draft:\s*true\s*$/im.test(frontmatter)) continue;
-  const title = frontmatter.match(/^title:\s*["']?(.*?)["']?\s*$/im)?.[1];
-  const wordCount = [...body.matchAll(/\b[\p{L}\p{N}][\p{L}\p{N}'-]*\b/gu)].length;
-  publishedPostSources.push({ file, title, wordCount, body });
-}
-check(publishedPostSources.length === expectedPublishedPostCount, `exactly ${expectedPublishedPostCount} non-draft post sources exist`);
-check(
-  publishedPostSources.every(({ wordCount }) => wordCount >= 800 && wordCount <= 1500),
-  `all published posts contain 800-1500 words (${publishedPostSources.map(({ file, wordCount }) => `${file}: ${wordCount}`).join(', ')})`
-);
-check(
-  publishedPostSources.every(({ body }) => /\bI\b|\bmy\b/i.test(body)),
-  'all published posts use a first-person voice'
-);
-check(
-  publishedPostSources.every(({ title }) => expectedPostTitles.has(title)),
-  'published post titles match the approved published titles'
-);
-
-// Homepage regression guard for the positioning pass: no residual FDE /
-// forward-deployed self-label. (Field Notes were removed pending Rich's writing.)
-const homeHtmlPath = path.join(dist, 'index.html');
-check(await exists(homeHtmlPath), 'homepage index.html exists');
-if (await exists(homeHtmlPath)) {
-  const homeHtml = await readFile(homeHtmlPath, 'utf8');
-  check(!/\bFDE\b|forward-deployed/i.test(homeHtml), 'homepage carries no FDE or forward-deployed self-label');
+// A human-ai-edited entry must carry the disclosure in the feed too (the body is
+// republished there in full), not only on its permalink.
+for (const entry of publishedEntries) {
+  if (entry.provenance !== 'human-ai-edited') continue;
+  const item = rssItems.find((raw) => {
+    const link = raw.match(/<link>([\s\S]*?)<\/link>/i)?.[1] ?? '';
+    try {
+      return new URL(decodeXml(link)).pathname === entry.route;
+    } catch {
+      return false;
+    }
+  });
+  check(Boolean(item) && item.includes(AI_MARKER), `${entry.route} carries the AI-assistance disclosure in rss.xml`);
 }
 
+// Em dashes: advisory only (a faithful quotation may contain one).
 const emDashHtmlFiles = textEntries
   .filter(([file, contents]) => path.extname(file).toLowerCase() === '.html' && contents.includes('—'))
   .map(([file]) => path.relative(dist, file));
-check(emDashHtmlFiles.length === 0, 'published HTML contains no em dashes');
+warn(emDashHtmlFiles.length === 0, `published HTML contains no em dashes${emDashHtmlFiles.length ? ` (${emDashHtmlFiles.join(', ')})` : ''}`);
 
 const sitemapFiles = files.filter((file) => /^sitemap(?:-index|-\d+)?\.xml$/i.test(path.basename(file)));
 check(sitemapFiles.length >= 2, 'sitemap index and generated sitemap exist');
@@ -434,18 +502,9 @@ if (benchmarkSourcesReady) {
   check(mirrorsMatch, 'public JSON downloads match their normalized runtime mirrors');
 }
 
-const caseStudySource = path.join(root, 'src', 'content', 'case-studies');
-const caseStudyFiles = (await readdir(caseStudySource)).filter((name) => !name.startsWith('_') && /\.mdx?$/.test(name));
-const draftCaseStudyIds = [];
-for (const file of caseStudyFiles) {
-  const source = await readFile(path.join(caseStudySource, file), 'utf8');
-  const frontmatter = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? '';
-  if (/^draft:\s*true\s*$/im.test(frontmatter)) draftCaseStudyIds.push(path.basename(file, path.extname(file)));
-}
-for (const id of draftCaseStudyIds) {
-  check(!(await exists(path.join(dist, 'work', id, 'index.html'))), `draft case study ${id} has no generated route`);
-  check(!sitemapContents.includes(`/work/${id}/`), `draft case study ${id} is absent from the sitemap`);
-}
+// Case studies were removed in the 2026-09-27 personal-weblog pass (the collection,
+// the /work/[id] route, and the NDA/scrolly components are gone), so no case-study
+// gate remains.
 
 const htmlFiles = files.filter((file) => path.extname(file).toLowerCase() === '.html');
 const brokenLocalLinks = [];
@@ -463,6 +522,21 @@ for (const file of htmlFiles) {
 check(
   brokenLocalLinks.length === 0,
   `all built local links and fragments resolve${brokenLocalLinks.length ? ` (${brokenLocalLinks.join('; ')})` : ''}`
+);
+
+// Authorship colophon must render on every content page (it lives in the shared
+// BaseLayout footer). Redirect stubs are noindex and exempt.
+const missingColophon = [];
+for (const file of htmlFiles) {
+  const route = routeForHtml(file);
+  if (!route) continue;
+  const html = await readFile(file, 'utf8');
+  if (isRedirectStub(html)) continue;
+  if (!html.includes(COLOPHON)) missingColophon.push(route);
+}
+check(
+  missingColophon.length === 0,
+  `every content page renders the authorship colophon${missingColophon.length ? ` (missing: ${missingColophon.join(', ')})` : ''}`
 );
 
 function countDataMarkers(html, name) {

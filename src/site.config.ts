@@ -9,14 +9,7 @@ export const SITE_TITLE = `${PERSON_NAME} | ${HANDLE}`;
 
 /** Default meta description; pages override via BaseLayout's `description` prop. */
 export const SITE_DESCRIPTION =
-  'Richard Berman builds legal-technology systems, automation, and applied AI for law firms through MHSB Solutions.';
-
-/**
- * Blog posts render WITHOUT visible dates (PLAN Open Item #3, resolved 2026-06-10).
- * `pubDate` stays in the schema for sitemap/ordering only.
- * Any date rendered anywhere in the UI must key off this const.
- */
-export const SHOW_DATES: boolean = false;
+  'Personal site and weblog of Richard Berman (granolacowboy): the projects I build and notes on building them.';
 
 /** Public contact and profile links. */
 export const EMAIL = 'info@mhsbsolutions.com';

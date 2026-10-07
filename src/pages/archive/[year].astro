@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RiverList from '../../components/RiverList.astro';
+import { getRiver, getYears } from '../../lib/river';
+
+export async function getStaticPaths() {
+  const years = await getYears();
+  return years.map((year) => ({ params: { year: String(year) } }));
+}
+
+const year = Number(Astro.params.year);
+const items = (await getRiver()).filter((i) => i.pubDate.getUTCFullYear() === year);
+---
+
+<BaseLayout title={`Archive: ${year}`} description={`Everything from ${year}.`}>
+  <header class="page-header">
+    <h1>{year}</h1>
+  </header>
+  <RiverList items={items} empty="Nothing from this year." heading="h2" />
+  <p class="metadata"><a href="/archive/">All years</a></p>
+</BaseLayout>

@@ -36,5 +36,10 @@ artifact/
 PLAN.md
 planning/
 
+# drafts inbox: AI may help edit Rich's notes here, but nothing in drafts/ is
+# published or mirrored. Rich promotes a finished piece into src/content/<type>/
+# by hand (a ! shell move), which is the human authorship act. Never track drafts/.
+drafts/
+
 # local session export and import staging; contains private source material
 sessions/

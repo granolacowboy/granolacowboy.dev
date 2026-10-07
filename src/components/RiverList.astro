@@ -1,0 +1,80 @@
+---
+// Shared renderer for a river of mixed entries. Short-form items (link/til/note/
+// quote) render their full body inline; long-form posts show title + description
+// and link to their permalink. A link entry's title points OUT to the thing it is
+// about (link-blog convention); its permalink and any via-attribution sit below.
+// Build-time only; ships no client JS.
+//
+// `heading` sets the entry-title level so the document outline stays correct: the
+// homepage lists the river under an <h2>, so titles are <h3> (default); standalone
+// list pages (a type index, a tag page, a year archive) list it under the page's
+// <h1>, so they pass heading="h2".
+import { render } from 'astro:content';
+import { formatDate, TYPE_LABEL, SHORT_FORM, AI_DISCLOSURE, type RiverItem } from '../lib/river';
+
+interface Props {
+  items: RiverItem[];
+  empty?: string;
+  heading?: 'h2' | 'h3';
+}
+
+const { items, empty = 'Nothing here yet.', heading = 'h3' } = Astro.props;
+const Title = heading;
+const bodies = await Promise.all(
+  items.map(async (item) => (SHORT_FORM.has(item.type) ? (await render(item.entry)).Content : null))
+);
+---
+
+{items.length === 0 && <p class="lede">{empty}</p>}
+{
+  items.length > 0 && (
+    <ol class="river">
+      {items.map((item, i) => {
+        const Body = bodies[i];
+        return (
+          <li class="river-row">
+            <p class="metadata">
+              {TYPE_LABEL[item.type]}
+              {' · '}
+              <time datetime={item.pubDate.toISOString()}>{formatDate(item.pubDate)}</time>
+              {item.tags.length > 0 && (
+                <>
+                  {' · '}
+                  {item.tags.map((tag, j) => (
+                    <>
+                      {j > 0 && ' '}
+                      <a class="tag" href={`/tags/${tag}/`}>{tag}</a>
+                    </>
+                  ))}
+                </>
+              )}
+            </p>
+            <Title class="river-row-title">
+              <a href={item.url ?? item.href}>{item.title}</a>
+            </Title>
+            {Body && (
+              <div class="river-body">
+                <Body />
+              </div>
+            )}
+            {item.type === 'link' && (
+              <p class="metadata">
+                <a href={item.href}>permalink</a>
+                {item.via && (
+                  <>
+                    {' · via '}
+                    {item.viaUrl ? <a href={item.viaUrl}>{item.via}</a> : item.via}
+                  </>
+                )}
+              </p>
+            )}
+            {Body && item.provenance === 'human-ai-edited' && <p class="metadata">{AI_DISCLOSURE}</p>}
+            {item.type === 'entry' && item.entry.data.description && (
+              <p class="river-row-desc">{item.entry.data.description}</p>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  )
+}

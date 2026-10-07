@@ -1,5 +1,4 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
 import {
   ARTIFACT_NAME,
   ARTIFACT_REPO_URL,
@@ -12,6 +11,7 @@ import {
   SITE_DESCRIPTION,
   SITE_URL,
 } from '../site.config';
+import { getRiver, TYPE_LABEL } from '../lib/river';
 
 // Curated llms.txt index for answer engines. Links ONLY pages that resolve to
 // indexable content: draft case studies at /work/* are excluded (they 404 and
@@ -20,14 +20,12 @@ import {
 // frontmatter and the canon, never paraphrased.
 
 export const GET: APIRoute = async () => {
-  const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-  );
+  const river = await getRiver();
 
-  const writing = posts
+  const writing = river
     .map(
-      (post) =>
-        `- [${post.data.title}](${SITE_URL}/writing/${post.id}/): ${post.data.description}`
+      (item) =>
+        `- [${item.title}](${SITE_URL}${item.href}): ${item.entry.data.description ?? `${TYPE_LABEL[item.type]} by ${PERSON_NAME}`}`
     )
     .join('\n');
 
@@ -35,7 +33,7 @@ export const GET: APIRoute = async () => {
 > ${SITE_DESCRIPTION}
 
 ## About
-- [About](${SITE_URL}/about/): Richard Berman and the systems he builds for law firms through MHSB Solutions.
+- [About](${SITE_URL}/about/): Richard Berman (granolacowboy): personal site with writing, projects, and notes.
 
 ## Writing
 ${writing}
