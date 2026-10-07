@@ -53,7 +53,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 // Site-wide OG image: one static branded 1200×630 image at public/og.png.
 const ogImageURL = new URL('/og.png', Astro.site);
-const ogImageAlt = `${SITE_TITLE} wordmark`;
+const ogImageAlt = `${PERSON_CANONICAL_NAME} · granolacowboy.dev`;
 
 // Nav surfaces a short-form type only once it has a published entry, and Tags
 // only once something is tagged, so empty collections never advertise emptiness.
@@ -73,7 +73,7 @@ const navItems = [
 
 // MHSB Solutions portfolio. Plain URLs, NO UTM params (entity-canon.json
 // familyLinkList). This site (granolacowboy.dev) is excluded as the current
-// origin. Rendered in this site's OWN dark tokens, never MHSB cream.
+// origin. Rendered in this site's OWN tokens, never MHSB cream.
 const familyLinks = [
   { href: 'https://www.mhsbsolutions.com/', label: 'MHSB Solutions' },
   { href: 'https://efficient.esq', label: 'EfficientEsq' },
@@ -152,9 +152,9 @@ const identityGraph = {
     <link rel="icon" href="/favicon.ico" />
     <title>{pageTitle}</title>
     <script type="application/ld+json" set:html={JSON.stringify(identityGraph)} />
-    {/* Dark is the only theme (design-system spec), so the former
-        theme-toggle script is gone and the site ships zero JavaScript
-        from this layout. */}
+    {/* Light by default with dark via prefers-color-scheme (no toggle),
+        so the former theme-toggle script is gone and the site ships zero
+        JavaScript from this layout. */}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>

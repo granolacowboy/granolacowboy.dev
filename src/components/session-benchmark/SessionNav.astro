@@ -1,9 +1,12 @@
 ---
 interface Props {
   current: 'overview' | 'cases' | 'failure-atlas' | 'registry';
+  /** Optional project label shown above the tabs, for sub-pages whose h1 is a
+      section name ("Cases and results") rather than the project name. */
+  label?: string;
 }
 
-const { current } = Astro.props;
+const { current, label } = Astro.props;
 const items = [
   { id: 'overview', href: '/projects/session-benchmark/', label: 'Overview' },
   { id: 'cases', href: '/projects/session-benchmark/cases/', label: 'Cases and results' },
@@ -13,6 +16,7 @@ const items = [
 ---
 
 <nav class="benchmark-nav" aria-label="Session Benchmark">
+  {label && <p class="benchmark-nav-label">{label}</p>}
   <ul>
     {items.map((item) => (
       <li>
@@ -29,6 +33,14 @@ const items = [
     border-block: 1px solid var(--color-border);
   }
 
+  .benchmark-nav-label {
+    margin: 0 0 0.5rem;
+    color: var(--color-muted);
+    font-family: var(--font-prose);
+    font-weight: 600;
+    font-size: var(--step-0);
+  }
+
   ul {
     display: flex;
     flex-wrap: wrap;
@@ -43,12 +55,16 @@ const items = [
     text-decoration: none;
   }
 
-  a:hover,
-  a[aria-current='page'] {
+  a:hover {
     color: var(--color-text);
   }
 
+  /* Current page: accent color plus an underline, so state never reads
+     by color alone (matches the site nav, WCAG 1.4.1). */
   a[aria-current='page'] {
-    font-weight: 650;
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
   }
 </style>
