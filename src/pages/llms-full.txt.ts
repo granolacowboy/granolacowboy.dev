@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
 import { PERSON_NAME, HANDLE, SITE_DESCRIPTION, SITE_URL } from '../site.config';
+import { getRiver, TYPE_LABEL, AI_DISCLOSURE } from '../lib/river';
 
 // Full-text corpus for answer engines: the clean body of the indexable pages,
 // with no nav/footer chrome. About prose and the Session Benchmark overview are
@@ -13,9 +13,9 @@ const DATA_BASE = `${SITE_URL}/projects/session-benchmark/data`;
 
 const ABOUT = `# About
 
-I am Richard Berman (granolacowboy). Through MHSB Solutions, I build systems for law firms: intake, CRM, reporting, document workflows, integration, automation, and applied AI.
+I am Richard Berman (granolacowboy). This is my personal site, where I keep my writing, projects, and notes.
 
-The work spans both the operating environment and the underlying technology. This site documents what I can share publicly; client details are omitted.`;
+I build software, mostly for law firms, through MHSB Solutions.`;
 
 const INTAKE_SAFETY = `# Deterministic legal intake safety proof
 
@@ -49,12 +49,13 @@ Data and eval downloads:
 - ${DATA_BASE}/synthetic_asset_registry.csv`;
 
 export const GET: APIRoute = async () => {
-  const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-  );
+  const river = await getRiver();
 
-  const writing = posts
-    .map((post) => `## ${post.data.title}\n\n${(post.body ?? '').trim()}`)
+  const writing = river
+    .map((item) => {
+      const disclosure = item.provenance === 'human-ai-edited' ? `\n\n${AI_DISCLOSURE}` : '';
+      return `## ${item.title} [${TYPE_LABEL[item.type]}]\n\n${(item.entry.body ?? '').trim()}${disclosure}`;
+    })
     .join('\n\n');
 
   const body = `# ${PERSON_NAME} (${HANDLE}) | ${SITE_URL}

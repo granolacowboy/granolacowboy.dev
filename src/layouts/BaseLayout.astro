@@ -1,16 +1,16 @@
 ---
 // Self-hosted variable fonts (fontsource), then tokens, then global styles.
-import '@fontsource-variable/space-grotesk/index.css';
+// Source Serif 4 for text and headings; JetBrains Mono for code only.
+// (Space Grotesk was dropped in the plain-academic redesign.)
 import '@fontsource-variable/source-serif-4/index.css';
 import '@fontsource-variable/jetbrains-mono/index.css';
-// Hashed URLs for the three latin variable woff2 files (the subsets every
-// page uses), preloaded in <head> below; the other subsets still load on
-// demand through each @font-face unicode-range.
-import spaceGroteskWoff2 from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+// Hashed URLs for the two latin variable woff2 files (the subsets every page
+// uses), preloaded in <head> below; other subsets load on demand per @font-face.
 import sourceSerifWoff2 from '@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2?url';
 import jetbrainsMonoWoff2 from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/global.css';
+import { getRiver, getTagCounts } from '../lib/river';
 import {
   GITHUB_URL,
   HANDLE,
@@ -53,10 +53,20 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 // Site-wide OG image: one static branded 1200×630 image at public/og.png.
 const ogImageURL = new URL('/og.png', Astro.site);
-const ogImageAlt = `${SITE_TITLE} wordmark on a dark background`;
+const ogImageAlt = `${SITE_TITLE} wordmark`;
 
+// Nav surfaces a short-form type only once it has a published entry, and Tags
+// only once something is tagged, so empty collections never advertise emptiness.
+const river = await getRiver();
+const hasType = (t: string) => river.some((i) => i.type === t);
+const hasTags = (await getTagCounts()).length > 0;
 const navItems = [
   { href: '/writing/', label: 'Writing' },
+  ...(hasType('link') ? [{ href: '/links/', label: 'Links' }] : []),
+  ...(hasType('til') ? [{ href: '/tils/', label: 'TILs' }] : []),
+  ...(hasType('note') ? [{ href: '/notes/', label: 'Notes' }] : []),
+  ...(hasType('quote') ? [{ href: '/quotes/', label: 'Quotes' }] : []),
+  ...(hasTags ? [{ href: '/tags/', label: 'Tags' }] : []),
   { href: '/projects/', label: 'Projects' },
   { href: '/about/', label: 'About' },
 ];
@@ -114,7 +124,6 @@ const identityGraph = {
     <meta name="generator" content={Astro.generator} />
     {/* Font fetches are CORS-mode even same-origin, so the preloads
         need `crossorigin` or the browser refetches the files. */}
-    <link rel="preload" as="font" type="font/woff2" href={spaceGroteskWoff2} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={sourceSerifWoff2} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={jetbrainsMonoWoff2} crossorigin />
     <meta name="description" content={description} />
@@ -187,8 +196,12 @@ const identityGraph = {
         {/* Uppercase presentation comes from CSS text-transform; markup
             keeps the handle in its exact lowercase form. */}
         <p>© {new Date().getFullYear()} · {HANDLE}.dev</p>
-        <p><a href={GITHUB_URL}>GitHub</a></p>
+        <p><a href={GITHUB_URL}>GitHub</a> · <a href="/rss.xml">RSS</a></p>
       </div>
+      {/* Site-wide authorship colophon. Its presence is enforced by
+          scripts/verify-build.mjs (the no-purely-AI-posts policy); posts edited
+          with AI assistance additionally carry a per-post marker. */}
+      <p class="container colophon">Everything here is written by Richard Berman. Posts edited with AI assistance are marked.</p>
     </footer>
   </body>
 </html>

@@ -26,13 +26,17 @@ title: "TEMPLATE: Post title"
 # description, so write it for both contexts.
 description: "TEMPLATE: what the post argues and who it is for."
 
-# Publication date, YYYY-MM-DD. NEVER displayed in the UI
-# (SHOW_DATES = false in src/site.config.ts); used only to order the
-# writing list (newest first) and for the sitemap.
-pubDate: 2026-01-01
+# Publication date (ISO). Displayed in the UI, and used for ordering + the sitemap.
+pubDate: 2026-01-01T12:00:00Z
 
 # Optional. Uncomment only when meaningfully revising a published post.
 # updatedDate: 2026-01-01
+
+# 1 to 10 tags (letters/digits, hyphen-separated). Required.
+tags: [legal-tech]
+
+# Authorship: human | human-ai-edited. AI may edit your notes, never originate.
+provenance: human
 
 # Drafts get no routes and never render anywhere. Set false to publish.
 draft: true

@@ -1,8 +1,8 @@
 # granolacowboy.dev
 
-Source for **[granolacowboy.dev](https://granolacowboy.dev)**, the personal site of
-[Richard Berman](https://github.com/granolacowboy): an MHSB Solutions business-development hub for his
-legal-technology projects and the Session Benchmark research artifact.
+Source for **[granolacowboy.dev](https://granolacowboy.dev)**, the personal site and weblog of
+[Richard Berman](https://github.com/granolacowboy): his writing, projects, and notes, including the
+Session Benchmark research artifact. MHSB Solutions is context, not the frame.
 
 **Stack:** [Astro 7](https://astro.build) with static output (no client-side framework, no
 adapter), deployed on [Vercel](https://vercel.com/): a static `dist/`, auto-deployed from the
@@ -41,6 +41,6 @@ MIT, see [LICENSE](LICENSE).
 
 <sub>© Richard Berman / [MHSB Solutions](https://github.com/MHSBai) · [granolacowboy.dev](https://granolacowboy.dev)</sub>
 
-## Featured engineering note
+## Featured writing
 
-- [How I use AI agents to build deterministic systems without trusting the agents to be deterministic](https://granolacowboy.dev/writing/post-4-deterministic-ai)
+- [Anatomy of a legal intake automation](https://granolacowboy.dev/writing/post-2-intake-anatomy/)

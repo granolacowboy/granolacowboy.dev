@@ -2,7 +2,7 @@
 
 ## granolacowboy.dev agent handoff
 
-This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed on Vercel (static `dist/`, auto-deploy from GitHub `main`). The project is intentionally small: no client framework, no adapter, no site chatbot, no Tailwind unless the user explicitly asks for it. Keep the site fast, static, professional, and focused on legal-technology systems, automation, and applied AI for law firms (an MHSB Solutions business-development hub).
+This repo is an Astro 7 static personal site for `granolacowboy.dev`, deployed on Vercel (static `dist/`, auto-deploy from GitHub `main`). The project is intentionally small: no client framework, no adapter, no site chatbot, no Tailwind unless the user explicitly asks for it. Keep the site fast, static, and personal: this is Rich Berman's personal site and weblog (granolacowboy), in the spirit of a Simon-Willison-style personal blog. MHSB Solutions is context (the About page and the footer Portfolio nav), not the frame.
 
 ### First read
 
@@ -19,17 +19,21 @@ This repo is an Astro 7 static portfolio site for `granolacowboy.dev`, deployed 
 - Hosting: Vercel project `mhsb/granolacowboy-dev` (static `dist/`, auto-deploy from GitHub `main`). No server adapter is required.
 - Production domain target: `https://granolacowboy.dev`.
 - Identity format: use `Richard Berman | granolacowboy` in human-facing identity copy (entity canon v1.3.0, 2026-09-30: `Richard Berman` is the primary Person name everywhere, `Rich Berman` only as the structured-data `alternateName`), and exact lowercase `granolacowboy` in the domain, GitHub handle, repository URLs, package name, and Vercel identifiers.
-- Content collections:
-  - `posts` render at `/writing/<id>/`.
-  - `caseStudies` render at `/work/<id>/`.
-  - `draft: true` entries are filtered out.
-  - `_TEMPLATE.mdx` files are intentionally excluded by the glob.
-- Positioning baseline (updated 2026-09-25, business-dev-hub pass, approved by Rich): the site is an MHSB Solutions business-development hub. Do NOT reintroduce the retired `[FDE / APPLIED AI]` label, the "forward-deployed" self-description, or a specific tenure/year count ("ten years", "2016-2026"). Lead with what Rich builds; let MHSB and applied AI emerge from the work. This deliberately supersedes the prior 2026-07-08 baseline (commit `9be68f5`).
-- Writing (hybrid, 2026-09-25): the published posts are `post-2-intake-anatomy` and `post-4-deterministic-ai`. `post-1-thesis` and `post-3-regulated-buyers` were retired (their URLs redirect to `/writing/`). The homepage surfaces all three projects (intake-triage-mcp, intake-safety, session-benchmark). `verify-build.mjs` `expectedPostTitles` drives the published-post count; update it and the docs together when posts change.
-- Copy is a deliberately minimal, academic placeholder (2026-09-25) until Rich writes his own: tight factual hero + a two-paragraph About, no editorial Field Notes. An earlier BLUF Field Notes section was removed at his request; do not re-add speculative/aphoristic copy in his voice.
-- There are no case studies. The three unattested draft archetypes were deleted (2026-09-25); only `_TEMPLATE.mdx` remains. Recreate case studies ONLY from real, anonymized engagements once Rich supplies and approves the narrative facts, anonymization treatment, and directional metrics.
-- Blog dates are intentionally hidden through `SHOW_DATES = false`; do not change this unless the user asks.
-- `NdaNote.astro` copy is fixed. Do not reword it without user sign-off.
+- Content collections (all share a base schema: `title`, `pubDate`, `tags` [1-10, required], `provenance` [required: `human` | `human-ai-edited`], `draft`):
+  - `posts` (.md/.mdx) render at `/writing/<id>/` (long-form entries).
+  - `links` render at `/links/<id>/` (link blog: `url` + optional `via`/`viaUrl`).
+  - `tils` render at `/tils/<id>/` (Today I Learned).
+  - `notes` render at `/notes/<id>/` (short observations).
+  - `quotes` render at `/quotes/<id>/` (quotation + `source`).
+  - Short-form (`links`/`tils`/`notes`/`quotes`) is `.md` only and renders its full body inline in the river; long-form links out.
+  - `draft: true` entries are filtered out; `_`-prefixed files (`_TEMPLATE.md/.mdx`) are excluded by the glob.
+  - The mixed river, tag counts, and year buckets are assembled in `src/lib/river.ts`; the river list UI is `src/components/RiverList.astro`.
+- Positioning baseline (2026-09-27, personal-weblog, approved by Rich): granolacowboy.dev is Rich Berman's genuine personal weblog, not an MHSB business-development hub. This supersedes the 2026-09-25 business-dev-hub baseline. MHSB survives only as context (the About page and the footer Portfolio nav), never the hero, footer chrome beyond Portfolio, or the Org node. Still enforced by build guards: do NOT reintroduce the retired `[FDE / APPLIED AI]` label, the "forward-deployed" self-description, or a specific tenure/year count ("ten years", "2016-2026").
+- Writing: the one published long-form post is `post-2-intake-anatomy` (`provenance: human`). `post-1-thesis`, `post-3-regulated-buyers`, and `post-4-deterministic-ai` are retired (their URLs 301 to `/writing/` via `astro.config.mjs`; post-4 was retired 2026-09-27 because its AI cadence needs a human rewrite, and is preserved in the gitignored `drafts/`). The short-form collections launch empty (honest emptiness). The homepage shows the mixed river plus the three projects (intake-triage-mcp, intake-safety, session-benchmark). Adding or retiring an entry no longer touches `verify-build.mjs`: the gate is provenance-driven, not a title allowlist.
+- Copy model (2026-09-27): personal voice, short-form notes, Field Notes, TILs, and link-blog entries are WELCOME because they are genuinely Rich's writing. The homepage hero and About currently ship as honest, sparse, factual stubs (marked for Rich only in stripped `{/* */}` comments). Agents must NOT ghost-write his bio or personal prose, and must never put "Rich to replace"-style markers in visible text or in HTML `<!-- -->` comments (Astro preserves those into `dist`), only in stripped `{/* */}` comments, or they will trip the placeholder gate.
+- Case studies were removed entirely in the 2026-09-27 pass (the `caseStudies` collection, the `/work/[id]` route, and the `NdaNote`/`ScrollyGrid` components are gone). Reintroduce them only if Rich asks, and only from real, anonymized, Rich-attested engagements.
+- New entries: run `node scripts/new.mjs <type> ...` to scaffold a dated file into `drafts/`, then promote it into `src/content/<type>/` by hand (a `!` shell move). Agents cannot write `src/content/**` once the authorship fence is armed; that move is the human authorship act.
+- Blog dates always render (the `SHOW_DATES` flag was retired; a personal weblog is dated). `pubDate` also drives ordering and the sitemap.
 
 ### Local command caveat on Windows
 
@@ -71,19 +75,15 @@ When spawning workers, tell them they are not alone in the codebase, must not re
    - Run `npm.cmd run verify`.
    - Treat the built `dist/` verification as the publication gate; draft source entries may intentionally retain metric placeholders.
 
-2. Resolve the Phase 4 content gate.
-   - Use `planning/PHASE4-CONTENT-INTERVIEW.md`.
-   - The user must own every claim and every metric.
-   - Do not fabricate experience, numbers, client details, or outcomes.
-   - Case studies should be 250 to 450 words with Context, Complication, What I built, Outcome.
-   - Posts should be 800 to 1,500 words, first person.
-   - Site copy should avoid em dashes.
+2. Content honesty.
+   - The user must own every claim and every metric. Do not fabricate experience, numbers, client details, or outcomes.
+   - No purely-AI-generated posts (see Guardrails). AI may edit Rich's notes into `drafts/`; only Rich promotes into `src/content/**`.
+   - Word range, first-person voice, and em dashes are ADVISORY now (the gate warns, it does not fail): they were AI-output sanitizers and must not block Rich's own writing.
 
-3. Maintain the portfolio surface.
-   - There are no case studies (the draft archetypes were deleted). Create one only from a real engagement with Rich-supplied, approved facts and metrics.
-   - Keep the published post set in sync with `expectedPostTitles` in `scripts/verify-build.mjs` (currently two: post-2-intake-anatomy, post-4-deterministic-ai); update the script and the docs together when it changes.
+3. Maintain the surface.
+   - The published-entry set is provenance-driven; adding or retiring an entry does NOT require editing `verify-build.mjs` (no more `expectedPostTitles`).
    - Preserve About/contact links, default meta description, project copy, and `ARTIFACT_WRITEUP_PATH`.
-   - Add a resume PDF and project screenshot only when the user supplies or approves them.
+   - Keep `/projects/**` (intake-triage-mcp, intake-safety, session-benchmark) intact; they are separate from the weblog river.
 
 4. Optimize honestly.
    - The layout ships zero client JavaScript (the theme toggle was removed); keep it that way unless there is a clear need. The Session Benchmark registry page is the one intentional script.
@@ -110,8 +110,9 @@ When spawning workers, tell them they are not alone in the codebase, must not re
 - Keep comments concise and remove stale phase comments when they stop helping.
 - Do not add a React island, analytics script, webfont, CSS framework, or third-party widget without a clear reason and user approval.
 - Preserve the anonymization strategy: category plus problem framing, no identifying client combinations.
-- Never publish placeholder copy, unaudited claims, or metrics not stated by the user.
-- Keep `AGENTS.md`, `README.md`, and `docs/ops.md` in sync with the live state. When a change alters the framework, the published post set, the projects, the deploy flow, or the copy model, update these docs in the SAME PR. Prefer code as the source of truth (`package.json`, `verify-build.mjs` `expectedPostTitles`) over restating facts in prose; `verify-build.mjs` enforces the framework version the docs state.
+- No purely-AI-generated posts, ever. Every published entry (any type) must be genuinely authored or owned by Rich; AI may edit or format his existing notes but must never originate an entry. ENFORCED: `src/content.config.ts` requires a default-less `provenance` enum (`human` | `human-ai-edited`), so `astro build` fails on a missing/invalid value; `scripts/verify-build.mjs` additionally fails the build unless every published entry declares an allowed provenance, every `human-ai-edited` entry renders its disclosure marker, and the site-wide colophon is present. The agent-unforgeable control is the guardrails authorship write-fence (agents cannot write `src/content/**`; Rich promotes from `drafts/` by hand). There is no allowed provenance value for AI-originated content; never present a purely-AI entry as human.
+- Never publish unaudited claims or metrics not stated by the user. Honest, factual, structural stubs (a one-line descriptor, section labels) are permitted for the homepage and About while Rich writes his own copy, but mark them only in stripped `{/* */}` comments and never include the tokens `verify-build.mjs` bans (`TODO`, `[PLACEHOLDER...]`, `[NAME]`, `coming soon`, `lorem`) or em dashes.
+- Keep `AGENTS.md`, `README.md`, and `docs/ops.md` in sync with the live state. When a change alters the framework, the entry types, the projects, the deploy flow, or the copy model, update these docs in the SAME PR. Prefer code as the source of truth (`package.json`, `src/content.config.ts`, `scripts/verify-build.mjs`) over restating facts in prose; `verify-build.mjs` enforces the framework version the docs state.
 
 ### Done checks
 
@@ -121,4 +122,4 @@ Before claiming a pass is complete:
 npm.cmd run verify
 ```
 
-The verification script checks built placeholders; published post and RSS counts (driven by `expectedPostTitles`, with retired-post redirect stubs excluded from the post/canonical checks); the homepage no-FDE guard; draft case-study exclusion; XML; canonical and OG metadata; exact lowercase handle casing; the framework-version doc check (every `Astro <N>` in README/AGENTS must match the `astro` major in `package.json`); Vercel launch headers; and the no-adapter rule. Also inspect the built site or local preview on desktop and mobile. For launch-readiness, run Lighthouse/PageSpeed and record any residual risks rather than hand-waving them away.
+The verification script checks built placeholders; per-entry authorship provenance (present + allowed value), the `human-ai-edited` disclosure marker, and the site-wide colophon; the full-text RSS feed's item links matching the published entry routes by set; well-formed XML; the homepage no-FDE guard; canonical and OG metadata; exact lowercase handle casing; the Session Benchmark data-integrity and privacy scans; the framework-version doc check (every `Astro <N>` in README/AGENTS must match the `astro` major in `package.json`); Vercel launch headers; and the no-adapter rule. Word range, first-person voice, and em dashes are advisory warnings. Also inspect the built site or local preview on desktop and mobile. For launch-readiness, run Lighthouse/PageSpeed and record any residual risks rather than hand-waving them away.
