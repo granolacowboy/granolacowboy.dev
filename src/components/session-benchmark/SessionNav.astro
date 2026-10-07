@@ -43,12 +43,16 @@ const items = [
     text-decoration: none;
   }
 
-  a:hover,
-  a[aria-current='page'] {
+  a:hover {
     color: var(--color-text);
   }
 
+  /* Current page: accent color plus an underline, so state never reads
+     by color alone (matches the site nav, WCAG 1.4.1). */
   a[aria-current='page'] {
-    font-weight: 650;
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
   }
 </style>
