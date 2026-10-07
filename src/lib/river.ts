@@ -22,6 +22,9 @@ export interface RiverItem {
   tags: string[];
   provenance: 'human' | 'human-ai-edited';
   entry: AnyEntry; // kept so list pages can render() short-form bodies inline
+  url?: string; // link entries: the external URL the title points to
+  via?: string; // link entries: optional "via <source>" attribution
+  viaUrl?: string;
 }
 
 // Route prefix per type. `entry` (long-form posts) keeps the stable /writing/ path.
@@ -34,11 +37,11 @@ const PREFIX: Record<EntryType, string> = {
 };
 
 export const TYPE_LABEL: Record<EntryType, string> = {
-  entry: 'ENTRY',
-  link: 'LINK',
+  entry: 'Post',
+  link: 'Link',
   til: 'TIL',
-  note: 'NOTE',
-  quote: 'QUOTE',
+  note: 'Note',
+  quote: 'Quote',
 };
 
 // Short-form types render their full body inline on list pages; long-form entries
@@ -56,24 +59,28 @@ export async function getRiver(): Promise<RiverItem[]> {
     getCollection('quotes', notDraft),
   ]);
 
-  const map = (type: EntryType, coll: AnyEntry[]): RiverItem[] =>
-    coll.map((entry) => ({
-      type,
-      id: entry.id,
-      href: `/${PREFIX[type]}/${entry.id}/`,
-      title: entry.data.title,
-      pubDate: entry.data.pubDate,
-      tags: entry.data.tags,
-      provenance: entry.data.provenance,
-      entry,
-    }));
+  const toItem = (type: EntryType, entry: AnyEntry): RiverItem => ({
+    type,
+    id: entry.id,
+    href: `/${PREFIX[type]}/${entry.id}/`,
+    title: entry.data.title,
+    pubDate: entry.data.pubDate,
+    tags: entry.data.tags,
+    provenance: entry.data.provenance,
+    entry,
+  });
 
   return [
-    ...map('entry', posts),
-    ...map('link', links),
-    ...map('til', tils),
-    ...map('note', notes),
-    ...map('quote', quotes),
+    ...posts.map((entry) => toItem('entry', entry)),
+    ...links.map((entry) => ({
+      ...toItem('link', entry),
+      url: entry.data.url,
+      via: entry.data.via,
+      viaUrl: entry.data.viaUrl,
+    })),
+    ...tils.map((entry) => toItem('til', entry)),
+    ...notes.map((entry) => toItem('note', entry)),
+    ...quotes.map((entry) => toItem('quote', entry)),
   ].sort((a, b) => b.pubDate.valueOf() - a.pubDate.valueOf());
 }
 

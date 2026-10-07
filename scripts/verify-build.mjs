@@ -268,7 +268,7 @@ const PUBLISHING_COLLECTIONS = new Map([
   ['quotes', '/quotes/'],
 ]);
 const AI_MARKER = 'Edited with AI assistance; the ideas and words are mine.'; // full sentence, rendered verbatim on human-ai-edited surfaces (distinct from the colophon so a whole-page includes() can't collide with it)
-const COLOPHON = 'written by Rich Berman'; // site-wide footer colophon substring
+const COLOPHON = 'written by Richard Berman'; // site-wide footer colophon substring
 const ENTRY_COUNT_RANGE = { min: 1, max: 1000 };
 const ADVISORY_WORD_RANGE = { min: 20, max: 4000 };
 

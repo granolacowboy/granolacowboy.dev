@@ -8,7 +8,6 @@ const items = (await getRiver()).filter((i) => i.type === 'quote');
 
 <BaseLayout title="Quotes" description="Quotations worth keeping, collected by Rich Berman.">
   <header class="page-header">
-    <p class="eyebrow">INDEX · QUOTES</p>
     <h1>Quotes</h1>
   </header>
   <RiverList items={items} empty="No quotes yet." heading="h2" />

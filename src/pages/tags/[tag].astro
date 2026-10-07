@@ -16,8 +16,7 @@ const items = (await getRiver()).filter((i) => i.tags.includes(tag));
 
 <BaseLayout title={`Tag: ${tag}`} description={`Entries tagged ${tag}.`}>
   <header class="page-header">
-    <p class="eyebrow">TAG</p>
-    <h1>{tag}</h1>
+    <h1>Tagged “{tag}”</h1>
   </header>
   <RiverList items={items} empty="Nothing tagged here." heading="h2" />
   <p class="metadata"><a href="/tags/">All tags</a></p>

@@ -1,30 +1,19 @@
 /* ============================================================
    granolacowboy.dev, global styles
-   Instrument-readout system: hairline borders and monospace labels
-   on a dark ink ramp with one sodium-amber accent. Dark only.
+   Plain-academic: a warm reading surface, serif throughout, mono for
+   code only, one restrained link blue. Light by default, dark via
+   prefers-color-scheme (see tokens.css). Chrome is minimal; the
+   typography and the hairline-divided lists carry the page.
 
-   Tokens live in src/styles/tokens.css, imported before this file
-   in BaseLayout.astro along with the three fontsource entries
-   (Space Grotesk, Source Serif 4, JetBrains Mono, all variable).
-
-   Hard rules carried from planning/design-system-spec.md:
-   - Headings are Space Grotesk; prose is Source Serif 4; every
-     label, tag, date, index, readout, and code span is JetBrains
-     Mono. No exceptions.
-   - Hairline 1px borders replace shadows everywhere. The only
-     sanctioned shadow is .overlay-shadow (true floating overlays,
-     tooltip/modal); it is defined here and applied nowhere.
-   - Sharp corners by default; 2px focus/inputs, 4px small controls
-     and code, pill for pips only.
-   - One accent (amber) plus strictly semantic coral. Never recolor
-     code with the brand amber.
+   Tokens live in src/styles/tokens.css, imported before this file in
+   BaseLayout.astro along with the two self-hosted fonts (Source Serif
+   4 for text and headings, JetBrains Mono for code).
    ============================================================ */
 
 /* ---------- Deprecated aliases ----------
    Legacy variables still consumed by session-benchmark.css and
-   SessionNav.astro, remapped onto the token ramp so those pages
-   stay coherent until their own restyle pass. Do not use these in
-   new work; use the tokens directly. */
+   SessionNav.astro, remapped onto the current ramp so those pages
+   track the light/dark palette. Do not use these in new work. */
 
 :root {
   --color-bg: var(--ink-900);
@@ -35,12 +24,12 @@
   --color-accent-strong: var(--amber-400);
   --color-border: var(--border-subtle);
 
-  --step--1: 0.8rem;
+  --step--1: 0.85rem;
   --step-0: 1rem;
-  --step-1: 1.25rem;
-  --step-2: 1.5625rem;
-  --step-3: 1.953rem;
-  --step-4: 2.441rem;
+  --step-1: 1.2rem;
+  --step-2: 1.45rem;
+  --step-3: 1.75rem;
+  --step-4: 2.1rem;
 }
 
 /* ---------- Base ---------- */
@@ -62,13 +51,15 @@ body {
   font-family: var(--font-prose);
   font-size: var(--body-size);
   line-height: var(--body-lh);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- Headings: display scale, Space Grotesk ----------
-   h1 maps to display-l, h2 to display-m, h3 to title-s (page titles
-   and article subheads per the page mockups). display-xl is
-   reserved for the home hero; compose it with the .display-xl
-   utility below. */
+::selection {
+  background-color: var(--amber-soft);
+}
+
+/* ---------- Headings: serif, modest academic scale ---------- */
 
 h1,
 h2,
@@ -109,7 +100,7 @@ h4,
 h5,
 h6 {
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.3;
   margin-block: var(--space-5) var(--space-2);
 }
@@ -148,10 +139,9 @@ h6 {
   letter-spacing: var(--title-s-ls);
 }
 
-/* Signature emphasis device: exactly one amber word per display
-   heading, done with color, never with italics or weight. */
+/* The former amber emphasis word is neutral now: no color device. */
 .accent {
-  color: var(--amber-500);
+  color: inherit;
 }
 
 p {
@@ -164,7 +154,7 @@ a {
   color: var(--amber-500);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+  text-underline-offset: 2px;
   transition: color var(--dur-fast) var(--ease);
 }
 
@@ -180,7 +170,7 @@ a:active {
 
 :focus-visible {
   outline: 2px solid var(--amber-500);
-  outline-offset: 3px;
+  outline-offset: 2px;
   border-radius: var(--radius-2);
 }
 
@@ -206,13 +196,12 @@ img {
 }
 
 main {
-  padding-block: var(--space-8) var(--space-6);
+  padding-block: var(--space-7) var(--space-8);
 }
 
-/* Single 860px breakpoint (documented in tokens.css). */
 @media (min-width: 860px) {
   main {
-    padding-block-start: var(--space-10);
+    padding-block-start: var(--space-9);
   }
 }
 
@@ -225,10 +214,10 @@ main {
   z-index: 10;
   padding: var(--space-2) var(--space-4);
   background-color: var(--ink-900);
-  border: 1px solid var(--amber-500);
-  color: var(--amber-500);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  border: 1px solid var(--ink-050);
+  color: var(--ink-050);
+  font-family: var(--font-prose);
+  font-size: 0.9rem;
   text-decoration: none;
 }
 
@@ -245,29 +234,26 @@ main {
 .site-header > .container {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
   gap: var(--space-2) var(--space-6);
-  padding-block: var(--space-4);
+  padding-block: var(--space-5);
 }
 
 .wordmark {
   color: var(--ink-050);
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   text-decoration: none;
-  transition: color var(--dur-fast) var(--ease);
 }
 
 .wordmark-accent {
-  color: var(--amber-500);
-  transition: color var(--dur-fast) var(--ease);
+  color: inherit;
 }
 
-.wordmark:hover,
-.wordmark:hover .wordmark-accent {
-  color: var(--amber-400);
+.wordmark:hover {
+  color: var(--amber-500);
 }
 
 .site-nav {
@@ -277,7 +263,7 @@ main {
 .site-nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-5);
+  gap: var(--space-2) var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -285,12 +271,8 @@ main {
 
 .site-nav a {
   color: var(--ink-300);
-  font-family: var(--font-mono);
-  font-size: var(--label-size);
-  font-weight: var(--label-weight);
-  line-height: var(--label-lh);
-  letter-spacing: var(--label-ls);
-  text-transform: uppercase;
+  font-family: var(--font-prose);
+  font-size: 0.95rem;
   text-decoration: none;
   transition: color var(--dur-fast) var(--ease);
 }
@@ -299,14 +281,13 @@ main {
   color: var(--ink-050);
 }
 
-/* Current page: amber plus the standard 1px link underline, so the
-   state never reads by color alone (WCAG 1.4.1). The 3px offset
-   carries over from the base anchor rule; .site-nav a resets only
-   the decoration line. */
+/* Current page: link color plus an underline, so state never reads by
+   color alone (WCAG 1.4.1). */
 .site-nav a[aria-current='page'] {
   color: var(--amber-500);
   text-decoration: underline;
   text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 @media (max-width: 30rem) {
@@ -316,112 +297,86 @@ main {
   }
 }
 
-/* ---------- Readout labels and data ----------
-   .eyebrow/.label sit at the decorative-label size where ink-400 is
-   permitted (large mono labels and decoration only; it fails AA for
-   body text). If a label carries essential information, bump it to
-   ink-300 at the call site. */
+/* ---------- Small labels and metadata (plain, muted) ---------- */
 
 .eyebrow,
 .label {
   margin-block: 0 var(--space-2);
-  color: var(--ink-400);
-  font-family: var(--font-mono);
+  color: var(--ink-300);
+  font-family: var(--font-prose);
   font-size: var(--label-size);
   font-weight: var(--label-weight);
   line-height: var(--label-lh);
-  letter-spacing: var(--label-ls);
-  text-transform: uppercase;
 }
 
 .data,
 .metadata {
   color: var(--ink-300);
-  font-family: var(--font-mono);
+  font-family: var(--font-prose);
   font-size: var(--data-size);
   font-weight: var(--data-weight);
   line-height: var(--data-lh);
-  letter-spacing: var(--data-ls);
 }
 
-/* A readout sitting directly above a heading hugs it; the heading's
-   own top margin is for running content, not for its eyebrow. */
 .eyebrow + h1,
 .eyebrow + h2,
 .eyebrow + h3 {
   margin-block-start: 0;
 }
 
-/* ---------- Tag (tech tags, NDA-safe category labels) ----------
-   Mono, normal case, sharp corners (pill radius is for pips only). */
+/* ---------- Tags (plain inline labels) ---------- */
 
 .tag {
   display: inline-block;
-  padding: var(--space-1) var(--space-2);
-  border: 1px solid var(--border-subtle);
+  padding: 0 var(--space-1);
   color: var(--ink-300);
-  font-family: var(--font-mono);
+  font-family: var(--font-prose);
   font-size: var(--data-size);
   font-weight: var(--data-weight);
   line-height: var(--data-lh);
-  letter-spacing: var(--data-ls);
-  text-transform: none;
 }
 
 .tag--active {
   color: var(--amber-500);
-  border-color: var(--amber-500);
 }
 
-/* Tag pills composed as a list (project stacks, post categories). */
 .tag-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--space-1) var(--space-3);
   margin-block: 0 var(--space-4);
   padding: 0;
   list-style: none;
 }
 
-/* ---------- Button ----------
-   CTAs are rare and read as intentional: transparent fill, 1px
-   amber border, mono uppercase label. .cta is the legacy class name
-   still used on pages; it shares the treatment. */
+/* ---------- Button (rare, plain) ---------- */
 
 .btn,
 .cta {
   display: inline-block;
-  padding: var(--space-3) var(--space-5);
+  padding: var(--space-2) var(--space-5);
   background-color: transparent;
   border: 1px solid var(--amber-500);
-  border-radius: 0;
+  border-radius: var(--radius-2);
   color: var(--amber-500);
-  font-family: var(--font-mono);
-  font-size: var(--label-size);
-  font-weight: var(--label-weight);
-  line-height: var(--label-lh);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--font-prose);
+  font-size: 0.95rem;
   text-decoration: none;
   cursor: pointer;
   transition:
     background-color var(--dur-fast) var(--ease),
-    border-color var(--dur-fast) var(--ease),
     color var(--dur-fast) var(--ease);
 }
 
 .btn:hover,
 .cta:hover {
   background-color: var(--amber-soft);
-  color: var(--amber-500);
 }
 
 .btn:active,
 .cta:active {
   background-color: var(--amber-soft);
-  border-color: var(--amber-600);
   color: var(--amber-600);
-  transform: translateY(1px); /* the subtle press inset */
 }
 
 .btn:disabled,
@@ -430,7 +385,6 @@ main {
   opacity: 0.45;
   background-color: transparent;
   cursor: not-allowed;
-  transform: none;
 }
 
 /* ---------- Divider ---------- */
@@ -442,35 +396,18 @@ hr,
   border-block-start: 1px solid var(--border-subtle);
 }
 
-/* Variant with a small mono label sitting inline on the line,
-   e.g. <div class="divider--labeled">end · 03</div>. */
+/* Legacy labelled divider: now just a plain rule (the mono "END · NN"
+   label was removed from the markup). Kept so any stray use is quiet. */
 .divider--labeled {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
   margin-block: var(--space-8);
   border: 0;
-  border-block-start: 0;
-  color: var(--ink-400);
-  font-family: var(--font-mono);
-  font-size: var(--label-size);
-  font-weight: var(--label-weight);
-  line-height: var(--label-lh);
-  letter-spacing: var(--label-ls);
-  text-transform: uppercase;
-}
-
-.divider--labeled::before,
-.divider--labeled::after {
-  content: '';
-  flex: 1 1 0;
   border-block-start: 1px solid var(--border-subtle);
+  color: var(--ink-400);
+  font-family: var(--font-prose);
+  font-size: var(--data-size);
 }
 
-/* ---------- Code ----------
-   Code sits on ink-950 with a restrained, muted syntax palette.
-   Never recolor code with the brand amber. The !important on the
-   pre background is required to beat Shiki's inline style. */
+/* ---------- Code ---------- */
 
 code {
   font-family: var(--font-mono);
@@ -502,16 +439,13 @@ pre code {
   font-size: inherit;
 }
 
-/* ---------- Callout / aside ----------
-   ink-800 surface with a 1px left accent and a mono kicker (use a
-   .label element inside for NOTE / CAUTION). Coral appears only via
-   the --caution variant; that is its semantic use. */
+/* ---------- Callout / aside ---------- */
 
 .callout {
   margin-block: var(--space-6);
   padding: var(--space-4) var(--space-5);
   background-color: var(--ink-800);
-  border-inline-start: 1px solid var(--border-strong);
+  border-inline-start: 2px solid var(--border-strong);
 }
 
 .callout--note {
@@ -526,20 +460,17 @@ pre code {
   margin-block-end: 0;
 }
 
-/* ---------- Card (project / case study) ----------
-   Flat panel, hairline border, no shadow. Hover lifts the border
-   from subtle to strong; never elevation, never transform. */
+/* ---------- Project / list entry (flat: no box) ----------
+   A plain hairline-separated block, not a panel. Title reads first;
+   description and links follow. */
 
 .card {
-  padding: var(--space-6);
-  background-color: var(--ink-800);
-  border: 1px solid var(--border-subtle);
-  border-radius: 0;
-  transition: border-color var(--dur-fast) var(--ease);
+  padding-block: var(--space-5);
+  border-block-end: 1px solid var(--border-subtle);
 }
 
-.card:hover {
-  border-color: var(--border-strong);
+.card:first-of-type {
+  border-block-start: 1px solid var(--border-subtle);
 }
 
 .card h2,
@@ -555,7 +486,8 @@ pre code {
 
 .card h2 a:hover,
 .card h3 a:hover {
-  color: var(--amber-400);
+  color: var(--amber-500);
+  text-decoration: underline;
 }
 
 .card p:last-child {
@@ -564,17 +496,13 @@ pre code {
 
 .card-list {
   display: grid;
-  gap: var(--space-4);
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* ---------- Pip strip ----------
-   Segmented dots showing discrete position in a sequence. The only
-   pill-radius shapes in the system. Default pip = upcoming (neutral
-   ink-400 outline: decoration, the permitted ink-400 use). Terminal
-   coral marks the narrative endpoint only. */
+/* ---------- Pip strip (session benchmark only) ---------- */
 
 .pip-strip {
   display: inline-flex;
@@ -604,34 +532,34 @@ pre code {
   border-color: var(--coral-500);
 }
 
-/* ---------- Overlay shadow ----------
-   The single sanctioned shadow, reserved for true floating overlays
-   (tooltip, modal). Defined for completeness; applied nowhere. Do
-   not use it on cards, panels, or anything in the page flow. */
+/* ---------- Overlay shadow (defined; applied nowhere) ---------- */
 
 .overlay-shadow {
-  box-shadow: 0 4px 24px rgba(15, 18, 22, 0.55);
+  box-shadow: 0 4px 24px rgba(27, 26, 23, 0.14);
 }
 
 /* ---------- Hero ---------- */
 
 .hero {
-  padding-block-start: var(--space-4);
+  padding-block-start: var(--space-2);
+}
+
+.hero h1 {
+  font-size: var(--display-xl-size);
+  font-weight: var(--display-xl-weight);
+  line-height: var(--display-xl-lh);
+  letter-spacing: var(--display-xl-ls);
 }
 
 .lede {
   max-width: var(--measure);
-  color: var(--ink-300);
+  color: var(--ink-050);
   font-family: var(--font-prose);
   font-size: var(--body-l-size);
   line-height: var(--body-l-lh);
 }
 
-/* Sweep cue: a mono affordance label beside a hairline carrying a
-   single amber sweep segment. The segment slides in once on entry;
-   the global reduced-motion override removes the animation, leaving
-   the segment resting at its end state. */
-
+/* Legacy sweep cue (not used in the markup; kept quiet). */
 .sweep-cue {
   display: flex;
   align-items: center;
@@ -649,103 +577,21 @@ pre code {
   position: relative;
   flex: 1 1 0;
   height: 1px;
-  overflow: hidden;
   background-color: var(--border-subtle);
 }
 
-.sweep-line::after {
-  content: '';
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  width: 72px;
-  height: 1px;
-  background-color: var(--amber-500);
-  animation: sweep-in var(--dur-slow) var(--ease) 1 both;
-}
-
-@keyframes sweep-in {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-/* ---------- Home sections and lists ---------- */
+/* ---------- Home sections ---------- */
 
 .home-section {
   margin-block-start: var(--space-9);
 }
 
-/* ---------- Writing index (/writing/) ----------
-   Hairline-divided rows: serif title, mono metadata readout with the UTC date,
-   tags, and a mono position index. */
+/* ---------- Writing index (/writing/) and the weblog river ----------
+   Hairline-divided rows: a serif title and a small muted metadata line
+   (date, reading time, tags). Short-form river entries render their full
+   body inline; long-form links out. */
 
-.writing-index {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-block-start: 1px solid var(--border-subtle);
-}
-
-.writing-row {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding-block: var(--space-5);
-  border-block-end: 1px solid var(--border-subtle);
-}
-
-.writing-row-title {
-  margin: 0;
-  font-family: var(--font-prose);
-  font-size: var(--title-s-size);
-  line-height: var(--title-s-lh);
-}
-
-.writing-row-title a {
-  color: var(--ink-050);
-  text-decoration: none;
-  transition: color var(--dur-fast) var(--ease);
-}
-
-.writing-row-title a:hover {
-  color: var(--amber-400);
-}
-
-.writing-row .metadata {
-  margin: 0;
-  white-space: nowrap;
-}
-
-.writing-row-desc {
-  max-width: var(--measure);
-  margin: var(--space-1) 0 0;
-  color: var(--ink-300);
-  font-size: var(--body-s-size);
-  line-height: var(--body-s-lh);
-}
-
-@media (min-width: 860px) {
-  .writing-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: var(--space-6);
-    align-items: baseline;
-  }
-
-  .writing-row-desc {
-    grid-column: 1;
-  }
-}
-
-/* ---------- Weblog river (mixed, dated, tagged stream) ----------
-   Reuses the instrument-readout vocabulary: hairline-divided rows, a mono
-   .metadata readout (type, date, tags), and the serif/mono body. Short-form
-   entries render their full body inline; long-form links out. */
-
+.writing-index,
 .river {
   margin: 0;
   padding: 0;
@@ -753,6 +599,7 @@ pre code {
   border-block-start: 1px solid var(--border-subtle);
 }
 
+.writing-row,
 .river-row {
   padding-block: var(--space-5);
   border-block-end: 1px solid var(--border-subtle);
@@ -762,29 +609,39 @@ pre code {
   margin-block: 0 var(--space-1);
 }
 
+.writing-row-title,
 .river-row-title {
   margin: 0;
-  font-family: var(--font-prose);
+  font-family: var(--font-display);
   font-size: var(--title-s-size);
+  font-weight: var(--title-s-weight);
   line-height: var(--title-s-lh);
 }
 
+.writing-row-title a,
 .river-row-title a {
   color: var(--ink-050);
   text-decoration: none;
   transition: color var(--dur-fast) var(--ease);
 }
 
+.writing-row-title a:hover,
 .river-row-title a:hover {
-  color: var(--amber-400);
+  color: var(--amber-500);
+  text-decoration: underline;
 }
 
+.writing-row-desc,
 .river-row-desc {
   max-width: var(--measure);
   margin: var(--space-1) 0 0;
   color: var(--ink-300);
   font-size: var(--body-s-size);
   line-height: var(--body-s-lh);
+}
+
+.writing-row .metadata {
+  margin: 0;
 }
 
 /* Short-form bodies render inline; keep them within the reading measure. */
@@ -801,23 +658,36 @@ pre code {
   margin-block-end: 0;
 }
 
-/* Tag rows/inline tags rendered as links pick up the accent on hover/focus. */
+@media (min-width: 860px) {
+  .writing-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-6);
+    align-items: baseline;
+  }
+
+  .writing-row-desc {
+    grid-column: 1;
+  }
+}
+
+/* Inline tag links. */
 a.tag {
   text-decoration: none;
-  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  transition: color var(--dur-fast) var(--ease);
 }
 
 a.tag:hover,
 a.tag:focus-visible {
-  color: var(--amber-400);
-  border-color: var(--amber-500);
+  color: var(--amber-500);
+  text-decoration: underline;
 }
 
-/* Tag index: tag + count, laid out as a wrapping cloud. */
+/* Tag index: tag + count as a wrapping cloud. */
 .tag-cloud {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -827,11 +697,12 @@ a.tag:focus-visible {
   color: var(--ink-400);
 }
 
-/* Authorship colophon (footer). Its exact text is enforced by verify-build. */
+/* Authorship colophon (footer). Its text is enforced by verify-build. */
 .colophon {
-  margin-block: var(--space-4) 0;
-  color: var(--ink-400);
-  font-family: var(--font-mono);
+  margin-block: var(--space-5) 0;
+  max-width: var(--measure);
+  color: var(--ink-300);
+  font-family: var(--font-prose);
   font-size: var(--data-size);
   line-height: var(--data-lh);
 }
@@ -858,8 +729,17 @@ a.tag:focus-visible {
 .prose blockquote {
   margin-inline: 0;
   padding-inline-start: var(--space-4);
-  border-inline-start: 1px solid var(--border-strong);
+  border-inline-start: 2px solid var(--border-strong);
   color: var(--ink-300);
+  font-style: italic;
+}
+
+.prose figure {
+  margin-inline: 0;
+}
+
+.prose figcaption {
+  margin-block-start: var(--space-2);
 }
 
 .page-header {
@@ -874,10 +754,7 @@ a.tag:focus-visible {
   border: 1px solid var(--border-subtle);
 }
 
-/* ---------- Contact list ----------
-   Mono-labeled hairline rows: label column left, amber mono link
-   right. Labels carry essential information, so they sit at ink-300
-   rather than the decorative ink-400. */
+/* ---------- Contact list ---------- */
 
 .contact-list {
   max-width: var(--measure);
@@ -916,12 +793,9 @@ a.tag:focus-visible {
   justify-content: space-between;
   padding-block: var(--space-6);
   color: var(--ink-300);
-  font-family: var(--font-mono);
+  font-family: var(--font-prose);
   font-size: var(--data-size);
-  font-weight: var(--data-weight);
   line-height: var(--data-lh);
-  letter-spacing: var(--data-ls);
-  text-transform: uppercase;
 }
 
 .site-footer p {
@@ -930,27 +804,27 @@ a.tag:focus-visible {
 
 .site-footer a {
   color: var(--amber-500);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-ls);
-  text-decoration: none;
 }
 
 .site-footer a:hover {
   color: var(--amber-400);
 }
 
-/* Family portfolio block: this site's own dark tokens, never MHSB cream.
-   Inherits the footer container's uppercase mono + amber links; only the
-   list layout and a separating hairline are added here. */
+/* Family portfolio block in the footer. */
 .footer-family {
   justify-content: flex-start;
   align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+}
+
+.footer-family-label {
+  color: var(--ink-400);
 }
 
 .footer-family ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
+  gap: var(--space-2) var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -960,9 +834,7 @@ a.tag:focus-visible {
   border-top: 1px solid var(--border-subtle);
 }
 
-/* ---------- Reduced motion ----------
-   Transitions and animations are disabled outright; all content
-   stays readable and every state stays reachable. */
+/* ---------- Reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
   *,

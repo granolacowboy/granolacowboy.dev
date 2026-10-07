@@ -7,7 +7,6 @@ const tags = await getTagCounts();
 
 <BaseLayout title="Tags" description="Browse Rich Berman's writing and notes by tag.">
   <header class="page-header">
-    <p class="eyebrow">INDEX · TAGS</p>
     <h1>Tags</h1>
   </header>
   {tags.length === 0 && <p class="lede">No tags yet.</p>}

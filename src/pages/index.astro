@@ -10,21 +10,21 @@ const recent = (await getRiver()).slice(0, 20);
 
 <BaseLayout>
   <section class="hero" aria-labelledby="hero-heading">
-    {/* Positioning stub (2026-09-27): factual hero for the personal weblog. Rich to
-        replace the headline and lede with his own voice; keep it non-BD, no MHSB eyebrow. */}
-    <p class="eyebrow">RICH BERMAN · WRITING, PROJECTS, NOTES</p>
-    <h1 id="hero-heading" class="display-xl">
-      Rich <span class="accent">Berman</span>
-    </h1>
+    {/* Positioning stub (2026-09-27): a factual hero for the personal weblog.
+        Rich to replace the headline and lede with his own voice. Do not ghost-write it. */}
+    <h1 id="hero-heading" class="display-xl">Richard Berman</h1>
     <p class="lede">
-      My personal site: the things I build, and notes on building them. I work mostly with law firms through MHSB Solutions.
+      My personal site: the things I build, and notes on building them. I work mostly with law firms
+      through MHSB Solutions.
     </p>
   </section>
 
   <section class="home-section" aria-labelledby="river-heading">
-    <p class="eyebrow">INDEX · RECENT</p>
-    <h2 id="river-heading" class="display-l">Recent</h2>
-    <RiverList items={recent} empty="Nothing posted yet. Writing, links, and notes will appear here." />
+    <h2 id="river-heading">Recent</h2>
+    <RiverList
+      items={recent}
+      empty="Nothing posted yet. Writing, links, and notes will appear here."
+    />
     <p class="metadata">
       <a href="/writing/">All writing</a>
       {' · '}<a href="/tags/">Tags</a>
@@ -33,11 +33,9 @@ const recent = (await getRiver()).slice(0, 20);
   </section>
 
   <section class="home-section" aria-labelledby="work-heading">
-    <p class="eyebrow">INDEX · PROJECTS</p>
-    <h2 id="work-heading" class="display-l">Projects</h2>
+    <h2 id="work-heading">Projects</h2>
 
     <article class="card">
-      <p class="eyebrow">PROJECT · 01 / 03 <span class="accent">[OPEN SOURCE]</span></p>
       <h3>{ARTIFACT_NAME}</h3>
       <p>A reference implementation of secure legal intake automation on the Model Context Protocol. The server is fully deterministic (no LLM calls, no network calls) and handles conflict screening, matter validation, follow-up templating, and triage logging. The language model does the language work, the server does the record work, with a clean boundary between them.</p>
       <ul class="tag-row" aria-label="Tags">
@@ -53,7 +51,6 @@ const recent = (await getRiver()).slice(0, 20);
     </article>
 
     <article class="card">
-      <p class="eyebrow">PROJECT · 02 / 03 <span class="accent">[SYSTEM PROOF]</span></p>
       <h3>Deterministic legal intake safety proof</h3>
       <p>A reproducible walk-through showing why a correct final answer is not enough: conflicts provenance, write refusal, adversarial inputs, trace assertions, and release evidence all sit outside the model.</p>
       <ul class="tag-row" aria-label="Tags">
@@ -65,7 +62,6 @@ const recent = (await getRiver()).slice(0, 20);
     </article>
 
     <article class="card">
-      <p class="eyebrow">PROJECT · 03 / 03 <span class="accent">[RESEARCH]</span></p>
       <h3>Session Benchmark v0</h3>
       <p>A public, client-scrubbed research artifact built from aggregate patterns across 1,299 agent sessions. It tests whether an agent can preserve constraints, privacy boundaries, evidence, and executable next steps when the source context is messy.</p>
       <ul class="tag-row" aria-label="Tags">

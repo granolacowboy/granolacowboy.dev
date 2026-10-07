@@ -8,7 +8,6 @@ const items = (await getRiver()).filter((i) => i.type === 'note');
 
 <BaseLayout title="Notes" description="Short notes and observations by Rich Berman.">
   <header class="page-header">
-    <p class="eyebrow">INDEX · NOTES</p>
     <h1>Notes</h1>
   </header>
   <RiverList items={items} empty="No notes yet." heading="h2" />

@@ -1,7 +1,9 @@
 ---
 // Shared renderer for a river of mixed entries. Short-form items (link/til/note/
-// quote) render their full body inline; long-form entries show title + description
-// and link to their permalink. Build-time only; ships no client JS.
+// quote) render their full body inline; long-form posts show title + description
+// and link to their permalink. A link entry's title points OUT to the thing it is
+// about (link-blog convention); its permalink and any via-attribution sit below.
+// Build-time only; ships no client JS.
 //
 // `heading` sets the entry-title level so the document outline stays correct: the
 // homepage lists the river under an <h2>, so titles are <h3> (default); standalone
@@ -48,16 +50,25 @@ const bodies = await Promise.all(
               )}
             </p>
             <Title class="river-row-title">
-              <a href={item.href}>{item.title}</a>
+              <a href={item.url ?? item.href}>{item.title}</a>
             </Title>
             {Body && (
               <div class="river-body">
                 <Body />
               </div>
             )}
-            {Body && item.provenance === 'human-ai-edited' && (
-              <p class="metadata">{AI_DISCLOSURE}</p>
+            {item.type === 'link' && (
+              <p class="metadata">
+                <a href={item.href}>permalink</a>
+                {item.via && (
+                  <>
+                    {' · via '}
+                    {item.viaUrl ? <a href={item.viaUrl}>{item.via}</a> : item.via}
+                  </>
+                )}
+              </p>
             )}
+            {Body && item.provenance === 'human-ai-edited' && <p class="metadata">{AI_DISCLOSURE}</p>}
             {item.type === 'entry' && item.entry.data.description && (
               <p class="river-row-desc">{item.entry.data.description}</p>
             )}
