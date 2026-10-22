@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   verify:
-    runs-on: [self-hosted, gcd]
+    runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - name: Checkout intake-triage-mcp
