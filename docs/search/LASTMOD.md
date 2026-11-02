@@ -4,9 +4,9 @@ Decision D11, task S1. Every `<lastmod>` in this site's sitemap is read at build
 
 ## How the dates are kept
 
-The manifest is maintained by `tools/d11/lastmod_manifest.py` in the control repository (granolacowboy/mhsb-web-portfolio-ops). Its `granola` adapter maps each indexable URL to its source content and hashes that content. When the hash is unchanged the stored date is kept; when it changed, or the URL is new, the run time is written. Static pages are dated from their file under src/pages and the JSON or YAML files they import; weblog entries from their file under src/content and their route template; tag and archive pages from their template plus the entries they list. /projects/notebooks/ is neither in the sitemap nor dated while src/data/notebooks.json is empty. The tool reads src/content and never writes there (the content-authorship fence).
+The manifest is maintained by `tools/d11/lastmod_manifest.py` in the control repository (granolacowboy/mhsb-web-portfolio-ops). Its `granola` adapter maps each indexable URL to its source content and hashes that content. When the hash is unchanged the stored date is kept; when it changed, or the URL is new, the run time is written. Static pages are dated from their file under src/pages and everything it imports, transitively (components, helpers, and JSON, YAML or TypeScript data; files under a layouts directory and type-only imports are not followed); weblog entries from their file under src/content and their route template with its imports; tag and archive pages from their template plus the entries they list. /projects/notebooks/ is neither in the sitemap nor dated while src/data/notebooks.json is empty. The tool reads src/content and never writes there (the content-authorship fence).
 
-The first manifest was seeded once on 2026-11-02 from each URL's last content commit (entries marked `"method": "seeded"`).
+The manifest was seeded on 2026-11-02 from each URL's last content commit (entries marked `"method": "seeded"`), and reseeded the same day with `--seed --seed-before origin/main` when the adapter began hashing every imported file, so this pull request's own commits date nothing.
 
 ## Refresh command
 

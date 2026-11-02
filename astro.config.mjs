@@ -8,13 +8,29 @@ import { readFileSync } from 'node:fs';
 // Sitemap lastmod comes from the committed manifest lastmod.json (D11, S1), never
 // from the build clock or from git. Refresh it with the command in docs/search/LASTMOD.md.
 const lastmodManifest = JSON.parse(readFileSync(new URL('./lastmod.json', import.meta.url), 'utf8'));
-/** @param {string} url @returns {string} */
+// @astrojs/sitemap catches an error thrown in serialize, logs it, writes no
+// sitemap and lets the build exit 0, so undated URLs are collected here and the
+// lastmod gate integration below fails the build once the sitemap step is done.
+/** @type {string[]} */
+const undatedUrls = [];
+/** @param {string} url @returns {string | undefined} */
 const lastmodFor = (url) => {
   const lastmod = lastmodManifest.urls[new URL(url).pathname]?.lastmod;
-  if (!lastmod) {
-    throw new Error(`lastmod.json has no entry for ${url}; run the refresh command in docs/search/LASTMOD.md`);
-  }
+  if (!lastmod) undatedUrls.push(url);
   return lastmod;
+};
+/** @type {import('astro').AstroIntegration} */
+const lastmodGate = {
+  name: 'd11-lastmod-gate',
+  hooks: {
+    'astro:build:done': () => {
+      if (undatedUrls.length > 0) {
+        throw new Error(
+          `lastmod.json has no entry for ${undatedUrls.join(', ')}; run the refresh command in docs/search/LASTMOD.md`
+        );
+      }
+    },
+  },
 };
 // /projects/notebooks/ redirects to /projects/ (a noindex stub) while
 // src/data/notebooks.json is empty, so it stays out of the sitemap until populated.
@@ -47,5 +63,6 @@ export default defineConfig({
       filter: (page) => !(notebooksEmpty && new URL(page).pathname === '/projects/notebooks/'),
       serialize: (item) => ({ ...item, lastmod: lastmodFor(item.url) }),
     }),
+    lastmodGate,
   ],
 });
