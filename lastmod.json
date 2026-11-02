@@ -109,47 +109,45 @@
       "method": "seeded",
       "lastmod": "2026-10-07T07:05:29Z"
     },
-    "/projects/notebooks/": {
-      "sources": [
-        "src/pages/projects/notebooks.astro"
-      ],
-      "hash": "bc6f9c2b169e490bab015fba436a3efdbe5ed3797cc7aba106186e80fd218f58",
-      "content_date": "2026-09-27T01:42:53Z",
-      "method": "seeded",
-      "lastmod": "2026-09-27T01:42:53Z"
-    },
     "/projects/session-benchmark/": {
       "sources": [
-        "src/pages/projects/session-benchmark/index.astro"
+        "src/pages/projects/session-benchmark/index.astro",
+        "src/data/session-benchmark/session_benchmark_summary.json",
+        "src/data/session-benchmark/session_deep_dive_summary.json"
       ],
-      "hash": "b7619499c22a5a6aa2538b4ca8364aa1437127c1e8b7e2b1bbf658712043f94e",
+      "hash": "b2740e51c251d338f774af7dbe884c18845b0c9c59ea2a97f6cbe6caf05b5dcd",
       "content_date": "2026-10-07T07:05:29Z",
       "method": "seeded",
       "lastmod": "2026-10-07T07:05:29Z"
     },
     "/projects/session-benchmark/cases/": {
       "sources": [
-        "src/pages/projects/session-benchmark/cases.astro"
+        "src/pages/projects/session-benchmark/cases.astro",
+        "src/data/session-benchmark/session_benchmark_cases.json",
+        "src/data/session-benchmark/session_candidate_results.json",
+        "src/data/session-benchmark/session_pilot_results.json"
       ],
-      "hash": "526d81f3e83b11ab8b50120d6d6fd69e1fa11548687bd9e645347c239b41d142",
+      "hash": "a8f97e956f176366ebb8309e048deac11e3ecac9493c7af326a6b3eaf220fc5b",
       "content_date": "2026-10-07T07:05:29Z",
       "method": "seeded",
       "lastmod": "2026-10-07T07:05:29Z"
     },
     "/projects/session-benchmark/failure-atlas/": {
       "sources": [
-        "src/pages/projects/session-benchmark/failure-atlas.astro"
+        "src/pages/projects/session-benchmark/failure-atlas.astro",
+        "src/data/session-benchmark/failure_mode_atlas.json"
       ],
-      "hash": "c4e5bf3f5cdc7b8b1d7bc888b505cc7483282e470c10fc241c5561494d316599",
+      "hash": "6d99dd7df295cf4a0caa840933f3454a9d6c04588f23ad22ba3b4851c1236692",
       "content_date": "2026-10-07T07:05:29Z",
       "method": "seeded",
       "lastmod": "2026-10-07T07:05:29Z"
     },
     "/projects/session-benchmark/registry/": {
       "sources": [
-        "src/pages/projects/session-benchmark/registry.astro"
+        "src/pages/projects/session-benchmark/registry.astro",
+        "src/data/session-benchmark/synthetic_asset_registry.json"
       ],
-      "hash": "9f283e1189d06975dde897550a7fb76fd45de4de65d20bb81c2dd3aa7f66b299",
+      "hash": "bf2b5b4975cde545c019a2c2271be28bc8fd7c1c0a04a3fb424450a754ddaa45",
       "content_date": "2026-10-07T07:05:29Z",
       "method": "seeded",
       "lastmod": "2026-10-07T07:05:29Z"

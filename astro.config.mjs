@@ -8,8 +8,18 @@ import { readFileSync } from 'node:fs';
 // Sitemap lastmod comes from the committed manifest lastmod.json (D11, S1), never
 // from the build clock or from git. Refresh it with the command in docs/search/LASTMOD.md.
 const lastmodManifest = JSON.parse(readFileSync(new URL('./lastmod.json', import.meta.url), 'utf8'));
-/** @param {string} url @returns {string | undefined} */
-const lastmodFor = (url) => lastmodManifest.urls[new URL(url).pathname]?.lastmod;
+/** @param {string} url @returns {string} */
+const lastmodFor = (url) => {
+  const lastmod = lastmodManifest.urls[new URL(url).pathname]?.lastmod;
+  if (!lastmod) {
+    throw new Error(`lastmod.json has no entry for ${url}; run the refresh command in docs/search/LASTMOD.md`);
+  }
+  return lastmod;
+};
+// /projects/notebooks/ redirects to /projects/ (a noindex stub) while
+// src/data/notebooks.json is empty, so it stays out of the sitemap until populated.
+const notebooksEmpty =
+  JSON.parse(readFileSync(new URL('./src/data/notebooks.json', import.meta.url), 'utf8')).length === 0;
 
 // https://astro.build/config
 export default defineConfig({
@@ -34,10 +44,8 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      serialize: (item) => {
-        const lastmod = lastmodFor(item.url);
-        return lastmod ? { ...item, lastmod } : item;
-      },
+      filter: (page) => !(notebooksEmpty && new URL(page).pathname === '/projects/notebooks/'),
+      serialize: (item) => ({ ...item, lastmod: lastmodFor(item.url) }),
     }),
   ],
 });
