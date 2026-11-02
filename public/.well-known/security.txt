@@ -1,6 +1,6 @@
 # Security contact for granolacowboy.dev (RFC 9116)
 # Contact copied from https://www.mhsbsolutions.com/.well-known/security.txt (D11, S1).
 Contact: mailto:ai@mhsbsolutions.com
-Expires: 2027-11-02T00:00:00.000Z
+Expires: 2027-10-01T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://granolacowboy.dev/.well-known/security.txt
