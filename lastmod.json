@@ -5,27 +5,32 @@
   "urls": {
     "/": {
       "sources": [
-        "src/pages/index.astro"
+        "src/pages/index.astro",
+        "src/components/RiverList.astro",
+        "src/lib/river.ts",
+        "src/site.config.ts"
       ],
-      "hash": "30a87312900fc1ede45285bf111f55bd1389192ceb9556e9f45317902ea64a35",
+      "hash": "60e561aad5dba9cc4542e0693bccf5013a30cc23658f20a5fba7b8746af7448e",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
     },
     "/about/": {
       "sources": [
-        "src/pages/about.astro"
+        "src/pages/about.astro",
+        "src/site.config.ts"
       ],
-      "hash": "e7a14c4a9505ce594ad1db280f5f4dcb49ab55b9ce20ff900b8f469be70f4425",
+      "hash": "e2d454d61902b04657657662aeb1b77120167140793a288eab872f2bc0d3a9e8",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
     },
     "/archive/": {
       "sources": [
-        "src/pages/archive/index.astro"
+        "src/pages/archive/index.astro",
+        "src/lib/river.ts"
       ],
-      "hash": "5b62e247b1b0086181b713310243e213aa57f9ab0f0d32a82b0c4c95a33aea98",
+      "hash": "1a6c2721bed4307393a4a527c5605bddcf515f29e7cc1766ac7c78bdd862aace",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
@@ -46,11 +51,13 @@
     "/links/": {
       "sources": [
         "src/pages/links/index.astro",
+        "src/components/RiverList.astro",
+        "src/lib/river.ts",
         "src/content/links/2026-10-07-intake-eval-harness.md",
         "src/content/links/2026-10-07-mhsb-intake-leak-calculator.md",
         "src/content/links/2026-10-07-stars.md"
       ],
-      "hash": "3b9fe262360ff00433746a96ebc758f4fe47447e3dba0db0423dc3f84e0e066a",
+      "hash": "54b411da6ff26867039bf4a16786633552b3db3ee763db4992d73f1a682d3f43",
       "content_date": "2026-10-08T00:27:34Z",
       "method": "seeded",
       "lastmod": "2026-10-08T00:27:34Z"
@@ -87,18 +94,21 @@
     },
     "/notes/": {
       "sources": [
-        "src/pages/notes/index.astro"
+        "src/pages/notes/index.astro",
+        "src/components/RiverList.astro",
+        "src/lib/river.ts"
       ],
-      "hash": "6dde76025af8ec6e1ae0f2553908b0cb5963eb002e59b20d00a42f555e0a3a04",
+      "hash": "e4a661374f541b84b6f1420a61401de0e372676738373c27a8725c6d225b19ed",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
     },
     "/projects/": {
       "sources": [
-        "src/pages/projects.astro"
+        "src/pages/projects.astro",
+        "src/site.config.ts"
       ],
-      "hash": "5ec5e1f6d475f4aa4af91a38f44170f81c439e682c04d822512c33f47e0cab8c",
+      "hash": "2c2b3eed2347c4e5d440e79df8ea46aecd2429ecfcb497eed540c1e8bdb2073a",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
@@ -115,10 +125,11 @@
     "/projects/session-benchmark/": {
       "sources": [
         "src/pages/projects/session-benchmark/index.astro",
+        "src/components/session-benchmark/SessionNav.astro",
         "src/data/session-benchmark/session_benchmark_summary.json",
         "src/data/session-benchmark/session_deep_dive_summary.json"
       ],
-      "hash": "b2740e51c251d338f774af7dbe884c18845b0c9c59ea2a97f6cbe6caf05b5dcd",
+      "hash": "7d619df47298c1751fde7ce46073ae32dfdf8e7c041b4d3d705b5574780367d6",
       "content_date": "2026-10-07T07:05:29Z",
       "method": "seeded",
       "lastmod": "2026-10-07T07:05:29Z"
@@ -126,11 +137,12 @@
     "/projects/session-benchmark/cases/": {
       "sources": [
         "src/pages/projects/session-benchmark/cases.astro",
+        "src/components/session-benchmark/SessionNav.astro",
         "src/data/session-benchmark/session_benchmark_cases.json",
         "src/data/session-benchmark/session_candidate_results.json",
         "src/data/session-benchmark/session_pilot_results.json"
       ],
-      "hash": "a8f97e956f176366ebb8309e048deac11e3ecac9493c7af326a6b3eaf220fc5b",
+      "hash": "8baf6d05a4f8f07f0dcbae466028e85f9156e7dd875bf8164bf7e80e97ba5e67",
       "content_date": "2026-10-07T07:05:29Z",
       "method": "seeded",
       "lastmod": "2026-10-07T07:05:29Z"
@@ -138,9 +150,10 @@
     "/projects/session-benchmark/failure-atlas/": {
       "sources": [
         "src/pages/projects/session-benchmark/failure-atlas.astro",
+        "src/components/session-benchmark/SessionNav.astro",
         "src/data/session-benchmark/failure_mode_atlas.json"
       ],
-      "hash": "6d99dd7df295cf4a0caa840933f3454a9d6c04588f23ad22ba3b4851c1236692",
+      "hash": "5cdfac4e4c50649573d2723a0b9b4b27994e4934512a5a9d5caca40036d9148c",
       "content_date": "2026-10-07T07:05:29Z",
       "method": "seeded",
       "lastmod": "2026-10-07T07:05:29Z"
@@ -148,27 +161,31 @@
     "/projects/session-benchmark/registry/": {
       "sources": [
         "src/pages/projects/session-benchmark/registry.astro",
+        "src/components/session-benchmark/SessionNav.astro",
         "src/data/session-benchmark/synthetic_asset_registry.json"
       ],
-      "hash": "bf2b5b4975cde545c019a2c2271be28bc8fd7c1c0a04a3fb424450a754ddaa45",
+      "hash": "12afd4e07fc93294bad4ddadcecfc05727374cd13fbe5bb0ddf10256d35e89ef",
       "content_date": "2026-10-07T07:05:29Z",
       "method": "seeded",
       "lastmod": "2026-10-07T07:05:29Z"
     },
     "/quotes/": {
       "sources": [
-        "src/pages/quotes/index.astro"
+        "src/pages/quotes/index.astro",
+        "src/components/RiverList.astro",
+        "src/lib/river.ts"
       ],
-      "hash": "b239de81b3c984f734cfbee02d8422b3d295281180c07459b3206c0b76b989aa",
+      "hash": "9c38f77d79d64bcc5a574aa1198d6851f525e9b1bd7154596edb89ccb33192f8",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
     },
     "/tags/": {
       "sources": [
-        "src/pages/tags/index.astro"
+        "src/pages/tags/index.astro",
+        "src/lib/river.ts"
       ],
-      "hash": "25984cc9bab591e5b34ef1ee2794f20839469d77ce9518b55662f4b8559349d7",
+      "hash": "c9b7c19a287f1452d14a604e66ba95c1f957dfca2abf8a0f8a044122c8904b16",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
@@ -251,9 +268,11 @@
     },
     "/tils/": {
       "sources": [
-        "src/pages/tils/index.astro"
+        "src/pages/tils/index.astro",
+        "src/components/RiverList.astro",
+        "src/lib/river.ts"
       ],
-      "hash": "f299d335697f0de3836339fdf74ce7d4650428e00a392a25903a3ee414c88d92",
+      "hash": "57200edf3ae15583a4c069d6dbe9f07d3df441afb2fd0cc8ba039b47e738df76",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
@@ -261,9 +280,10 @@
     "/writing/": {
       "sources": [
         "src/pages/writing/index.astro",
+        "src/lib/river.ts",
         "src/content/posts/post-2-intake-anatomy.mdx"
       ],
-      "hash": "7633bc4083d0a97d89062a422241335fcdbd7aa3752f250ecedeedd91abc0a70",
+      "hash": "fbe828a5cdd242f8643ebe7827171a2e33a89a278e42c05bf1653a916d3652c7",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
