@@ -3,6 +3,13 @@ import { defineConfig } from 'astro/config';
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import { readFileSync } from 'node:fs';
+
+// Sitemap lastmod comes from the committed manifest lastmod.json (D11, S1), never
+// from the build clock or from git. Refresh it with the command in docs/search/LASTMOD.md.
+const lastmodManifest = JSON.parse(readFileSync(new URL('./lastmod.json', import.meta.url), 'utf8'));
+/** @param {string} url @returns {string | undefined} */
+const lastmodFor = (url) => lastmodManifest.urls[new URL(url).pathname]?.lastmod;
 
 // https://astro.build/config
 export default defineConfig({
@@ -24,5 +31,13 @@ export default defineConfig({
   // setting it to 0 forces Astro to externalize its one processed client script (the
   // Session Benchmark registry enhancement) to /_astro, loaded from a same-origin URL.
   vite: { build: { assetsInlineLimit: 0 } },
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      serialize: (item) => {
+        const lastmod = lastmodFor(item.url);
+        return lastmod ? { ...item, lastmod } : item;
+      },
+    }),
+  ],
 });
