@@ -1,0 +1,280 @@
+{
+  "version": 1,
+  "site": "granolacowboy.dev",
+  "refresh": "python3 tools/d11/lastmod_manifest.py granola <repo-root> (from mhsb-web-portfolio-ops)",
+  "urls": {
+    "/": {
+      "sources": [
+        "src/pages/index.astro"
+      ],
+      "hash": "30a87312900fc1ede45285bf111f55bd1389192ceb9556e9f45317902ea64a35",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/about/": {
+      "sources": [
+        "src/pages/about.astro"
+      ],
+      "hash": "e7a14c4a9505ce594ad1db280f5f4dcb49ab55b9ce20ff900b8f469be70f4425",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/archive/": {
+      "sources": [
+        "src/pages/archive/index.astro"
+      ],
+      "hash": "5b62e247b1b0086181b713310243e213aa57f9ab0f0d32a82b0c4c95a33aea98",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/archive/2026/": {
+      "sources": [
+        "src/pages/archive/[year].astro",
+        "src/content/posts/post-2-intake-anatomy.mdx",
+        "src/content/links/2026-10-07-intake-eval-harness.md",
+        "src/content/links/2026-10-07-mhsb-intake-leak-calculator.md",
+        "src/content/links/2026-10-07-stars.md"
+      ],
+      "hash": "de571e7213ee73230b2f8415dad78334f36e4b15e4c182877682d34d5e4709f0",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/links/": {
+      "sources": [
+        "src/pages/links/index.astro",
+        "src/content/links/2026-10-07-intake-eval-harness.md",
+        "src/content/links/2026-10-07-mhsb-intake-leak-calculator.md",
+        "src/content/links/2026-10-07-stars.md"
+      ],
+      "hash": "3b9fe262360ff00433746a96ebc758f4fe47447e3dba0db0423dc3f84e0e066a",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/links/2026-10-07-intake-eval-harness/": {
+      "sources": [
+        "src/content/links/2026-10-07-intake-eval-harness.md"
+      ],
+      "hash": "f63974e631947eea310c799881d0bf63b45c631eb7e278daa8d361d9894cbe37",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/links/2026-10-07-mhsb-intake-leak-calculator/": {
+      "sources": [
+        "src/content/links/2026-10-07-mhsb-intake-leak-calculator.md"
+      ],
+      "hash": "bb1b9ba4f2f374da584296389bd6908e99429c09e442cf9b2b9a8c72296f8801",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/links/2026-10-07-stars/": {
+      "sources": [
+        "src/content/links/2026-10-07-stars.md"
+      ],
+      "hash": "5690f943fcd23ede1ddc108f7c8b9e7a017cc47ec5cd18e529d602eb63c2edae",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/notes/": {
+      "sources": [
+        "src/pages/notes/index.astro"
+      ],
+      "hash": "6dde76025af8ec6e1ae0f2553908b0cb5963eb002e59b20d00a42f555e0a3a04",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/projects/": {
+      "sources": [
+        "src/pages/projects.astro"
+      ],
+      "hash": "5ec5e1f6d475f4aa4af91a38f44170f81c439e682c04d822512c33f47e0cab8c",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/projects/intake-safety/": {
+      "sources": [
+        "src/pages/projects/intake-safety/index.astro"
+      ],
+      "hash": "d84991c2aa61d2fc5cb1294fd96cf13758df22969bd58fcaa23a62bc6eb1bc74",
+      "content_date": "2026-10-07T07:05:29Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T07:05:29Z"
+    },
+    "/projects/notebooks/": {
+      "sources": [
+        "src/pages/projects/notebooks.astro"
+      ],
+      "hash": "bc6f9c2b169e490bab015fba436a3efdbe5ed3797cc7aba106186e80fd218f58",
+      "content_date": "2026-09-27T01:42:53Z",
+      "method": "seeded",
+      "lastmod": "2026-09-27T01:42:53Z"
+    },
+    "/projects/session-benchmark/": {
+      "sources": [
+        "src/pages/projects/session-benchmark/index.astro"
+      ],
+      "hash": "b7619499c22a5a6aa2538b4ca8364aa1437127c1e8b7e2b1bbf658712043f94e",
+      "content_date": "2026-10-07T07:05:29Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T07:05:29Z"
+    },
+    "/projects/session-benchmark/cases/": {
+      "sources": [
+        "src/pages/projects/session-benchmark/cases.astro"
+      ],
+      "hash": "526d81f3e83b11ab8b50120d6d6fd69e1fa11548687bd9e645347c239b41d142",
+      "content_date": "2026-10-07T07:05:29Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T07:05:29Z"
+    },
+    "/projects/session-benchmark/failure-atlas/": {
+      "sources": [
+        "src/pages/projects/session-benchmark/failure-atlas.astro"
+      ],
+      "hash": "c4e5bf3f5cdc7b8b1d7bc888b505cc7483282e470c10fc241c5561494d316599",
+      "content_date": "2026-10-07T07:05:29Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T07:05:29Z"
+    },
+    "/projects/session-benchmark/registry/": {
+      "sources": [
+        "src/pages/projects/session-benchmark/registry.astro"
+      ],
+      "hash": "9f283e1189d06975dde897550a7fb76fd45de4de65d20bb81c2dd3aa7f66b299",
+      "content_date": "2026-10-07T07:05:29Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T07:05:29Z"
+    },
+    "/quotes/": {
+      "sources": [
+        "src/pages/quotes/index.astro"
+      ],
+      "hash": "b239de81b3c984f734cfbee02d8422b3d295281180c07459b3206c0b76b989aa",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/tags/": {
+      "sources": [
+        "src/pages/tags/index.astro"
+      ],
+      "hash": "25984cc9bab591e5b34ef1ee2794f20839469d77ce9518b55662f4b8559349d7",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/tags/deterministic/": {
+      "sources": [
+        "src/pages/tags/[tag].astro",
+        "src/content/posts/post-2-intake-anatomy.mdx"
+      ],
+      "hash": "41566f7b06b95028e166c829a63dd78f5d0b4842bc68e58a014f871f36e80030",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/tags/evals/": {
+      "sources": [
+        "src/pages/tags/[tag].astro",
+        "src/content/posts/post-2-intake-anatomy.mdx",
+        "src/content/links/2026-10-07-intake-eval-harness.md"
+      ],
+      "hash": "d0db1c4372774208845ab7642a9a30fb9520db58151432155bfba038f6c32075",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/tags/intake/": {
+      "sources": [
+        "src/pages/tags/[tag].astro",
+        "src/content/posts/post-2-intake-anatomy.mdx",
+        "src/content/links/2026-10-07-mhsb-intake-leak-calculator.md"
+      ],
+      "hash": "f63c91b6792488e4213591e9baef56b39b17769a2c5d221a10b507cc04169d17",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/tags/legal-tech/": {
+      "sources": [
+        "src/pages/tags/[tag].astro",
+        "src/content/posts/post-2-intake-anatomy.mdx",
+        "src/content/links/2026-10-07-mhsb-intake-leak-calculator.md"
+      ],
+      "hash": "f63c91b6792488e4213591e9baef56b39b17769a2c5d221a10b507cc04169d17",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/tags/mcp/": {
+      "sources": [
+        "src/pages/tags/[tag].astro",
+        "src/content/posts/post-2-intake-anatomy.mdx",
+        "src/content/links/2026-10-07-intake-eval-harness.md"
+      ],
+      "hash": "d0db1c4372774208845ab7642a9a30fb9520db58151432155bfba038f6c32075",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/tags/open-source/": {
+      "sources": [
+        "src/pages/tags/[tag].astro",
+        "src/content/links/2026-10-07-intake-eval-harness.md",
+        "src/content/links/2026-10-07-stars.md"
+      ],
+      "hash": "dcde7f9f1ccf057ad9a3a4eb3550ecbed28058d7ac3b9cd1e49de24ecf628314",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/tags/tools/": {
+      "sources": [
+        "src/pages/tags/[tag].astro",
+        "src/content/links/2026-10-07-mhsb-intake-leak-calculator.md",
+        "src/content/links/2026-10-07-stars.md"
+      ],
+      "hash": "aeaac47b81eaae93995ee1e7abc73106e7cd693743fc4eabffb60d0abd8a24cf",
+      "content_date": "2026-10-08T00:27:34Z",
+      "method": "seeded",
+      "lastmod": "2026-10-08T00:27:34Z"
+    },
+    "/tils/": {
+      "sources": [
+        "src/pages/tils/index.astro"
+      ],
+      "hash": "f299d335697f0de3836339fdf74ce7d4650428e00a392a25903a3ee414c88d92",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/writing/": {
+      "sources": [
+        "src/pages/writing/index.astro",
+        "src/content/posts/post-2-intake-anatomy.mdx"
+      ],
+      "hash": "7633bc4083d0a97d89062a422241335fcdbd7aa3752f250ecedeedd91abc0a70",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    },
+    "/writing/post-2-intake-anatomy/": {
+      "sources": [
+        "src/content/posts/post-2-intake-anatomy.mdx"
+      ],
+      "hash": "68d42739d2e480f0620150341fa2f88a2a4d4678b88d6bb763c552c5cb364300",
+      "content_date": "2026-10-07T01:04:57Z",
+      "method": "seeded",
+      "lastmod": "2026-10-07T01:04:57Z"
+    }
+  }
+}
