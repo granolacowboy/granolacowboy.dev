@@ -57,27 +57,30 @@
     },
     "/links/2026-10-07-intake-eval-harness/": {
       "sources": [
-        "src/content/links/2026-10-07-intake-eval-harness.md"
+        "src/content/links/2026-10-07-intake-eval-harness.md",
+        "src/pages/links/[id].astro"
       ],
-      "hash": "f63974e631947eea310c799881d0bf63b45c631eb7e278daa8d361d9894cbe37",
+      "hash": "287e57194fb911272903fc8c761453d52309c584cdc5a84337442f0d2e87c95e",
       "content_date": "2026-10-08T00:27:34Z",
       "method": "seeded",
       "lastmod": "2026-10-08T00:27:34Z"
     },
     "/links/2026-10-07-mhsb-intake-leak-calculator/": {
       "sources": [
-        "src/content/links/2026-10-07-mhsb-intake-leak-calculator.md"
+        "src/content/links/2026-10-07-mhsb-intake-leak-calculator.md",
+        "src/pages/links/[id].astro"
       ],
-      "hash": "bb1b9ba4f2f374da584296389bd6908e99429c09e442cf9b2b9a8c72296f8801",
+      "hash": "3efd76b5915c90b221e813b18f150a4699a4086cdeecae0984ea5799b36508b7",
       "content_date": "2026-10-08T00:27:34Z",
       "method": "seeded",
       "lastmod": "2026-10-08T00:27:34Z"
     },
     "/links/2026-10-07-stars/": {
       "sources": [
-        "src/content/links/2026-10-07-stars.md"
+        "src/content/links/2026-10-07-stars.md",
+        "src/pages/links/[id].astro"
       ],
-      "hash": "5690f943fcd23ede1ddc108f7c8b9e7a017cc47ec5cd18e529d602eb63c2edae",
+      "hash": "cfb8cc6582908e4494c741d4dc67ba4f735329d72fe8558d7bbe1efb31c311d8",
       "content_date": "2026-10-08T00:27:34Z",
       "method": "seeded",
       "lastmod": "2026-10-08T00:27:34Z"
@@ -267,9 +270,10 @@
     },
     "/writing/post-2-intake-anatomy/": {
       "sources": [
-        "src/content/posts/post-2-intake-anatomy.mdx"
+        "src/content/posts/post-2-intake-anatomy.mdx",
+        "src/pages/writing/[id].astro"
       ],
-      "hash": "68d42739d2e480f0620150341fa2f88a2a4d4678b88d6bb763c552c5cb364300",
+      "hash": "54f8010e46ed66fe0eaa38281e98ea8e755229d3391a3eba2d783f8dd0eee611",
       "content_date": "2026-10-07T01:04:57Z",
       "method": "seeded",
       "lastmod": "2026-10-07T01:04:57Z"
