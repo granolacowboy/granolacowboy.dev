@@ -699,12 +699,13 @@ const expectedHeaders = new Map([
   ['permissions-policy', 'camera=(), microphone=(), geolocation=()'],
   ['cross-origin-opener-policy', 'same-origin'],
   ['cross-origin-resource-policy', 'same-origin'],
-  // Enforced CSP (SF-0006). script-src is 'self' with no 'unsafe-inline': the one client
-  // script is externalized to /_astro via build.assetsInlineLimit: 0, and JSON-LD blocks are
-  // non-executable data. The prior Report-Only header and placeholder Reporting-Endpoints
-  // were dropped; the enforced policy supersedes them. Wiring a real report sink later must
-  // update this allowlist deliberately.
-  ['content-security-policy', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'"],
+  // Enforced CSP (SF-0006, D11 S7). script-src is 'self' plus static.cloudflareinsights.com for
+  // the Cloudflare Web Analytics beacon (D11 S7), and connect-src allows cloudflareinsights.com
+  // for its RUM POST; no 'unsafe-inline'. The one first-party client script is externalized to
+  // /_astro via build.assetsInlineLimit: 0, and JSON-LD blocks are non-executable data. The prior
+  // Report-Only header and placeholder Reporting-Endpoints were dropped; the enforced policy
+  // supersedes them. Wiring a real report sink later must update this allowlist deliberately.
+  ['content-security-policy', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com"],
 ]);
 check(configuredHeaders.length === expectedHeaders.size, 'vercel.json contains only the expected security headers');
 const headerKeys = new Set(configuredHeaders.map((header) => header.key.toLowerCase()));
