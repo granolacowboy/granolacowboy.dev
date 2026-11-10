@@ -152,9 +152,11 @@ const identityGraph = {
     <link rel="icon" href="/favicon.ico" />
     <title>{pageTitle}</title>
     <script type="application/ld+json" set:html={JSON.stringify(identityGraph)} />
-    {/* Light by default with dark via prefers-color-scheme (no toggle),
-        so the former theme-toggle script is gone and the site ships zero
-        JavaScript from this layout. */}
+    {/* Light by default with dark via prefers-color-scheme (no toggle), so the
+        former theme-toggle script is gone. The only JavaScript this layout ships
+        is the Cloudflare Web Analytics beacon below (privacy-first, no cookies). */}
+    <!-- Cloudflare Web Analytics (D11 S7): privacy-first, sets no cookies -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "428bd90cdb6741db952ac00a94c91fdb"}'></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
