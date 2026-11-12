@@ -17,11 +17,8 @@ import {
   SITE_DESCRIPTION,
   SITE_TITLE,
   SITE_URL,
-  CANONICAL_ORG_ID,
   CANONICAL_PERSON_ID,
   PERSON_CANONICAL_NAME,
-  PERSON_ALT_NAME,
-  PROFILE_SAME_AS,
 } from '../site.config';
 
 interface Props {
@@ -89,8 +86,10 @@ const { pathname } = Astro.url;
 const isCurrent = (href: string) =>
   pathname === href || pathname === href.slice(0, -1) || pathname.startsWith(href);
 
-// Portfolio identity spine: the canonical Person (defined authoritatively on the
-// apex, mhsbsolutions.com, and reused here by @id) plus this site's own WebSite.
+// Portfolio identity spine. The canonical Person is defined once, on the apex
+// (mhsbsolutions.com), with its profiles; this site carries it as a stub (@id,
+// @type, name, url) and references it by @id. Each page adds its own WebPage,
+// part of this site's WebSite.
 const identityGraph = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -98,10 +97,7 @@ const identityGraph = {
       '@type': 'Person',
       '@id': CANONICAL_PERSON_ID,
       name: PERSON_CANONICAL_NAME,
-      alternateName: PERSON_ALT_NAME,
       url: `${SITE_URL}/`,
-      worksFor: { '@id': CANONICAL_ORG_ID },
-      sameAs: PROFILE_SAME_AS,
     },
     {
       '@type': 'WebSite',
@@ -111,6 +107,13 @@ const identityGraph = {
       description: SITE_DESCRIPTION,
       author: { '@id': CANONICAL_PERSON_ID },
       inLanguage: 'en-US',
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonicalURL.href}#webpage`,
+      url: canonicalURL.href,
+      name: pageTitle,
+      isPartOf: { '@id': `${SITE_URL}/#website` },
     },
   ],
 };
