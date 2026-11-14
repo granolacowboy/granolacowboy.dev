@@ -21,7 +21,7 @@
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@fontsource-variable/source-serif-4": "^5.2.9",
     "@fontsource-variable/space-grotesk": "^5.2.10",
-    "astro": "^7.3.3"
+    "astro": "^7.4.12"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
